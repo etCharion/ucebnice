@@ -455,9 +455,9 @@ const FIG = {
 
   'l1-03': () => figWrap('Pod povrchem pole', 'kovové proužky', S.svg(320, 150, (() => {
     let s = '';
-    s += `<path d="M20 14H300M20 26H300" style="stroke:var(--bad);stroke-width:4;opacity:.8"/><path d="M20 124H300M20 136H300" style="stroke:var(--water);stroke-width:4;opacity:.8"/>`;
+    s += `<path d="M20 14H300M20 124H300" style="stroke:var(--bad);stroke-width:4;opacity:.8"/><path d="M20 26H300M20 136H300" style="stroke:var(--water);stroke-width:4;opacity:.8"/>`;
     for (let i = 0; i < 12; i++) { const x = 34 + i * 23; s += `<rect x="${x - 4}" y="38" width="8" height="34" rx="2" style="fill:var(--copper);opacity:.75"/><rect x="${x - 4}" y="80" width="8" height="34" rx="2" style="fill:var(--copper);opacity:.75"/>`; }
-    s += `<rect x="20" y="74" width="280" height="4" style="fill:var(--muted);opacity:.4"/>` + S.t(312, 18, '+', 'tx') + S.t(312, 30, '−', 'tx') + S.t(10, 60, 'a–e', 'txm', 'middle') + S.t(10, 102, 'f–j', 'txm', 'middle');
+    s += `<rect x="20" y="74" width="280" height="4" style="fill:var(--muted);opacity:.4"/>` + S.t(312, 18, '+', 'tx') + S.t(312, 30, '−', 'tx') + S.t(312, 128, '+', 'tx') + S.t(312, 140, '−', 'tx') + S.t(10, 60, 'a–e', 'txm', 'middle') + S.t(10, 102, 'f–j', 'txm', 'middle');
     return s;
   })(), 'Kovové proužky uvnitř nepájivého pole'), 'Svislé měděné proužky spojují vždy pět děr v jednom sloupci. Vodorovné lišty nahoře a dole vedou napájení po celé délce.'),
 
@@ -479,10 +479,11 @@ const FIG = {
 
   'l1-09': () => figWrap('Tranzistor jako spínač', 'spínání na straně GND', S.svg(320, 230,
     S.t(200, 16, '+5 V', 'txc', 'middle') + S.w('200,22 200,40') + S.motor(200, 62) + S.w('200,78 200,98') + S.npn(190, 130, 'Q1 NPN') + S.w('200,162 200,190') + S.gnd(200, 200)
+    + S.w('200,32 250,32') + S.diodeUp(250, 62) + S.w('250,92 200,92') + S.dot(200, 32) + S.dot(200, 92) + S.t(262, 66, 'dioda', 'txm')
     + S.pinT(40, 130, 'GPIO') + S.w('44,130 70,130') + S.res(100, 130, false, '1 kΩ') + S.w('130,130 158,130')
     + S.t(215, 110, 'C', 'txm') + S.t(166, 124, 'B', 'txm') + S.t(215, 160, 'E', 'txm'),
-    'NPN tranzistor spíná motor, báze přes rezistor 1 kiloohm z GPIO'),
-    'Malý proud tekoucí z GPIO do báze otevře cestu z kolektoru do emitoru. Motorem pak teče proud ze zdroje 5 V, ne z GPIO.'),
+    'NPN tranzistor spíná motor, báze přes rezistor 1 kiloohm z GPIO, k motoru paralelně ochranná dioda katodou k plus 5 voltům'),
+    'Malý proud tekoucí z GPIO do báze otevře cestu z kolektoru do emitoru. Motorem pak teče proud ze zdroje 5 V, ne z GPIO. Dioda vedle motoru (katodou k +5 V) chrání tranzistor při vypnutí; proč, vysvětlí lekce 2.9.'),
 
   'l1-10': () => figWrap('Dva zdroje, jedna zem', 'Pico W + motor', S.svg(330, 170,
     `<rect x="20" y="20" width="110" height="60" rx="6" class="sy"/>` + S.t(75, 45, 'Pico W', 'tx', 'middle') + S.t(75, 64, 'USB 5 V', 'txm', 'middle')
@@ -549,7 +550,7 @@ const FIG = {
   'l3-01': () => figWrap('Fázový posun', 'kondenzátor na střídavém napětí', S.svg(340, 130, (() => {
     let u = '', i = ''; for (let x = 0; x <= 280; x += 4) { const a = x / 280 * Math.PI * 4; u += (x ? 'L' : 'M') + (40 + x) + ' ' + (65 - 40 * Math.sin(a)).toFixed(1); i += (x ? 'L' : 'M') + (40 + x) + ' ' + (65 - 28 * Math.cos(a)).toFixed(1); }
     return `<path d="M40 65H320" style="stroke:var(--line)"/><path d="${u}" style="fill:none;stroke:var(--qU);stroke-width:2.2"/><path d="${i}" style="fill:none;stroke:var(--qI);stroke-width:2.2"/>` + S.t(326, 20, 'U', 'txc', 'end') + S.t(326, 40, 'I', 'txw', 'end');
-  })(), 'Napětí a proud kondenzátoru'), 'Proud (modře) dosáhne vrcholu o čtvrt periody dřív než napětí (měď). Kondenzátor se musí nejdřív nabít, proto proud předbíhá.'),
+  })(), 'Napětí a proud kondenzátoru'), 'Proud (I) dosáhne vrcholu o čtvrt periody dřív než napětí (U). Kondenzátor se musí nejdřív nabít, proto proud předbíhá.'),
 
   'l3-02': () => figWrap('RC dolní propust', '', S.svg(320, 150,
     S.pinT(30, 40, 'vstup') + S.w('34,40 70,40') + S.res(100, 40, false, 'R') + S.w('130,40 180,40') + S.dot(180, 40) + S.w('180,40 250,40') + S.pinT(254, 40, 'výstup')
@@ -580,12 +581,17 @@ const FIG = {
     for (let k = 0; k < 18; k++) { const x = 195 + r(k + 100) * 105, y = 38 + r(k + 150) * 55; s += `<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="3.5" class="wf"/>`; }
     s += S.t(90, 20, 'P · díry (+)', 'txc', 'middle') + S.t(250, 20, 'N · elektrony (−)', 'txw', 'middle') + S.t(170, 120, 'vyprázdněná oblast', 'txm', 'middle') + S.t(30, 120, 'anoda', 'txm') + S.t(310, 120, 'katoda', 'txm', 'end');
     return s;
-  })(), 'PN přechod s dírami a elektrony'), 'Na rozhraní se elektrony a díry vzájemně „vyruší" a vznikne tenká oblast bez volných nosičů. Ta funguje jako bariéra, kterou lze překonat jen jedním směrem.'),
+  })(), 'PN přechod s dírami a elektrony'), 'Na rozhraní se elektrony a díry vzájemně „vyruší" a vznikne tenká oblast bez volných nosičů. Ta funguje jako bariéra, kterou lze překonat jen jedním směrem. Obě vrstvy jsou přitom jako celek elektricky neutrální: + a − v popisku říká jen, jaké nosiče náboje se v nich pohybují.'),
 
-  'l3-07': () => figWrap('FET jako přiškrcená hadice', '', S.svg(360, 120,
-    `<path d="M20 35H140Q180 52 220 35H340V85H220Q180 68 140 85H20Z" class="pipe"/><rect x="160" y="8" width="40" height="30" style="fill:var(--copper-soft);stroke:var(--copper)"/><rect x="160" y="82" width="40" height="30" style="fill:var(--copper-soft);stroke:var(--copper)"/>`
-    + S.t(180, 28, 'G', 'txc', 'middle') + S.t(30, 64, 'S', 'tx') + S.t(330, 64, 'D', 'tx', 'end') + S.t(180, 64, 'kanál', 'txm', 'middle'),
-    'Kanál sevřený hradlem'), 'Tlak na hradle (napětí G) svírá kanál mezi S a D. Hradlem samotným neteče žádný trvalý proud.')
+  'l3-07': () => figWrap('MOSFET jako hadice se svorkou', 'N-MOSFET', S.svg(360, 236,
+    S.t(20, 14, 'Hradlo bez napětí: svorka hadici svírá', 'txm')
+    + `<path d="M20 44H140Q180 62 220 44H340V84H220Q180 66 140 84H20Z" class="pipe"/><rect x="160" y="20" width="40" height="32" style="fill:var(--copper-soft);stroke:var(--copper)"/><rect x="160" y="76" width="40" height="32" style="fill:var(--copper-soft);stroke:var(--copper)"/>`
+    + S.t(180, 40, 'G', 'txc', 'middle') + S.t(30, 69, 'S', 'tx') + S.t(330, 69, 'D', 'tx', 'end')
+    + S.t(20, 136, 'Napětí na hradle svorku rozevře: voda teče', 'txm')
+    + `<path d="M20 170H340V210H20Z" class="pipe"/><rect x="160" y="146" width="40" height="16" style="fill:var(--copper-soft);stroke:var(--copper)"/><rect x="160" y="218" width="40" height="14" style="fill:var(--copper-soft);stroke:var(--copper)"/>`
+    + `<path class="wl" style="stroke-width:3" d="M60 190H290"/>` + S.arrowHead(60, 190, 290, 190, 1).replace('syf', 'wf')
+    + S.t(180, 158, 'G', 'txc', 'middle') + S.t(30, 195, 'S', 'tx') + S.t(330, 195, 'D', 'tx', 'end'),
+    'Nahoře hadice sevřená svorkou, dole svorka rozevřená a voda teče'), 'MOSFET je v klidu zavřený. Teprve napětí na hradle (G) otevře kanál mezi S a D, a čím je vyšší, tím víc kanál otevře. Hradlem samotným neteče žádný trvalý proud.')
     + figWrap('Značka', 'MOSFET s kanálem N', S.svg(160, 90, `<path class="sy" d="M40 60H66M66 30V60M74 26V36M74 40V50M74 54V64M74 31H100V14M74 59H100V76M74 45H100V59"/>` + S.arrowHead(100, 45, 74, 45, .9) + S.t(30, 64, 'G', 'tx', 'end') + S.t(108, 18, 'D', 'tx') + S.t(108, 80, 'S', 'tx'), 'Značka N-MOSFET')),
 
   'l3-08': () => figWrap('Číslování vývodů', 'pouzdro DIP-8 shora', S.svg(300, 150, (() => {
@@ -599,11 +605,11 @@ const FIG = {
       + S.dot(100, 125) + S.w('100,125 90,125') + S.res(60, 125, false, 'R1') + S.w('30,125 20,125 20,140') + S.gnd(20, 150),
       'Operační zesilovač se zpětnou vazbou'), 'Výstup je přes R2 vrácen na invertující vstup (−); R1 vede z tohoto bodu k zemi.'),
 
-  'l3-09': () => figWrap('Ostré rohy na plošném spoji', '', S.svg(340, 120,
+  'l3-09': () => figWrap('Ostré úhly na plošném spoji', '', S.svg(340, 120,
     `<rect x="10" y="10" width="150" height="100" rx="6" style="fill:var(--pcb)"/><rect x="180" y="10" width="150" height="100" rx="6" style="fill:var(--pcb)"/>`
-    + `<path d="M30 90H100V30H140" style="fill:none;stroke:#c98b4a;stroke-width:9;stroke-linejoin:miter"/><path d="M200 90H250L270 70V50L285 35H310" style="fill:none;stroke:#c98b4a;stroke-width:9;stroke-linejoin:round"/>`
-    + `<text x="85" y="104" text-anchor="middle" class="silkt">ŠPATNĚ</text><text x="255" y="104" text-anchor="middle" class="silkt">SPRÁVNĚ</text>`, 'Měděná cesta s pravoúhlým a se zkoseným ohybem'),
-    'V ostrém rohu je silnější elektrické pole a měď se tam snáz odlupuje. Cesty se proto lámou po 45° nebo zaoblují.'),
+    + `<path d="M30 90H120L70 30H140" style="fill:none;stroke:#c98b4a;stroke-width:9;stroke-linejoin:miter"/><path d="M200 90H250L270 70V50L285 35H310" style="fill:none;stroke:#c98b4a;stroke-width:9;stroke-linejoin:round"/>`
+    + `<text x="85" y="104" text-anchor="middle" class="silkt">ŠPATNĚ</text><text x="255" y="104" text-anchor="middle" class="silkt">SPRÁVNĚ</text>`, 'Měděná cesta s ostrým úhlem a se zkoseným ohybem'),
+    'V úhlu ostřejším než 90° se při leptání drží leptadlo a cestu může naleptat. Lom po 45° nebo obloukem tomu předejde a deska je přehlednější. Pravý úhel u běžných desek zpravidla nevadí, lom po 45° je ale dobrý zvyk.'),
 };
 
 /* ================= Lekce ================= */
@@ -697,8 +703,11 @@ const LESSONS = [
   <div class="note"><h4>Častá chyba</h4><p>Proud se v rezistoru nespotřebuje. Kolik vody do trubky vteče, tolik z ní vyteče, a proto je proud v jednoduchém okruhu všude stejný. Rezistor bere energii (tlak klesá) a mění ji v teplo.</p></div>
   ${more('Když se proud nespotřebuje, co tedy rezistor bere?', `<p>Představ si v potrubí malou vrtulku. Kolik vody do ní vteče, tolik z ní vyteče. Voda se nikam neztratí. Za vrtulkou má ale menší tlak: vrtulka jí vzala <b>energii</b> a roztočila se.</p>
   <p>Rezistor je taková vrtulka, jen energii mění v teplo. Projdou jím všechny elektrony, proto je proud před ním i za ním stejný. Za rezistorem mají ale menší „tlak": napětí kleslo. Tomu poklesu se říká <b>úbytek napětí</b>.</p>
-  <p>Spotřebuje se tedy energie, ne proud. Proto se rezistor hřeje.</p>`)}`,
-  sim: 'ohm', task: 'Nastav 9 V a 100 Ω. Pak odpor zdvojnásob. Co se stane s proudem? Teče voda v zúženém místě pomaleji než jinde?' },
+  <p>Spotřebuje se tedy energie, ne proud. Proto se rezistor hřeje.</p>`)}
+  ${more('Proč šipka proudu míří od + k −, když elektrony tečou opačně?', `<p>O elektřině se vědělo dávno předtím, než byly objeveny elektrony (1897). Vědci se tehdy dohodli, že proud teče od + k −. Tahle dohoda platí dodnes: šipky ve schématech i značky diod a tranzistorů míří od + k −.</p>
+  <p>Později se ukázalo, že v kovových drátech se ve skutečnosti pohybují elektrony, a to opačně, od − k +. Pro výpočty to nevadí, vyjde to stejně. Důležité je držet se jednoho směru.</p>
+  <p class="hint"><b>V této aplikaci</b> šipka proudu vždy znamená dohodnutý směr od + k −.</p>`)}`,
+  sim: 'ohm', task: 'Nastav 9 V a 100 Ω. Nejdřív si tipni, co udělá proud, když odpor zdvojnásobíš, a pak to vyzkoušej. Je proud za rezistorem menší než před ním?' },
 
 { id: 'l1-02', lvl: 1, title: 'Obvod, zem a zkrat', sub: 'Proud teče jen dokola',
   idea: 'Proud teče jen uzavřeným okruhem. Zkrat je cesta bez odporu, a proto je nebezpečný.',
@@ -709,7 +718,7 @@ const LESSONS = [
   <p>Pico pošle signál 3,3&nbsp;V, tedy o 3,3&nbsp;V víc, než má <em>jeho</em> GND. Ovladač motoru měří vůči <em>svému</em> GND. Dokud nejsou obě GND spojená, je to jako měřit výšku stolu ze dvou různých pater: čísla spolu nesouvisí a ovladač signál spolehlivě nepozná.</p>
   <p>Propojením GND získají oba obvody společnou „podlahu". Kladné póly zdrojů se nespojují, každý zdroj dál napájí svou část.</p>`)}
   <p><b class="c">Zkrat</b> vznikne, když spojíš + a − zdroje přímo, bez součástky, která by proud omezila. Podle Ohmova zákona je při téměř nulovém odporu proud obrovský. Baterie se zahřeje, tenký drát se může roztavit a Pico se může nevratně poškodit.</p>
-  <div class="note try"><h4>Bezpečnostní pravidlo</h4><p>Zapojení měň vždy s odpojeným napájením. Před zapnutím zkontroluj, že nikde nejsou přímo spojené 5 V (nebo 3,3 V) a GND.</p></div>`,
+  <div class="note limit"><h4>Bezpečnostní pravidlo</h4><p>Zapojení měň vždy s odpojeným napájením. Před zapnutím zkontroluj, že nikde nejsou přímo spojené 5 V (nebo 3,3 V) a GND.</p></div>`,
   sim: 'circuit', task: 'Sepni spínač a podívej se na proud. Pak zkus zkrat. Kolikrát je proud větší?' },
 
 { id: 'l1-03', lvl: 1, title: 'Nepájivé pole', sub: 'Stavíme bez pájení',
@@ -753,6 +762,7 @@ const LESSONS = [
   body: `<p>LED sama proud neomezuje. Dokud je napětí pod asi 2 V, nesvítí. Jakmile ho překročí, proud prudce roste a LED se během chvilky zničí. Proto s ní vždy zapojujeme rezistor.</p>
   <p>Výpočet: od napětí zdroje odečteme úbytek na LED a zbytek „padne" na rezistoru.</p><p class="formula">R = (U zdroje − U_F) / I</p>
   <p>Na Picu počítáme s proudem kolem 4 mA, protože s ním počítá výchozí nastavení jeho pinů. Pro GPIO (3,3 V) a červenou LED (2,0 V): R = (3,3 − 2,0) / 0,004 ≈ 325 Ω. Zvolíme nejbližší vyšší běžnou hodnotu: <b>330 Ω</b>. Pro napájení 5 V a 10 mA vychází 300 Ω, tedy také 330 Ω.</p>
+  <div class="note limit"><h4>Modrá a bílá LED na 3,3 V</h4><p>Potřebují kolem 3 V a každý kus trochu jinak (asi 2,8–3,4 V). Z GPIO s 3,3 V na rezistor zbude jen pár desetin voltu, takže proud i jas jsou nevyzpytatelné. Na začátek ber červenou, žlutou nebo zelenou LED.</p></div>
   ${more('Proč se odečítá U_F? Výpočet krok za krokem', `<p>Představ si potrubí se schodem. LED je schod: ať teče jakýkoli proud, vezme si vždy zhruba stejné napětí, u červené asi 2&nbsp;V. Zbytek napětí zdroje „padne" na rezistoru.</p>
   <ol><li>Kolik zbyde na rezistor? 3,3&nbsp;V − 2,0&nbsp;V = <b>1,3&nbsp;V</b>.</li>
   <li>Jaký proud chceš? 4&nbsp;mA = <b>0,004&nbsp;A</b> (do vzorce v ampérech).</li>
@@ -784,7 +794,7 @@ while True:             # dokola:
   body: `<p>Raspberry Pi Pico W má po obou dlouhých stranách 40 pinů. Většina z nich jsou <b class="c">GPIO</b>: GP0 až GP28, použitelných je 26. V programu určíš, jestli pin bude <em>výstup</em> (zapíná LED) nebo <em>vstup</em> (čte tlačítko).</p>
   <ul><li>Výstup HIGH = 3,3 V, LOW = 0 V.</li>
   <li>Vstup čte napětí: blízko 3,3 V je 1, blízko 0 V je 0. <b>Nikdy na něj nepřiváděj 5 V.</b> Čip Pica vyšší napětí nesnese a pin, případně celý čip, se může zničit.</li>
-  <li>Z jednoho pinu ber jen pár miliampérů. Výchozí nastavení počítá se 4 mA, nejvíc se dá nastavit 12 mA. Na LED to stačí, na motor, relé nebo LED pásek ne. Na ty je tranzistor (lekce 9).</li>
+  <li>Z jednoho pinu ber jen pár miliampérů. Výchozí nastavení počítá se 4 mA, nejvíc se dá nastavit 12 mA, a všechny piny dohromady zvládnou jen kolem 50 mA. Na pár LED to stačí, na motor, relé nebo LED pásek ne. Na ty je tranzistor (lekce 1.9).</li>
   <li>Piny <b>VBUS</b>, <b>VSYS</b> a <b>3V3(OUT)</b> jsou napájecí a nedají se ovládat. Z 3V3(OUT) napájej senzory a pull-up rezistory.</li>
   <li>Tři piny, GP26 až GP28, umí změřit i napětí mezi 0 a 3,3 V (analogový vstup, lekce 3.8).</li></ul>
   ${more('Jaký je rozdíl mezi VBUS, VSYS a 3V3(OUT)?', `<p>Napájení teče po desce Pica postupně, jako voda po spádu:</p>
@@ -853,7 +863,7 @@ while True:
   <p>Typické použití s Picem: ultrazvukový dálkoměr HC-SR04 vrací na pinu ECHO 5 V. S děličem R1 = 1 kΩ (nahoře) a R2 = 2 kΩ (dole) dostaneš 5 · 2 / 3 ≈ 3,3 V a GPIO je v bezpečí.</p>
   <p>Potenciometr je vlastně nastavitelný dělič: jezdec rozdělí odporovou dráhu na R1 a R2.</p>
   <div class="note limit"><h4>Na co se dělič nehodí</h4><p>Dělič je dobrý pro signály, ne pro napájení. Jakmile z jeho středu začneš odebírat proud (motor, LED pásek), napětí poklesne. Pro napájení se používá stabilizátor nebo měnič.</p></div>`,
-  sim: 'divider', task: 'Nastav 5 V a hledej R1 a R2 tak, aby výstup byl mezi 3,0 a 3,3 V.' },
+  sim: 'divider', task: 'Nastav 5 V a hledej R1 a R2 tak, aby výstup byl mezi 3,0 a 3,4 V.' },
 
 { id: 'l1-09', lvl: 1, title: 'Tranzistor jako spínač', sub: 'Malý proud ovládá velký',
   idea: 'Malý proud z GPIO do báze otevře tranzistor a ten spíná velký proud do zátěže.',
@@ -866,16 +876,17 @@ while True:
   <p class="hint">Proto „spínání na straně GND": tranzistor připojuje spodní konec zátěže k zemi, jako vypínač pod žárovkou.</p>`)}
   <p>(0,7 V „spolkne" přechod báze–emitor). S β ≈ 100 může kolektorem téct až 260 mA. Aby byl tranzistor plně sepnutý, dávej do báze proud s rezervou, aspoň dvakrát víc, než by stačilo podle β. Jinak zůstane napůl otevřený a hřeje se.</p>
   ${more('Co znamená plně sepnutý a proč ta rezerva?', `<p>Tranzistor pustí kolektorem nejvýš β-krát víc, než teče bází. Motorek chce 250&nbsp;mA a tranzistor má β = 100. Do báze tedy musí téct aspoň 250 / 100 = 2,5&nbsp;mA.</p>
-  <p>β se ale kus od kusu liší a mění se i s teplotou. Kdyby měl tvůj kus β jen 80, pustí při 2,5&nbsp;mA jen 200&nbsp;mA. Tranzistor zůstane napůl otevřený, část napětí padne na něm a mění se v teplo. Proto se do báze dává rezerva, ideálně dvojnásobek.</p>
+  <p>β se ale kus od kusu liší a mění se i s teplotou. Kdyby měl tvůj kus β jen 80, pustí při 2,5&nbsp;mA jen 200&nbsp;mA. Tranzistor zůstane napůl otevřený, část napětí padne na něm a mění se v teplo. Proto se do báze dává rezerva, aspoň dvojnásobek. V profesionálních návrzích se počítá i s I_B = I_C / 10, tedy s ještě větší rezervou.</p>
   <p><b>Plně sepnutý</b> tranzistor (v nasycení) je jako dokořán otevřený ventil: napětí na něm je jen asi 0,2&nbsp;V a skoro se nehřeje.</p>
-  <p class="hint">U Pica naráží rezerva na limit pinu (výchozí 4&nbsp;mA). Na větší motory je proto lepší MOSFET (úroveň 3) nebo hotový ovladač motoru.</p>`)}
-  <p>Běžné malé tranzistory (BC337, 2N2222) spínají do asi 500 mA. Na větší proudy se používá MOSFET (úroveň 3). Motor a relé potřebují navíc ochrannou diodu (úroveň 2, lekce Relé).</p>
-  <div class="note"><h4>Pořadí vývodů</h4><p>Pořadí C–B–E se u různých tranzistorů liší (BC547: C, B, E; 2N2222: E, B, C). Vždy si ho ověř v katalogovém listu (datasheetu).</p></div>`,
+  <p class="hint">U Pica naráží rezerva na limit pinu (výchozí 4&nbsp;mA). Na větší motory je proto lepší MOSFET (lekce 3.7) nebo hotový ovladač motoru.</p>`)}
+  <p>Běžné malé tranzistory (BC337, 2N2222) spínají do asi 500 mA. Na větší proudy se používá MOSFET (lekce 3.7). Motor a relé potřebují navíc <b>ochrannou diodu</b>, zapojenou vedle nich katodou k +5 V. Na schématu níže už je; proč tam patří, vysvětlí lekce 2.9.</p>
+  <div class="note limit"><h4>Pozor na BC547</h4><p>V sadách součástek bývá nejčastěji BC547. Ten ale snese jen asi 100 mA: na LED stačí, motorek by zničil. Na motorek sáhni po BC337, MOSFETu nebo hotovém ovladači.</p></div>
+  <div class="note"><h4>Pořadí vývodů</h4><p>Pořadí C–B–E se u různých tranzistorů liší (BC547: C, B, E; 2N2222 často E, B, C, ale podle výrobce i jinak). Vždy si ho ověř v katalogovém listu (datasheetu).</p></div>`,
   sim: 'tswitch', task: 'Zvol zátěž motorek. Najdi bázový rezistor, se kterým je tranzistor plně sepnutý a GPIO přitom nepřetížíš.' },
 
 { id: 'l1-10', lvl: 1, title: 'Napájení a baterie', sub: 'Kolik proudu a na jak dlouho',
   idea: 'Zdroj musí dodat dost proudu. Výdrž baterie ≈ kapacita (mAh) / odběr (mA).',
-  terms: [['Napájení Pica', 'Pico W se napájí 5 V přes micro-USB (pin VBUS). Baterie se připojuje na pin VSYS (1,8 až 5,5 V).'], ['Kapacita (mAh)', 'Kolik proudu baterie dodá za hodinu. 1 000 mAh = 1 A po dobu jedné hodiny.'], ['Výkon P = U · I', 'Ve wattech (W). 5 V · 2 A = 10 W.'], ['Podpětí', 'Zdroj nestíhá, napětí klesá. Pico se může náhodně restartovat, třeba když se rozjede motor na stejném zdroji.']],
+  terms: [['Napájení Pica', 'Pico W se napájí 5 V přes micro-USB (pin VBUS). Baterie se připojuje na pin VSYS (1,8 až 5,5 V).'], ['Kapacita (mAh)', 'Kolik náboje baterie pojme. 1 000 mAh vystačí na 1 A po dobu jedné hodiny, nebo na 100 mA po dobu 10 hodin.'], ['Výkon P = U · I', 'Ve wattech (W). 5 V · 2 A = 10 W.'], ['Podpětí', 'Zdroj nestíhá, napětí klesá. Pico se může náhodně restartovat, třeba když se rozjede motor na stejném zdroji.']],
   body: `<p>Každý zdroj má dvě důležitá čísla: <b class="c">napětí</b> (musí sedět) a <b class="c">maximální proud</b> (musí stačit). Pico W samo odebírá jen desítky miliampérů, se zapnutou Wi-Fi o něco víc. Stačí mu tedy skoro každá USB nabíječka nebo port počítače.</p>
   ${more('Proč větší proud zdroje nevadí, ale větší napětí ano?', `<p>Napětí zdroj „tlačí" vždycky celé. Proud si ale určuje zařízení samo, podle Ohmova zákona: I = U / R, kde R je dané zařízením.</p>
   <p>Nabíječka 5&nbsp;V / 2&nbsp;A tedy do Pica „nenatlačí" 2&nbsp;A. Jen říká, že <em>umí</em> dodat až 2&nbsp;A. Pico si při 5&nbsp;V vezme svých asi 50&nbsp;mA a zbytek zůstane nevyužitý, jako u kohoutku, ze kterého natočíš jen sklenici.</p>
@@ -884,9 +895,9 @@ while True:
   <p>Problém nastane, když ze stejného zdroje napájíš motor, servo nebo LED pásek. Ty berou stovky mA a při rozběhu ještě víc. Napětí poklesne (<b>podpětí</b>) a Pico se může restartovat nebo zaseknout. Motory a LED pásky proto napájej z vlastního zdroje a země obou zdrojů propoj. Pin 3V3(OUT) unese nejvýš asi 300 mA, a to jen pro senzory a drobnosti.</p>
   <p>Na baterie se Pico připojuje přes pin <b>VSYS</b>, který přijme 1,8 až 5,5 V: třeba tři tužkové články (4,5 V) nebo jeden Li-ion článek (3,7 V). Jinak stačí powerbanka přes USB. Hrubý odhad výdrže:</p>
   <p class="formula">t [h] ≈ kapacita [mAh] / odběr [mA]</p>
-  <p>Ve skutečnosti vydrží méně, obvykle 70–80 % výpočtu: napětí se převádí a část energie se ztratí jako teplo.</p>
+  <p>Ve skutečnosti vydrží méně. Kapacita powerbanky se udává pro její vnitřní články s napětím 3,7 V. Na 5 V se napětí musí převést a část energie se přitom ztratí jako teplo, takže počítej asi s 60–70 % výpočtu.</p>
   <div class="note limit"><h4>Dvě časté potíže</h4><p>Některé powerbanky se při malém odběru (pod zhruba 50–100 mA) samy vypnou, protože si myslí, že nic není připojené. Pico je pro ně příliš úsporné.</p><p>Když necháš baterii na VSYS a zároveň připojíš USB, patří do cesty od baterie Schottkyho dioda. Jinak by USB baterii „nabíjelo".</p></div>`,
-  sim: 'battery', task: 'Kolik hodin vydrží Pico W, které jen bliká LED, na powerbance 10 000 mAh? A kolik, když pohání motorek?' },
+  sim: 'battery', task: 'Kolik hodin vydrží Pico W, které jen bliká LED, na powerbance 10 000 mAh? A kolik, když pohání motorek? Vydrželo by to doopravdy? Vzpomeň si, co dělají některé powerbanky při malém odběru.' },
 
 /* ---------- ÚROVEŇ 2 ---------- */
 { id: 'l2-01', lvl: 2, title: 'Druhy rezistorů a výkon', sub: 'Teplo, materiály a normalizované řady',
@@ -897,8 +908,8 @@ while True:
   <li><b>Uhlíkový hmotový</b>: uhlíkový prášek s pryskyřicí vypálený v peci. Při přetížení trvale změní hodnotu. Dnes spíš historie.</li>
   <li><b>Uhlíkový vrstvový</b>: tenká vrstva uhlíku na keramické tyčince, spirálovitě prořezaná. Levný, nejběžnější béžový rezistor.</li>
   <li><b>Metalizovaný</b>: místo uhlíku kovová slitina. Přesnější, stabilnější, méně šumí. Obvykle modrý s pěti pruhy.</li>
-  <li><b>Nelineární</b>: termistor (teplota), fotorezistor (světlo), varistor (napětí, ochrana proti přepětí).</li></ul>
-  <p>Rezistory se dřív vyrobily a pak roztřídily. Tak vznikly <b class="c">normalizované řady</b>: v řadě E24 jsou sousední hodnoty asi 10 % od sebe, takže se jejich tolerance ±5 % dotýkají.</p>
+  <li><b>Nelineární</b>: termistor (teplota), fotorezistor (čím víc světla, tím menší odpor), varistor (napětí, ochrana proti přepětí).</li></ul>
+  <p>Hodnoty rezistorů nejsou libovolné, ale tvoří <b class="c">normalizované řady</b>. Každá další hodnota je zhruba o stejné procento větší než předchozí. V řadě E24 je to asi 10 %, takže se sousední hodnoty se svou tolerancí ±5 % právě dotýkají a nikde nezůstane mezera.</p>
   <p>Kolik tepla rezistor snese, závisí hlavně na jeho <b>velikosti</b>: 1/8 W (3,5 mm), 1/4 W (6 mm), 1/2 W (9 mm). Rezistor pro LED z GPIO (330 Ω, 4 mA) má jen P = 0,004² · 330 ≈ 5 mW. Rezistor 10 Ω na 5 V už 2,5 W a potřebuje 5W typ.</p>`,
   sim: 'power', task: 'Jaký výkon vzniká na rezistoru 47 Ω připojeném na 12 V? Jaký typ zvolíš?' },
 
@@ -908,7 +919,7 @@ while True:
   body: `<p>Představ si trubku přepaženou pružnou gumovou <b>membránou</b>. Když na jednom konci zatlačíš pístem, voda napne membránu. Voda na druhé straně se posune, takže chvíli teče proud. Jakmile membrána tlačí zpět stejně silně jako píst, všechno se zastaví. Trubka je <b class="c">nabitá</b>. Když píst pustíš, membrána vodu vrátí a trubka se <b class="c">vybije</b>.</p>
   <p>Kondenzátor se chová stejně. Po připojení ke zdroji se na jedné desce hromadí elektrony, dokud napětí kondenzátoru nevyrovná napětí zdroje. Pak proud přestane téct. Stejnosměrný proud tedy trvale <b>neprojde</b>, teče jen krátký přechodový proud.</p>
   <p>Jak rychle se nabije, určuje rezistor v cestě: <span class="mono">τ = R · C</span>. S 10 kΩ a 100 µF je τ = 1 s.</p>
-  <p>Kde kondenzátory potkáš: 100nF kondenzátor u každého čipu vyhlazuje napájení, velké elektrolyty v zdrojích, v časovačích a v bleskách fotoaparátů.</p>
+  <p>Kde kondenzátory potkáš: 100nF kondenzátor u každého čipu vyhlazuje napájení, velké elektrolyty ve zdrojích, v časovačích a v bleskách fotoaparátů.</p>
   <div class="note limit"><h4>Pozor</h4><p>Velké kondenzátory drží náboj i po vypnutí přístroje. V síťových zdrojích může zůstat nebezpečné napětí.</p></div>`,
   sim: 'rc', task: 'Připoj zdroj a sleduj proud. Pak zvětši C a zopakuj. Za jak dlouho je kondenzátor „plný"?' },
 
@@ -922,16 +933,17 @@ while True:
   <p>V analogii s membránou: měkká guma se hodně vydme a pojme hodně vody, ale snadno praskne (velká kapacita, nízké napětí). Tuhá guma vydrží velký tlak, ale pojme málo. Chceš-li obojí, potřebuješ větší trubku. Proto kondenzátor s velkým C i U je velký.</p>
   <p>Jediné dielektrikum, ve kterém se neztrácí žádná energie, je dokonalé vakuum. U ladicího kondenzátoru je dielektrikem vzduch; největší kapacitu má, když jsou otočné desky celé zasunuté mezi pevné.</p>
   <div class="tscroll"><table><thead><tr><th>Materiál</th><th>εr</th></tr></thead><tbody><tr><td>vzduch</td><td class="num">1</td></tr><tr><td>papír</td><td class="num">1,5–3</td></tr><tr><td>parafín</td><td class="num">2,25</td></tr><tr><td>porcelán</td><td class="num">4,4</td></tr><tr><td>slída</td><td class="num">7,5</td></tr><tr><td>sklo</td><td class="num">≈ 10</td></tr><tr><td>destilovaná voda</td><td class="num">81</td></tr></tbody></table></div>`,
-  sim: 'capcalc', task: 'Nastav sklo a desky 25 × 25 mm vzdálené 0,25 mm. Pak desky přibliž na polovinu. Kolikrát vzrostla kapacita?' },
+  sim: 'capcalc', task: 'Nastav sklo a desky 25 × 25 mm vzdálené 0,25 mm. Tipni si, kolikrát vzroste kapacita, když desky přiblížíš na polovinu. Pak to ověř.' },
 
 { id: 'l2-04', lvl: 2, title: 'Značení kondenzátorů a polarita', sub: 'Kódy 104, 4n7 a pruh s minusem',
   idea: 'Kód 104 znamená 10 · 10⁴ pF = 100 nF. Elektrolyt má polaritu: pruh s minusem patří k nižšímu napětí.',
   terms: [['pF, nF, µF', '1 µF = 1 000 nF = 1 000 000 pF.'], ['Trojčíselný kód', 'Dvě číslice a počet nul, v pikofaradech. 473 = 47 000 pF = 47 nF.'], ['Tolerance J / K / M', '±5 %, ±10 %, ±20 %. Z znamená +80 / −20 %.'], ['Jmenovité napětí', 'Nejvyšší napětí, které kondenzátor trvale vydrží. Vol ho s rezervou.'], ['Elektrolytický kondenzátor', 'Velká kapacita v malém objemu, ale má polaritu.']],
   body: `<p>Malé keramické kondenzátory nesou krátký kód. Tři číslice: první dvě jsou hodnota, třetí počet nul, vše v <b>pikofaradech</b>:</p>
-  <ul><li>104 = 10 + 0000 pF = 100 000 pF = <b>100 nF</b> (nejběžnější „blokovací" kondenzátor),</li><li>472 = 4 700 pF = 4,7 nF,</li><li>4n7 nebo 2R2: písmeno stojí místo desetinné čárky (4,7 nF; 2,2).</li></ul>
+  <ul><li>104 = 10 a za ní 4 nuly = 100 000 pF = <b>100 nF</b> (nejběžnější „blokovací" kondenzátor),</li><li>472 = 4 700 pF = 4,7 nF,</li><li>4n7 nebo 2R2: písmeno stojí místo desetinné čárky (4n7 = 4,7 nF; 2R2 = 2,2 pF u malého keramického, 2,2 µF u elektrolytu).</li></ul>
   <p>Písmeno na konci je tolerance (473<b>J</b> = ±5 %). Někteří výrobci ale píšou hodnotu přímo: malý kotouček s nápisem 100 bývá 100 pF, velký elektrolyt s nápisem 100 je 100 µF. Pomáhá velikost součástky.</p>
   <p><b class="c">Elektrolytické</b> (a tantalové) kondenzátory mají polaritu. Delší nožička je +, pruh s minusy na pouzdře je −. Obráceně zapojený elektrolyt se zahřívá, nafoukne a může prasknout.</p>
-  <p>Jmenovité napětí vol aspoň o polovinu vyšší než napětí v obvodu: pro 5 V stačí 10 V, pro 12 V volíme 25 V.</p>`,
+  <p>Jmenovité napětí vol aspoň o polovinu vyšší než napětí v obvodu: pro 5 V stačí 10 V, pro 12 V volíme 25 V.</p>
+  <p>Když nemáš potřebnou hodnotu, kondenzátory spoj <b>paralelně</b> (vedle sebe): kapacity se sčítají, jako by se zvětšila plocha desek. 10 µF a 20 µF vedle sebe dají 30 µF.</p>`,
   sim: 'capcode', task: 'Rozlušti kódy 104, 473J, 4n7 a napěťový kód 1H.' },
 
 { id: 'l2-05', lvl: 2, title: 'Cívka: elektrická setrvačnost', sub: 'Proud, který se nechce zastavit',
@@ -948,7 +960,7 @@ while True:
   terms: [['Anoda a katoda', 'Proud teče z anody do katody. Katodu označuje proužek.'], ['Propustný / závěrný směr', 'V propustném dioda vede, v závěrném ne.'], ['Prahové napětí', 'Křemík 0,6–0,7 V, Schottkyho dioda asi 0,3 V, LED 1,8–3,3 V.'], ['Zenerova dioda', 'V závěrném směru při určitém napětí (např. 5,1 V) vede a drží ho stálé.'], ['VA charakteristika', 'Graf proudu v závislosti na napětí.']],
   body: `<p>Dioda je jako <b class="c">zpětný ventil</b> s pružinou. Voda jím proteče jen jedním směrem, a to až když tlak přemůže pružinu. Opačným směrem ventil zavře doraz.</p>
   <p>U křemíkové diody „pružina" odpovídá asi 0,7 V. Pod touto hranicí proud prakticky neteče, nad ní prudce roste. Proto s diodou (a LED) vždy počítáme s omezením proudu.</p>
-  <p>Dioda z galium-arsenidu potřebuje asi dvojnásobné napětí a energie uvolněná na přechodu se mění ve světlo. To je <b>LED</b>. Barva závisí na materiálu: červená asi 1,8–2 V, modrá a bílá asi 3 V.</p>
+  <p>U <b>LED</b> se energie uvolněná na přechodu mění ve světlo. LED se nevyrábějí z křemíku, ale z jiných polovodičů, a barva i napětí závisí na materiálu: infračervená z arsenidu galia (dálkové ovladače) asi 1,2–1,5 V, červená asi 1,8–2 V, modrá a bílá asi 3 V. Modré světlo nese víc energie než červené, proto modrá LED potřebuje vyšší napětí.</p>
   <p><b>Zenerova dioda</b> se zapojuje obráceně. Při dosažení svého Zenerova napětí začne vést a napětí na ní zůstane stálé. Slouží jako reference nebo ochrana proti přepětí.</p>
   <p>K čemu diody jsou: usměrňovač (ze střídavého proudu stejnosměrný), ochrana proti přepólování baterie, ochrana tranzistoru u relé. Běžné typy: 1N4148 (signálová), 1N4007 (usměrňovací, 1 A).</p>`,
   sim: 'diode', task: 'Pomalu zvyšuj napětí na křemíkové diodě. Kdy začne téct proud? Porovnej s modrou LED a Zenerovou diodou v závěrném směru.' },
@@ -958,7 +970,7 @@ while True:
   terms: [['Zesilovací činitel β', 'Poměr I_C / I_B. Liší se kus od kusu, typicky 100–400.'], ['Aktivní režim', 'Tranzistor zesiluje: I_C roste úměrně I_B.'], ['Nasycení', 'Plně sepnuto. Větší I_B už proud nezvětší.'], ['Závěr', 'Zavřeno: bez proudu báze neteče ani kolektorem.'], ['NPN a PNP', 'U PNP tečou proudy opačně a emitor bývá připojen k +.']],
   body: `<p>Představ si páku. Slabý proud báze tlačí na její dlouhé rameno. Krátké rameno otevírá ventil ve velké trubce kolektoru. Poměr ramen odpovídá <b class="c">β</b>: když je dlouhé rameno 100× delší, kolektorem proteče 100× víc než bází. Oba proudy nakonec odtékají emitorem:</p>
   <p class="formula">I_C = β · I_B     I_E = I_B + I_C</p>
-  <p>Tranzistor má tři režimy. <b>Závěr</b>: báze bez proudu, tranzistor zavřený. <b>Aktivní režim</b>: zesiluje, I_C sleduje I_B. <b>Nasycení</b>: ventil je otevřený naplno a víc proudu nepustí, protože ho omezuje zátěž. Při spínání (lekce 9 úrovně 1) chceme nasycení, při zesilování zvuku aktivní režim.</p>
+  <p>Tranzistor má tři režimy. <b>Závěr</b>: báze bez proudu, tranzistor zavřený. <b>Aktivní režim</b>: zesiluje, I_C sleduje I_B. <b>Nasycení</b>: ventil je otevřený naplno a víc proudu nepustí, protože ho omezuje zátěž. Při spínání (lekce 1.9) chceme nasycení, při zesilování zvuku aktivní režim.</p>
   <p><b>PNP</b> tranzistor funguje obráceně: proud vtéká emitorem a vytéká bází a kolektorem. Emitor PNP se proto připojuje k + zdroje, emitor NPN k zemi. Šipka ve značce ukazuje směr proudu emitorem. Pomůcka: <em>PNP = „Pointing iN"</em>, šipka míří dovnitř.</p>
   <p>β se liší i u tranzistorů stejného typu. Dobře navržený obvod na přesné hodnotě β nezávisí.</p>`,
   sim: 'beta', task: 'Zvyšuj bázový proud a sleduj, kdy lampa přestane jasnět. Jak se tomu stavu říká?' },
@@ -982,14 +994,14 @@ time.sleep(2)
 for jas in range(0, 65536, 1024):
     led.duty_u16(jas)
     time.sleep_ms(20)`)}
-  <p>Metoda <span class="mono">duty_u16</span> bere čísla od 0 (vypnuto) do 65 535 (trvale zapnuto). Polovina, 32 768, je střída 50 %. Pico umí hardwarové PWM na každém GPIO pinu. Servomotory používají PWM 50 Hz s pulzem 1–2 ms.</p>`,
-  sim: 'pwm', task: 'Nastav 2 Hz a střídu 25 %. Pak zvyšuj frekvenci, dokud LED nepřestane blikat.' },
+  <p>Metoda <span class="mono">duty_u16</span> bere čísla od 0 (vypnuto) do 65 535 (trvale zapnuto). Polovina, 32 768, je střída 50 %. PWM umí každý GPIO pin. Piny se ale dělí o 16 kanálů: třeba GP0 a GP16 sdílejí jeden kanál, takže by měly stejnou střídu. Pro dvě různě svítící LED vyber sousední piny, například GP14 a GP15. Servomotory používají PWM 50 Hz s pulzem 1–2 ms.</p>`,
+  sim: 'pwm', task: 'Nastav 2 Hz a střídu 25 % a sleduj LED. Pak přepni na 50 Hz. Proč LED přestala blikat, i když se pořád zapíná a vypíná? (Přesnou hranici, kdy oko blikání přestane vidět, simulace neukáže. Na skutečném Picu ji najdeš změnou čísla v led.freq().)' },
 
 { id: 'l2-09', lvl: 2, title: 'Relé a ochranná dioda', sub: 'Spínač ovládaný cívkou',
   idea: 'Relé je spínač ovládaný cívkou. Paralelně k cívce vždy zapoj diodu, jinak špička zničí tranzistor.',
   terms: [['Relé', 'Elektromagnet přitahuje kontakty. Ovládací a spínaný obvod jsou oddělené.'], ['COM, NO, NC', 'Společný kontakt, v klidu rozpojený (NO) a v klidu spojený (NC).'], ['Ochranná dioda', 'Dioda paralelně k cívce, katodou k +. Tlumí špičku při vypnutí.'], ['Galvanické oddělení', 'Obvody nejsou vodivě spojené; ovlivňují se jen magneticky nebo světlem.']],
   body: `<p>Relé má uvnitř <b>cívku</b> a pohyblivé kontakty. Proud cívkou vytvoří magnetické pole, které kontakty přitáhne. Malý proud tak spíná obvod, který je od Pica úplně oddělený: lampu, čerpadlo nebo motor.</p>
-  <p>Cívka ale má setrvačnost (lekce Cívka). Když ji tranzistor vypne, vznikne na kolektoru <b class="c">napěťová špička</b> desítek až stovek voltů. Malý tranzistor ji nemusí přežít.</p>
+  <p>Cívka ale má setrvačnost (lekce 2.5). Když ji tranzistor vypne, vznikne na kolektoru <b class="c">napěťová špička</b> desítek až stovek voltů. Malý tranzistor ji nemusí přežít.</p>
   <p>Řešením je <b>ochranná dioda</b> paralelně k cívce, zapojená katodou k +. Za běžného provozu nevede. Po vypnutí převezme proud cívky, ten pomalu doběhne v kroužku cívka–dioda a špička nevznikne. Totéž platí pro motory a elektromagnetické ventily.</p>
   <p>Hotové moduly relé mají tranzistor, diodu i kontrolku už na desce. Některé přidávají optočlen pro úplné oddělení. Pro Pico vybírej modul, který spolehlivě sepne signálem 3,3 V.</p>
   <div class="note limit"><h4>Síťové napětí</h4><p>Relé zvládne spínat 230 V, ale práce se síťovým napětím je životu nebezpečná. Jako začátečník spínej jen bezpečná nízká napětí.</p></div>`,
@@ -1005,30 +1017,30 @@ for jas in range(0, 65536, 1024):
   <p class="formula">X_L = 2π · f · L</p>
   <p>Proud a napětí navíc nejsou „v kroku". U kondenzátoru proud předbíhá napětí o čtvrt periody (nejdřív musí téct, aby se nabil). U cívky napětí předbíhá proud.</p>
   <p>Na tom stojí filtry (další lekce), výhybky v reproduktorech i ladění rádia.</p>`,
-  sim: 'ac', task: 'Posouvej frekvenci. Při jaké frekvenci mají kondenzátor 1 µF a cívka 10 mH stejnou reaktanci?' },
+  sim: 'ac', task: 'Nastav C = 1 µF a L = 10 mH. Posouvej frekvenci a najdi, kde se obě křivky protnou. Tipni si: pod touto frekvencí brání proudu víc kondenzátor, nebo cívka? Pak to ověř.' },
 
 { id: 'l3-02', lvl: 3, title: 'RC filtr', sub: 'Dolní a horní propust',
   idea: 'Rezistor a kondenzátor tvoří filtr. Nad mezní frekvencí f_m = 1 / (2π R C) signál slábne.',
   terms: [['Dolní propust', 'Propustí nízké frekvence, vysoké utlumí. R v sérii, C k zemi.'], ['Horní propust', 'Opak: C v sérii, R k zemi.'], ['Mezní frekvence f_m', 'Výstup má 70,7 % vstupní amplitudy (−3 dB).'], ['Decibel (dB)', 'Logaritmická míra poměru. −20 dB = desetkrát menší amplituda.']],
-  body: `<p>Zapoj rezistor do série a kondenzátor ze výstupu k zemi. Pro <b>pomalé</b> změny se kondenzátor stihne nabíjet a výstup kopíruje vstup. Pro <b>rychlé</b> změny má kondenzátor malou reaktanci a signál „svede" do země. Vznikla <b class="c">dolní propust</b>.</p>
+  body: `<p>Zapoj rezistor do série a kondenzátor z výstupu k zemi. Pro <b>pomalé</b> změny se kondenzátor stihne nabíjet a výstup kopíruje vstup. Pro <b>rychlé</b> změny má kondenzátor malou reaktanci a signál „svede" do země. Vznikla <b class="c">dolní propust</b>.</p>
   <p class="formula">f_m = 1 / (2π · R · C)</p>
   <p>Na mezní frekvenci má výstup asi 71 % amplitudy. Nad ní klesá asi desetkrát na každou desetinásobnou frekvenci (−20 dB na dekádu).</p>
   <p>Prohodíš-li R a C, dostaneš <b>horní propust</b>, která propustí jen rychlé změny.</p>
   <p>S Picem: Pico nemá analogový výstup. PWM signál ale můžeš vyhladit dolní propustí s f_m hluboko pod frekvencí PWM a dostaneš plynulé napětí. Podobně RC článek potlačí zákmity tlačítka.</p>`,
-  sim: 'rcfilter', task: 'Nastav R = 10 kΩ a C = 100 nF. Jaká je mezní frekvence? Kolik projde z PWM s frekvencí 1 kHz?' },
+  sim: 'rcfilter', task: 'Nastav R = 10 kΩ a C = 100 nF. Jaká je mezní frekvence? Tipni si, jestli z PWM s frekvencí 1 kHz projde víc, nebo méně než polovina amplitudy, a pak to ověř.' },
 
 { id: 'l3-03', lvl: 3, title: 'Indukčnost: jak se počítá', sub: 'Závity, průřez, délka, jádro',
   idea: 'L = μ₀ · μr · N² · A / l. Počet závitů působí kvadraticky, jádro násobí indukčnost permeabilitou.',
   terms: [['Počet závitů N', 'Indukčnost roste s N². Dvakrát víc závitů = čtyřikrát větší L.'], ['Průřez A', 'Plocha závitu (π · r²). Větší průměr = větší L.'], ['Délka l', 'Natažená cívka má menší indukčnost než stlačená.'], ['Permeabilita μr', 'Kolikrát jádro zesílí magnetické pole. Vzduch 1, ferit stovky až tisíce.'], ['Nasycení jádra', 'Při velkém proudu jádro „nestačí" a indukčnost prudce klesne.']],
   body: `<p>Jak vyrobit cívku s požadovanou indukčností? Rozhodují čtyři věci:</p>
   <ol><li><b>Délka</b>: stlačíš-li závity k sobě, ovlivňují se víc a L roste. Indukčnost je nepřímo úměrná délce.</li>
-  <li><b>Průřez</b>: větší průměr znamená delší drát na závit a větší plochu pro magnetické pole.</li>
+  <li><b>Průřez</b>: větší průměr znamená větší plochu, kterou prochází magnetické pole. Indukčnost roste s plochou průřezu.</li>
   <li><b>Počet závitů</b>: víc drátu a zároveň víc vzájemného ovlivnění. Proto roste s druhou mocninou N.</li>
   <li><b>Jádro</b>: železo nebo ferit obsahuje „malé magnetky", které se natáčejí s polem a zesilují ho μr-krát.</li></ol>
   <p class="formula">L = μ₀ · μr · N² · A / l</p>
   <p>Vzorec platí dobře pro dlouhé válcové cívky (délka větší než průměr). Ferit se používá pro vysoké frekvence (měniče, filtry), plechy z křemíkové oceli pro síťové transformátory.</p>
   <p>Hotové cívky bývají vyrobené na zakázku a často nemají standardní značení. Malé tlumivky mívají barevné pruhy jako rezistory (hodnota v µH).</p>`,
-  sim: 'indcalc', task: 'Zdvojnásob počet závitů. Kolikrát vzroste L? Pak vlož feritové jádro.' },
+  sim: 'indcalc', task: 'Tipni si: kolikrát vzroste L, když zdvojnásobíš počet závitů? Pak to ověř a vlož feritové jádro.' },
 
 { id: 'l3-04', lvl: 3, title: 'Transformátor, Faraday a Lenz', sub: 'Jak se mění napětí',
   idea: 'Měnící se proud v primáru indukuje napětí v sekundáru: U₂ / U₁ = N₂ / N₁. Výkon se nevyrobí, proud se změní opačně.',
@@ -1047,7 +1059,7 @@ for jas in range(0, 65536, 1024):
   body: `<p>Spoj membránu (kondenzátor) s těžkou hadicí (cívkou). Napnutá membrána vodu vytlačí, voda se setrvačností přežene a membránu napne na druhou stranu. A znovu. Vzniklo kyvadlo: energie se přelévá mezi elektrickým polem kondenzátoru a magnetickým polem cívky.</p>
   <p class="formula">f₀ = 1 / (2π · √(L · C))</p>
   <p>Na této frekvenci se reaktance cívky a kondenzátoru přesně vyruší (X_L = X_C). V sériovém obvodu pak proud omezuje jen odpor drátu a je největší.</p>
-  <p><b class="c">Činitel jakosti Q</b> říká, jak ostrá rezonance je: Q = X_L / r (r je odpor vinutí). Vyšší Q získáš jádrem, které zvýší L, nebo silnějším drátem, který sníží r. Čím vyšší Q, tím přesněji obvod vybere jednu frekvenci.</p>
+  <p><b class="c">Činitel jakosti Q</b> říká, jak ostrá rezonance je: Q = X_L / r (r je odpor vinutí). Vyšší Q získáš hlavně silnějším drátem, který sníží r. Jádro sice zvýší L, ale samo přidává ztráty, takže na vyšších frekvencích Q často nezlepší. Čím vyšší Q, tím přesněji obvod vybere jednu frekvenci.</p>
   <p>Využití: ladění rádia (otočný kondenzátor mění f₀), filtry, oscilátory a bezdrátové nabíjení telefonů.</p>`,
   sim: 'lc', task: 'Najdi f₀ pro L = 10 mH a C = 1 µF. Pak zmenšuj odpor a sleduj, jak se křivka zužuje.' },
 
@@ -1062,11 +1074,12 @@ for jas in range(0, 65536, 1024):
   sim: null },
 
 { id: 'l3-07', lvl: 3, title: 'FET a MOSFET', sub: 'Spínání napětím',
-  idea: 'Tranzistor řízený polem spíná napětím na hradle, téměř bez proudu. Pro Pico vybírej MOSFET s logickou úrovní.',
-  terms: [['FET', 'Field Effect Transistor. Vývody: hradlo G, zdroj S (source), kolektor D (drain).'], ['Prahové napětí U_GS(th)', 'Napětí hradla, při kterém kanál začne vést.'], ['R_DS(on)', 'Odpor sepnutého kanálu, často jen miliohmy.'], ['Logic-level MOSFET', 'Plně sepne už při 2,5–4,5 V, takže ho lze řídit přímo z GPIO.'], ['Citlivost na statiku', 'Tenkou izolaci hradla prorazí i výboj statické elektřiny.']],
-  body: `<p>Představ si trubku, jejíž část je z tenké pružné gumy. Kolem ní je voda z třetí trubky, <b>hradla</b>. Když v hradle zvýšíš tlak, guma kanál přiškrtí. Hradlem přitom žádná voda neteče. To je tranzistor řízený polem, <b class="c">FET</b>.</p>
-  <p>U <b>MOSFETu</b> je hradlo od kanálu oddělené tenkou vrstvou oxidu. Chová se jako malý kondenzátor: proud teče jen při přepínání. U N-MOSFETu kladné napětí na hradle kanál otevře a sepnutý kanál má odpor jen desítky miliohmů. Proto MOSFET spíná ampéry a skoro se nehřeje.</p>
-  <p>Pozor na napětí hradla. Mnoho výkonových MOSFETů (IRF520, IRFZ44N) se plně otevře až při 10 V; při 3,3 V z GPIO zůstanou napůl sepnuté a hřejí se. Pro Pico vybírej <b>logic-level</b> typ, jehož R_DS(on) výrobce udává pro U_GS = 2,5 V (například AO3400, IRLZ44N je hraniční).</p>
+  idea: 'Tranzistor řízený polem spíná napětím na hradle, téměř bez proudu. Pro Pico vybírej MOSFET, který se plně otevře už při 2,5 V.',
+  terms: [['FET', 'Field Effect Transistor, tranzistor řízený polem. Vývody: hradlo G (gate), S (source) a D (drain).'], ['Prahové napětí U_GS(th)', 'Napětí hradla, při kterém kanál začne vést.'], ['R_DS(on)', 'Odpor sepnutého kanálu, často jen miliohmy.'], ['Logic-level MOSFET', 'Výrobce u něj zaručuje sepnutí už při 4,5–5 V místo 10 V. Pro 3,3 V z Pica to ale nemusí stačit.'], ['Citlivost na statiku', 'Tenkou izolaci hradla prorazí i výboj statické elektřiny.']],
+  body: `<p>Představ si měkkou hadici sevřenou pružnou svorkou. V klidu je zmáčknutá a voda neteče. Svorku ovládá malý píst, <b>hradlo</b>. Dokud na něj tlačíš slabě, pružina svorky vyhrává a nic se neděje. Když tlak přemůže pružinu, svorka se rozevře, a čím víc tlačíš, tím víc se hadice otevře. Pístem samotným přitom žádná voda neteče. Tak funguje tranzistor řízený polem, <b class="c">FET</b>, v provedení, které budeš s Picem používat: N-MOSFET.</p>
+  <p>U <b>MOSFETu</b> je hradlo od kanálu oddělené tenkou vrstvou oxidu. Chová se jako malý kondenzátor: proud teče jen při přepínání. Kladné napětí na hradle N-MOSFETu kanál otevře; síla pružiny odpovídá prahovému napětí. Sepnutý kanál má odpor jen desítky miliohmů, proto MOSFET spíná ampéry a skoro se nehřeje.</p>
+  <p class="cap">Starší typ, JFET, funguje obráceně: v klidu vede a napětí na hradle kanál přiškrcuje. S Picem se s ním skoro nepotkáš.</p>
+  <p>Pozor na napětí hradla. Mnoho výkonových MOSFETů (IRF520, IRFZ44N) se plně otevře až při 10 V; při 3,3 V z GPIO zůstanou napůl sepnuté a hřejí se. Nestačí ani nápis <b>logic-level</b>: ten obvykle znamená, že výrobce zaručuje sepnutí při 4,5–5 V. Pro Pico hledej typ, jehož R_DS(on) je v datasheetu udané pro U_GS = 2,5 V (například AO3400). Oblíbený IRLZ44N je logic-level, ale z 3,3 V je hraniční.</p>
   <p>Zapojení: GPIO → rezistor 100 Ω → hradlo; mezi hradlo a GND rezistor 100 kΩ, aby hradlo při startu Pica „neplavalo" a MOSFET náhodně nesepnul.</p>`,
   sim: 'mosfet', task: 'Nastav hradlo na 3,3 V a porovnej logic-level a standardní MOSFET při zátěži 2 A.' },
 
@@ -1086,9 +1099,10 @@ for jas in range(0, 65536, 1024):
   terms: [['Plošný spoj (DPS)', 'Izolační deska s měděnými cestami. Nejčastěji sklolaminát FR4.'], ['Potisk (legenda)', 'Obrysy a označení součástek (R1, C1) na straně součástek.'], ['Prokovený otvor', 'Pokovená díra, která spojuje cesty na obou stranách desky.'], ['Pájka', 'Slitina cínu. Olovnatá Sn63Pb37 taje při 183 °C, bezolovnatá kolem 217–227 °C.'], ['Tavidlo (kalafuna)', 'Čistí povrch při pájení. Je uvnitř trubičkové pájky.']],
   body: `<p><b class="c">Plošný spoj</b> je izolační deska s měděnou fólií (typicky 35 µm), ze které se vyleptají vodivé cesty. Oproti ručnímu drátování šetří místo, vylučuje chyby v zapojení a umožňuje strojní osazování. Oboustranné desky mají prokovené otvory.</p>
   <p>Několik návrhových pravidel:</p>
-  <ul><li>Šířka cesty podle proudu: cesta široká 2,5 mm se při 5 A ohřeje asi o 10 °C.</li><li>Mezery podle napětí: mezi cestami s rozdílem 500 V aspoň 0,8 mm.</li><li>Žádné ostré rohy: lom po 45° nebo oblouk. V rohu je silnější pole a měď se snáz odlupuje.</li><li>Těžké součástky upevni, desku uchyť bez pnutí.</li></ul>
+  <ul><li>Šířka cesty podle proudu: cesta široká 2,5 mm se při 5 A ohřeje asi o 10 °C.</li><li>Mezery podle napětí: čím větší napětí mezi cestami, tím větší mezera. Pro nízká napětí kolem Pica stačí výchozí pravidla návrhového programu.</li><li>Lom cesty po 45° nebo obloukem, nikdy ostřejší než 90°: v ostrém úhlu se při leptání drží leptadlo.</li><li>Těžké součástky upevni, desku uchyť bez pnutí.</li></ul>
   <p>Schéma je „mapa" obvodu, potisk je „adresa" součástky na desce. Při opravě hledáš ve schématu R1 a na desce najdeš nápis R1.</p>
-  <p><b>Pájení</b>: nejnižší bod tání má slitina cínu a olova 63/37 (eutektikum, 183 °C). V EU se od roku 2006 v nové elektronice používá bezolovnatá pájka (např. Sn99,3Cu0,7). Pro elektroniku jen pájka s kalafunou, nikdy instalatérská s kyselinou. Postup: hrotem ohřej zároveň plôšku i vývod, přidej pájku, po 2–3 s odtáhni. Správný spoj je lesklý kužel.</p>`,
+  <p><b>Pájení</b>: nejnižší bod tání má slitina cínu a olova 63/37 (eutektikum, 183 °C). V EU se od roku 2006 v nové elektronice používá bezolovnatá pájka (např. Sn99,3Cu0,7). Pro elektroniku jen pájka s kalafunou, nikdy instalatérská s kyselinou. Postup: hrotem ohřej zároveň plôšku i vývod, přidej pájku, po 2–3 s odtáhni. Správný spoj má tvar kužele s mírně prohnutými stěnami: pájka obteče vývod i plošku. Olovnatá pájka je lesklá, bezolovnatá bývá i u dobrého spoje matnější. Kulička, která se plošky skoro nedotýká, je „studený" spoj.</p>
+  <div class="note limit"><h4>Bezpečnost při pájení</h4><ul><li>Hrot má přes 300 °C. Páječku odkládej jen do stojánku a nikdy ji nechytej za kovovou část.</li><li>Výpary z tavidla dráždí dýchací cesty: pájej u otevřeného okna nebo s odsáváním a kouř nedýchej zblízka.</li><li>Při štípání vývodů a při pájení nos brýle. Ustřižený drátek i kapka pájky umí odletět.</li><li>Po práci s olovnatou pájkou si umyj ruce. U pájení nejez a nepij.</li></ul></div>`,
   sim: 'pcb', task: 'Klepni na součástku ve schématu a najdi ji na desce. Pak to zkus obráceně.' },
 ];
 /* ================= Pomůcky ================= */
@@ -1146,7 +1160,7 @@ const SIMS = {};
 
 /* ---------- 1 Ohmův zákon: okruh s kapkami ---------- */
 SIMS.ohm = (root) => {
-  const q = mount(root, figT('Simulace', 'uzavřený okruh') + `<div class="fig-body"><canvas style="aspect-ratio:16/11" aria-label="Okruh s čerpadlem a zúženým místem"></canvas><div class="controls">${rng('sU', 'Napětí zdroje U', 0, 12, 0.5, 9, 'U')}${rng('sR', 'Odpor R', 50, 1000, 10, 100, 'R')}<div class="readouts">${ro('rI', 'Proud I', 'qI')}${ro('rP', 'Výkon P = U · I', 'qP')}</div><p class="cap">Kapky se pohybují stejně rychle v celém okruhu, i za rezistorem. Rezistor se zahřívá tím víc, čím větší výkon na něm vzniká.</p></div></div>`);
+  const q = mount(root, figT('Simulace', 'uzavřený okruh') + `<div class="fig-body"><canvas style="aspect-ratio:16/11" aria-label="Okruh s čerpadlem a zúženým místem"></canvas><div class="controls">${rng('sU', 'Napětí zdroje U', 0, 12, 0.5, 9, 'U')}${rng('sR', 'Odpor R', 50, 1000, 10, 100, 'R')}<div class="readouts">${ro('rI', 'Proud I', 'qI')}${ro('rP', 'Výkon P = U · I', 'qP')}</div><p class="cap">Za sekundu proteče stejně kapek v celém okruhu, před rezistorem i za ním: proud se nespotřebuje. Rezistor se zahřívá tím víc, čím větší výkon na něm vzniká.</p></div></div>`);
   const k = canvasKit(q('canvas')); let U, R, I, P; const N = 70; const parts = [...Array(N)].map((_, i) => ({ s: i / N, o: Math.random() * 2 - 1 }));
   onInputs(q, ['sU', 'sR'], () => { U = +q('#sU').value; R = +q('#sR').value; I = U / R; P = U * I; q('#sUo').textContent = num(U) + ' V'; q('#sRo').textContent = R + ' Ω'; q('#rI').textContent = si(I, 'A'); q('#rP').textContent = si(P, 'W'); });
   return { step(dt, motion) {
@@ -1254,30 +1268,31 @@ SIMS.led = (root) => {
   const q = mount(root, figT('Simulace', 'LED s předřadným rezistorem') + `<div class="fig-body"><div id="lSvg"></div><div class="controls">
   <div class="ctl"><label for="lSrc">Zdroj</label><select id="lSrc"><option value="3.3">GPIO pin (3,3 V)</option><option value="5">5 V</option><option value="9">baterie 9 V</option></select></div>
   <div class="ctl"><label for="lCol">Barva LED</label><select id="lCol"><option value="2.0|#e63b2e">červená (≈ 2,0 V)</option><option value="2.2|#35b34a">zelená (≈ 2,2 V)</option><option value="3.0|#3d7dff">modrá (≈ 3,0 V)</option></select></div>
-  ${rng('lR', 'Rezistor R', 0, Rs.length - 1, 1, Rs.indexOf(330), 'R')}
+  ${rng('lR', 'Rezistor R', 0, Rs.length - 1, 1, Rs.indexOf(1000), 'R')}
   <div class="btns"><button class="btn" id="lFlip" type="button">Otočit LED</button><button class="btn primary" id="lNew" type="button" hidden>Vyměnit LED</button></div>
   <div class="readouts">${ro('rI', 'Proud', 'qI')}${ro('rUR', 'Napětí na R', 'qU')}${ro('rPR', 'Výkon na R', 'qP')}</div><div id="lSt"></div><p class="cap" id="lHint"></p></div></div>`);
   let flip = false, dead = false;
   const upd = () => {
     const U = +q('#lSrc').value, [vf, col] = q('#lCol').value.split('|'), Vf = +vf, R = Rs[+q('#lR').value]; q('#lRo').textContent = si(R, 'Ω');
     let I = (!flip && !dead && U > Vf) ? (U - Vf) / R : 0; const gpio = U < 4;
-    if (I > 0.03) { dead = true; I = 0; }
+    if (I > 0.03 && !gpio) { dead = true; I = 0; }
+    const over = gpio && I > 0.03; // GPIO tolik proudu nedodá, výpočet by byl nereálný
     const glow = clamp(I / 0.015, 0, 1);
     q('#lSvg').innerHTML = S.svg(320, 170, S.bat(40, 85, gpio ? '3,3 V' : num(U) + ' V') + S.w('40,55 40,30 100,30') + S.res(130, 30, false, si(R, 'Ω')) + S.w('160,30 250,30 250,55')
       + `<circle cx="250" cy="85" r="24" style="fill:${col};opacity:${glow * .55}"/>` + (flip ? `<g transform="rotate(180 250 85)">${S.diode(250, 85, 'down', '', 'led')}</g>` : S.diode(250, 85, 'down', '', 'led'))
       + (dead ? `<path d="M236 72l28 26M264 72l-28 26" style="stroke:var(--bad);stroke-width:3"/>` : '') + S.w('250,115 250,140 40,140 40,115') + S.t(280, 90, dead ? 'zničená' : flip ? 'obráceně' : 'LED', 'txm'), 'Zdroj, rezistor a LED');
-    q('#rI').textContent = si(I, 'A'); q('#rUR').textContent = si(I * R, 'V'); q('#rPR').textContent = si(I * I * R, 'W');
+    q('#rI').textContent = over ? 'přes 30 mA' : si(I, 'A'); q('#rUR').textContent = over ? '–' : si(I * R, 'V'); q('#rPR').textContent = over ? '–' : si(I * I * R, 'W');
     let st;
     if (dead) st = '<span class="state bad">LED se zničila, proud byl přes 30 mA</span>';
     else if (flip) st = '<span class="state info">závěrný směr: proud neteče</span>';
     else if (U <= Vf) st = '<span class="state info">napětí nestačí na otevření LED</span>';
-    else if (gpio && I > 0.012) st = '<span class="state bad">přetížený GPIO pin (víc než 12 mA)</span>';
+    else if (gpio && I > 0.012) st = '<span class="state bad">přetížený GPIO pin (víc než 12 mA): tolik proudu nedá a může se poškodit</span>';
     else if (gpio && I > 0.0042) st = '<span class="state warn">GPIO nad 4 mA: víc, než počítá výchozí nastavení pinu</span>';
     else if (I > 0.02) st = '<span class="state warn">LED přes 20 mA, zkracuje se jí život</span>';
     else st = '<span class="state good">v pořádku</span>';
     q('#lSt').innerHTML = st; q('#lNew').hidden = !dead;
     const target = gpio ? 0.004 : 0.01, need = (U - Vf) / target, pick = Rs.find((r) => r >= need);
-    q('#lHint').textContent = U > Vf ? `Pro ${si(target, 'A')} vychází R = (${num(U)} − ${num(Vf)}) / ${num(target)} ≈ ${si(need, 'Ω')} → běžná hodnota ${si(pick, 'Ω')}.` : '';
+    q('#lHint').textContent = U > Vf ? `Pro ${si(target, 'A')} vychází R = (${num(U)} − ${num(Vf)}) / ${num(target)} ≈ ${si(need, 'Ω')} → běžná hodnota ${si(pick, 'Ω')}.` + (gpio && Vf >= 2.9 ? ' U modré LED na 3,3 V je to jen orientační: skutečné napětí LED kolísá asi mezi 2,8 a 3,4 V.' : '') : '';
   };
   onInputs(q, ['lSrc', 'lCol', 'lR'], upd);
   q('#lFlip').onclick = () => { flip = !flip; upd(); }; q('#lNew').onclick = () => { dead = false; upd(); };
@@ -1386,7 +1401,8 @@ SIMS.tswitch = (root) => {
     q('#tSt').innerHTML = st.join('');
     q('#tG').textContent = g ? 'GPIO: HIGH (3,3 V)' : 'GPIO: LOW (0 V)'; q('#tG').setAttribute('aria-pressed', g);
     const load = IL < 0.1 ? `<circle cx="200" cy="62" r="18" style="fill:#e63b2e;opacity:${frac * .5}"/>` + S.diode(200, 62, 'down', '', 'led') : `<circle class="sy" cx="200" cy="62" r="16"/><g id="rot"><path d="M190 62H210M200 52V72" style="stroke:var(--copper);stroke-width:3"/></g>` + S.t(222, 66, IL > 0.4 ? 'pásek' : 'M', 'txm');
-    q('#tSvg').innerHTML = S.svg(320, 230, S.t(200, 16, '+5 V', 'txc', 'middle') + S.w('200,22 200,32') + (IL < 0.1 ? S.w('200,32 200,32') : S.w('200,32 200,46')) + load + S.w('200,78 200,98') + (IL < 0.1 ? S.w('200,92 200,98') : '') + S.npn(190, 130, 'NPN') + S.w('200,162 200,190') + S.gnd(200, 200)
+    q('#tSvg').innerHTML = S.svg(320, 230, S.t(200, 16, '+5 V', 'txc', 'middle') + S.w('200,22 200,32') + (IL < 0.1 ? S.w('200,32 200,32') : S.w('200,32 200,46')) + load + S.w('200,78 200,98') + (IL < 0.1 ? S.w('200,92 200,98') : '')
+      + (IL >= 0.1 && IL <= 0.4 ? S.w('200,32 250,32') + S.diodeUp(250, 62) + S.w('250,92 200,92') + S.dot(200, 32) + S.dot(200, 92) + S.t(262, 66, 'dioda', 'txm') : '') + S.npn(190, 130, 'NPN') + S.w('200,162 200,190') + S.gnd(200, 200)
       + S.pinT(40, 130, g ? 'GPIO 3,3 V' : 'GPIO 0 V') + S.w('44,130 70,130') + S.res(100, 130, false, si(RB, 'Ω')) + S.w('130,130 158,130'), 'Tranzistor spíná zátěž');
   };
   onInputs(q, ['tR', 'tB', 'tL'], upd); q('#tG').onclick = () => { g = !g; upd(); };
@@ -1397,9 +1413,9 @@ SIMS.tswitch = (root) => {
 SIMS.battery = (root) => {
   const q = mount(root, figT('Kalkulačka', 'výdrž baterie') + `<div class="fig-body"><div class="controls">
   <div class="ctl"><label for="bC">Kapacita powerbanky</label><select id="bC"><option>2500</option><option>5000</option><option selected>10000</option><option>20000</option></select></div>
-  ${rng('bI', 'Odběr', 10, 1000, 5, 25, 'I')}${rng('bE', 'Účinnost převodu', 50, 100, 5, 80)}
+  ${rng('bI', 'Odběr', 10, 1000, 5, 25, 'I')}${rng('bE', 'Účinnost převodu', 50, 100, 5, 65)}
   <div class="btns"><button class="btn small" data-i="25" type="button">Pico W bliká LED ≈ 25 mA</button><button class="btn small" data-i="50" type="button">Pico W s Wi-Fi ≈ 50 mA</button><button class="btn small" data-i="300" type="button">Pico W s motorkem ≈ 300 mA</button></div>
-  <div><span class="eyebrow">Výdrž</span><div class="bigval" id="bOut"></div><p class="cap" id="bCap"></p></div><div class="progress" style="height:14px"><i id="bBar"></i></div><p class="cap">Pruh ukazuje výdrž vůči jednomu týdnu. Hodnoty odběru jsou přibližné; závisí na programu a připojených součástkách.</p></div></div>`);
+  <div><span class="eyebrow">Výdrž</span><div class="bigval" id="bOut"></div><p class="cap" id="bCap"></p></div><div class="progress" style="height:14px"><i id="bBar"></i></div><p class="cap">Pruh ukazuje výdrž vůči jednomu týdnu. Hodnoty odběru jsou přibližné; závisí na programu a připojených součástkách. U powerbanky počítej s účinností kolem 65 %, protože její kapacita je udaná pro články 3,7 V.</p></div></div>`);
   const upd = () => { const Cc = +q('#bC').value, I = +q('#bI').value, e = +q('#bE').value / 100, t = Cc / I * e; q('#bIo').textContent = I + ' mA'; q('#bEo').textContent = Math.round(e * 100) + ' %'; const hh = Math.floor(t), mm = Math.round((t - hh) * 60); q('#bOut').textContent = `${hh} h ${mm} min`; q('#bCap').textContent = `${Cc} mAh / ${I} mA · ${Math.round(e * 100)} % = ${num(t)} h` + (t >= 48 ? `, tedy asi ${Math.round(t / 24)} ${pl(Math.round(t / 24), 'den', 'dny', 'dní')}` : ''); q('#bBar').style.width = clamp(t / 168 * 100, 1, 100) + '%'; };
   onInputs(q, ['bC', 'bI', 'bE'], upd); root.querySelectorAll('[data-i]').forEach((b) => b.onclick = () => { q('#bI').value = b.dataset.i; upd(); });
   return {};
@@ -1468,7 +1484,7 @@ SIMS.capcalc = (root) => {
   const mats = [['vzduch', 1], ['papír', 2], ['parafín', 2.25], ['porcelán', 4.4], ['slída', 7.5], ['sklo', 10], ['destilovaná voda', 81]];
   const q = mount(root, figT('Kalkulačka', 'deskový kondenzátor') + `<div class="fig-body"><div id="cpSvg"></div><div class="controls">
   <div class="ctl"><label for="cpK">Dielektrikum</label><select id="cpK">${mats.map(([n, k]) => `<option value="${k}"${k === 10 ? ' selected' : ''}>${n} (εr = ${num(k)})</option>`).join('')}</select></div>
-  ${rng('cpA', 'Strana desky', 5, 100, 0.5, 25.5)}${rng('cpD', 'Vzdálenost desek', 0.05, 2, 0.01, 0.25)}${rng('cpN', 'Počet desek', 2, 12, 1, 2)}
+  ${rng('cpA', 'Strana desky', 5, 100, 0.5, 25)}${rng('cpD', 'Vzdálenost desek', 0.05, 2, 0.01, 0.25)}${rng('cpN', 'Počet desek', 2, 12, 1, 2)}
   <div><span class="eyebrow">Kapacita</span><div class="bigval" id="cpOut"></div></div></div></div>`);
   onInputs(q, ['cpK', 'cpA', 'cpD', 'cpN'], () => {
     const k = +q('#cpK').value, a = +q('#cpA').value / 1000, d = +q('#cpD').value / 1000, N = +q('#cpN').value, Cc = 8.854e-12 * k * a * a * (N - 1) / d;
@@ -1570,7 +1586,7 @@ SIMS.pwm = (root) => {
 /* ---------- 19 Reaktance ---------- */
 SIMS.ac = (root) => {
   const q = mount(root, figT('Simulace', 'reaktance podle frekvence') + `<div class="fig-body"><canvas style="aspect-ratio:16/10" aria-label="Graf reaktance"></canvas><div class="legend"><span><i style="background:var(--water)"></i>kondenzátor X_C</span><span><i style="background:var(--copper)"></i>cívka X_L</span></div>
-  <div class="controls">${rng('xF', 'Frekvence', 0, 1000, 1, 500)}${rng('xC', 'Kapacita C', 0, 1000, 1, 500)}${rng('xL', 'Indukčnost L', 0, 1000, 1, 500)}<div class="readouts">${ro('rC', 'X_C', 'w')}${ro('rL', 'X_L', 'c')}${ro('rE', 'Stejné při')}</div></div></div>`);
+  <div class="controls">${rng('xF', 'Frekvence', 0, 1000, 1, 500)}${rng('xC', 'Kapacita C', 0, 1000, 1, 300)}${rng('xL', 'Indukčnost L', 0, 1000, 1, 750)}<div class="readouts">${ro('rC', 'X_C', 'w')}${ro('rL', 'X_L', 'c')}${ro('rE', 'Stejné při')}</div></div></div>`);
   const k = canvasKit(q('canvas')); const F = logSlider(q('#xF'), 1, 1e5), Cs = logSlider(q('#xC'), 1e-7, 1e-5), Ls = logSlider(q('#xL'), 1e-3, 1e-1);
   onInputs(q, ['xF', 'xC', 'xL'], () => { const f = F.get(), c = Cs.get(), l = Ls.get(); q('#xFo').textContent = si(f, 'Hz'); q('#xCo').textContent = si(c, 'F'); q('#xLo').textContent = si(l, 'H'); q('#rC').textContent = si(1 / (2 * Math.PI * f * c), 'Ω'); q('#rL').textContent = si(2 * Math.PI * f * l, 'Ω'); q('#rE').textContent = si(1 / (2 * Math.PI * Math.sqrt(l * c)), 'Hz'); k.dirty = true; });
   return { step() {
@@ -1583,7 +1599,7 @@ SIMS.ac = (root) => {
 /* ---------- 20 RC filtr ---------- */
 SIMS.rcfilter = (root) => {
   const Rs = series(E12, 100, 100000);
-  const q = mount(root, figT('Simulace', 'dolní propust') + `<div class="fig-body"><canvas style="aspect-ratio:16/10" aria-label="Graf propustnosti filtru"></canvas><div class="controls">${rng('fR', 'R', 0, Rs.length - 1, 1, Rs.indexOf(10000), 'R')}${rng('fC', 'C', 0, 1000, 1, 500)}${rng('fF', 'Frekvence signálu', 0, 1000, 1, 600)}
+  const q = mount(root, figT('Simulace', 'dolní propust') + `<div class="fig-body"><canvas style="aspect-ratio:16/10" aria-label="Graf propustnosti filtru"></canvas><div class="controls">${rng('fR', 'R', 0, Rs.length - 1, 1, Rs.indexOf(1000), 'R')}${rng('fC', 'C', 0, 1000, 1, 300)}${rng('fF', 'Frekvence signálu', 0, 1000, 1, 600)}
   <div class="readouts">${ro('rM', 'Mezní frekvence', 'c')}${ro('rG', 'Projde amplitudy', 'w')}${ro('rD', 'Útlum')}</div></div></div>`);
   const k = canvasKit(q('canvas')); const Cs = logSlider(q('#fC'), 1e-9, 1e-5), F = logSlider(q('#fF'), 1, 1e5);
   const G = (f, R, c) => 1 / Math.sqrt(1 + Math.pow(2 * Math.PI * f * R * c, 2));
@@ -1614,7 +1630,7 @@ SIMS.indcalc = (root) => {
 /* ---------- 22 Transformátor ---------- */
 SIMS.transformer = (root) => {
   const q = mount(root, figT('Simulace', 'transformátor na 230 V') + `<div class="fig-body"><div id="xSvg"></div><div class="controls"><div class="btns"><button class="btn" id="xAC" type="button" aria-pressed="true">Zdroj: střídavý 230 V / 50 Hz</button></div>
-  ${rng('xN1', 'Závity primáru N₁', 50, 2000, 10, 1000)}${rng('xN2', 'Závity sekundáru N₂', 10, 2000, 1, 52)}${rng('xR', 'Zátěž na sekundáru', 1, 1000, 1, 10, 'R')}
+  ${rng('xN1', 'Závity primáru N₁', 50, 2000, 10, 1000)}${rng('xN2', 'Závity sekundáru N₂', 10, 2000, 1, 200)}${rng('xR', 'Zátěž na sekundáru', 1, 1000, 1, 10, 'R')}
   <div class="readouts">${ro('rU', 'U₂', 'qU')}${ro('rI2', 'I₂', 'w')}${ro('rI1', 'I₁', 'w')}${ro('rP', 'Výkon', 'qP')}</div><div id="xSt"></div></div></div>`);
   let ac = true, off = 0;
   const upd = () => {
@@ -1635,7 +1651,7 @@ SIMS.transformer = (root) => {
 
 /* ---------- 23 LC rezonance ---------- */
 SIMS.lc = (root) => {
-  const q = mount(root, figT('Simulace', 'sériový RLC obvod') + `<div class="fig-body"><canvas style="aspect-ratio:16/10" aria-label="Rezonanční křivka"></canvas><div class="controls">${rng('lL', 'Indukčnost L', 0, 1000, 1, 500)}${rng('lC', 'Kapacita C', 0, 1000, 1, 500)}${rng('lR', 'Odpor vinutí r', 0, 1000, 1, 500, 'R')}
+  const q = mount(root, figT('Simulace', 'sériový RLC obvod') + `<div class="fig-body"><canvas style="aspect-ratio:16/10" aria-label="Rezonanční křivka"></canvas><div class="controls">${rng('lL', 'Indukčnost L', 0, 1000, 1, 800)}${rng('lC', 'Kapacita C', 0, 1000, 1, 200)}${rng('lR', 'Odpor vinutí r', 0, 1000, 1, 500, 'R')}
   <div class="readouts">${ro('rF', 'f₀', 'c')}${ro('rQ', 'Q', 'w')}${ro('rB', 'Šířka pásma')}</div></div></div>`);
   const k = canvasKit(q('canvas')); const Ls = logSlider(q('#lL'), 1e-3, 1e-1), Cs = logSlider(q('#lC'), 1e-7, 1e-5), Rr = logSlider(q('#lR'), 1, 100);
   onInputs(q, ['lL', 'lC', 'lR'], () => { const L = Ls.get(), c = Cs.get(), r = Rr.get(), f0 = 1 / (2 * Math.PI * Math.sqrt(L * c)), Q = Math.sqrt(L / c) / r; q('#lLo').textContent = si(L, 'H'); q('#lCo').textContent = si(c, 'F'); q('#lRo').textContent = si(r, 'Ω'); q('#rF').textContent = si(f0, 'Hz'); q('#rQ').textContent = num(Q, 3); q('#rB').textContent = si(f0 / Q, 'Hz'); k.dirty = true; });
@@ -1696,9 +1712,9 @@ SIMS.pcb = (root) => {
   const pad = (x, y) => `<circle cx="${x}" cy="${y}" r="6" style="fill:#c98b4a"/><circle cx="${x}" cy="${y}" r="2" style="fill:var(--pcb)"/>`;
   const tr = (d) => `<path d="${d}" style="fill:none;stroke:#c98b4a;stroke-width:5;stroke-linejoin:round;stroke-linecap:round;opacity:.9"/>`;
   q('#brd').innerHTML = `<svg viewBox="0 0 340 240" role="img" aria-label="Plošný spoj s potiskem"><rect x="10" y="10" width="320" height="220" rx="10" style="fill:var(--pcb)"/>`
-    + tr('M40 40H150') + tr('M150 40V70') + tr('M62 40V120') + tr('M40 200H214L222 192V185') + tr('M78 120V200') + tr('M40 160H100') + tr('M180 160H210L235 185') + tr('M230 70L243 83V100') + tr('M248 185L268 165V113L257 102V100')
+    + tr('M40 40H150') + tr('M150 40V70') + tr('M78 40V120') + tr('M40 200H214L222 192V185') + tr('M62 120H24V200H40') + tr('M40 160H100') + tr('M180 160H210L235 185') + tr('M230 70L243 83V100') + tr('M248 185L268 165V113L257 102V100')
     + pad(40, 40) + pad(40, 200) + pad(40, 160) + `<text x="52" y="30" class="silkt">B+</text><text x="52" y="222" class="silkt">GND</text><text x="52" y="152" class="silkt">IN</text>`
-    + G('C1', `<circle cx="70" cy="120" r="22" class="silk"/>` + pad(62, 120) + pad(78, 120) + `<text x="70" y="156" text-anchor="middle" class="silkt">C1</text>`)
+    + G('C1', `<circle cx="70" cy="120" r="22" class="silk"/>` + pad(62, 120) + pad(78, 120) + `<text x="104" y="104" class="silkt">C1</text>`)
     + G('R1', `<rect x="110" y="150" width="60" height="20" class="silk"/>` + pad(100, 160) + pad(180, 160) + `<text x="140" y="164" text-anchor="middle" class="silkt">R1</text>`)
     + G('R2', `<rect x="160" y="60" width="60" height="20" class="silk"/>` + pad(150, 70) + pad(230, 70) + `<text x="190" y="74" text-anchor="middle" class="silkt">R2</text>`)
     + G('D1', `<path d="M236 94A14 14 0 1 1 264 94" class="silk"/><path d="M236 106H264" class="silk"/>` + pad(243, 100) + pad(257, 100) + `<text x="250" y="130" text-anchor="middle" class="silkt">D1</text>`)
@@ -1804,7 +1820,7 @@ const QF = {
     + `<text x="75.5" y="24" text-anchor="middle" font-size="15" font-weight="700" fill="#1f3d78">–</text><text x="75.5" y="46" text-anchor="middle" font-size="15" font-weight="700" fill="#1f3d78">–</text>` + QF.tag(48, 93, '1') + QF.tag(72, 81, '2'), 'Elektrolytický kondenzátor s vývody 1 a 2'),
   pcbTrace: (bend) => S.svg(160, 110, `<rect x="5" y="5" width="150" height="100" rx="6" style="fill:var(--pcb)"/>` + (bend
     ? `<path d="M25 85H75L95 65V45L115 25H135" style="fill:none;stroke:#c98b4a;stroke-width:9;stroke-linejoin:round"/>`
-    : `<path d="M25 85H95V25H135" style="fill:none;stroke:#c98b4a;stroke-width:9;stroke-linejoin:miter"/>`), 'Měděná cesta na plošném spoji'),
+    : `<path d="M25 85H100L60 30H135" style="fill:none;stroke:#c98b4a;stroke-width:9;stroke-linejoin:miter"/>`), 'Měděná cesta na plošném spoji'),
 };
 
 const diodeRight = (x, y, rev) => rev ? `<g transform="rotate(180 ${x} ${y})">${S.diode(x, y, 'right')}</g>` : S.diode(x, y, 'right');
@@ -1894,7 +1910,7 @@ const QBANK = {
 ],
 'l1-06': [
   { q: 'Jaké napětí má výstup GPIO ve stavu HIGH?', a: ['3,3 V', '5 V', '1 V', '12 V'], why: 'Pico pracuje s logikou 3,3 V.' },
-  { q: 'Senzor posílá signál 5 V. Můžeš ho připojit přímo na GPIO Pica?', a: ['ne, potřebuješ dělič napětí nebo převodník úrovní', 'ano, bez problému', 'ano, když ho připojíš na pin VBUS', 'ano, když pin v programu nastavíš jako vstup'], why: 'GPIO Pica nesnese víc než 3,3 V. Úroveň snížíš děličem (lekce 8).' },
+  { q: 'Senzor posílá signál 5 V. Můžeš ho připojit přímo na GPIO Pica?', a: ['ne, potřebuješ dělič napětí nebo převodník úrovní', 'ano, bez problému', 'ano, když ho připojíš na pin VBUS', 'ano, když pin v programu nastavíš jako vstup'], why: 'GPIO Pica nesnese víc než 3,3 V. Úroveň snížíš děličem (lekce 1.8).' },
   { q: 'V kódu je Pin(15, Pin.OUT). Co znamená číslo 15?', a: ['číslo GP15 v čipu, fyzický pin najdeš v mapě pinů', 'fyzický pin číslo 15 na okraji desky', 'napětí 1,5 V', 'patnáctou LED v pořadí'], why: 'Do kódu se píše číslo GP. GP15 je na okraji desky jinde, fyzicky je to pin 20.' },
   { q: 'Jak v MicroPythonu nastavíš GP15 jako výstup?', a: ['led = Pin(15, Pin.OUT)', 'led = Pin(20, Pin.OUT)', 'led = Pin(15, Pin.IN)', 'led = LED(15)'], why: 'Píše se číslo GP (15), ne fyzický pin (20). Pin.OUT znamená výstup.' },
   { q: 'Jak nejsnáz zjistíš, na kterém fyzickém pinu je GP15?', a: ['z mapy pinů (pinoutu) nebo z popisků na spodní straně desky', 'odpočítáš 15 pinů od kraje', 'je to vždy prostřední pin', 'vyzkoušíš postupně všechny piny'], why: 'Mezi piny GP jsou vložené piny GND, proto čísla nesedí s pořadím na okraji.' },
@@ -1945,15 +1961,15 @@ const QBANK = {
   { q: 'Odkud teče velký proud do motoru?', a: ['ze zdroje 5 V přes motor a tranzistor', 'z GPIO pinu', 'z báze tranzistoru', 'z bázového rezistoru'], why: 'GPIO dodává jen malý proud do báze.' },
   { q: 'Co znamená, že je tranzistor v nasycení?', a: ['je plně sepnutý a skoro se nehřeje', 'je zavřený', 'je přetížený a hoří', 'zesiluje signál'], why: 'Plně otevřený „ventil" má malý úbytek napětí, a proto málo hřeje.' },
   { q: 'Proč dávat do báze proud s rezervou, aspoň dvakrát víc, než by stačilo podle β?', a: ['aby byl tranzistor jistě plně sepnutý', 'aby motor jel rychleji', 'aby se šetřil GPIO', 'aby tranzistor vydržel vyšší napětí'], why: 'β se liší kus od kusu. Napůl otevřený tranzistor se hřeje.' },
-  { q: 'Jak zjistíš pořadí vývodů C, B, E u konkrétního tranzistoru?', a: ['v katalogovém listu (datasheetu)', 'je u všech tranzistorů stejné', 'prostřední je vždy kolektor', 'podle barvy pouzdra'], why: 'BC547 má pořadí C, B, E, ale 2N2222 E, B, C.' },
+  { q: 'Jak zjistíš pořadí vývodů C, B, E u konkrétního tranzistoru?', a: ['v katalogovém listu (datasheetu)', 'je u všech tranzistorů stejné', 'prostřední je vždy kolektor', 'podle barvy pouzdra'], why: 'Třeba BC547 má C, B, E, ale 2N2222 často E, B, C. Liší se to i podle výrobce.' },
   { q: 'Co je 0,7 V ve výpočtu bázového proudu?', a: ['úbytek napětí na přechodu báze–emitor', 'napětí GPIO', 'napětí na motoru', 'tolerance rezistoru'], why: 'Přechod báze–emitor se chová jako dioda.' },
-  { q: 'Potřebuješ spínat proud několik ampérů. Co použiješ místo malého tranzistoru?', a: ['MOSFET', 'větší bázový rezistor', 'dva GPIO piny', 'LED'], why: 'Malé tranzistory zvládnou asi 500 mA. Na ampéry je MOSFET (úroveň 3).' },
+  { q: 'Potřebuješ spínat proud několik ampérů. Co použiješ místo malého tranzistoru?', a: ['MOSFET', 'větší bázový rezistor', 'dva GPIO piny', 'LED'], why: 'Malé tranzistory zvládnou asi 500 mA. Na ampéry je MOSFET (lekce 3.7).' },
 ],
 'l1-10': [
-  { q: 'Jak odhadneš výdrž baterie?', a: ['výdrž [h] ≈ kapacita [mAh] / odběr [mA]', 'výdrž ≈ kapacita · odběr', 'výdrž ≈ odběr / kapacita', 'výdrž ≈ napětí / odběr'], why: 'Kapacita v mAh říká, kolik miliampérů baterie dodá po dobu jedné hodiny.' },
+  { q: 'Jak odhadneš výdrž baterie?', a: ['výdrž [h] ≈ kapacita [mAh] / odběr [mA]', 'výdrž ≈ kapacita · odběr', 'výdrž ≈ odběr / kapacita', 'výdrž ≈ napětí / odběr'], why: 'Kapacita v mAh je proud krát čas: 1 000 mAh vystačí na 100 mA po dobu 10 hodin.' },
   { q: 'Powerbanka 5 000 mAh, odběr 500 mA, bez ztrát. Výdrž?', a: ['10 h', '2,5 h', '100 h', '1 h'], why: '5 000 / 500 = 10 hodin.' },
   { q: 'Odběr zařízení se zdvojnásobí. Co udělá výdrž baterie?', a: ['klesne na polovinu', 'zdvojnásobí se', 'nezmění se', 'klesne na čtvrtinu'], why: 'Odběr je ve jmenovateli.' },
-  { q: 'Proč vydrží baterie ve skutečnosti méně, než ukáže výpočet?', a: ['část energie se ztratí při převodu napětí a jako teplo', 'kapacita se udává s rezervou', 'baterie se vybíjí jen do poloviny', 'nevydrží méně, výpočet je přesný'], why: 'Počítej asi se 70–80 % výpočtu.' },
+  { q: 'Proč vydrží baterie ve skutečnosti méně, než ukáže výpočet?', a: ['část energie se ztratí při převodu napětí a jako teplo', 'kapacita se udává s rezervou', 'baterie se vybíjí jen do poloviny', 'nevydrží méně, výpočet je přesný'], why: 'U powerbanky počítej asi s 60–70 % výpočtu.' },
   { q: 'Pico se restartuje pokaždé, když se rozjede motor napájený ze stejného zdroje. Proč?', a: ['motor při rozběhu stáhne napětí zdroje (podpětí)', 'v programu je chyba', 'motor ruší Wi-Fi', 'motor je zapojený obráceně'], why: 'Rozbíhající se motor odebere velký proud a napětí poklesne. Motor patří na vlastní zdroj se společnou GND.' },
   { q: 'Jaký výkon odebírá zařízení na 5 V při proudu 2 A?', a: ['10 W', '2,5 W', '7 W', '3 W'], why: 'P = U · I = 5 · 2 = 10 W.' },
   { q: 'Co znamená kapacita 1 000 mAh?', a: ['baterie dodá 1 A po dobu jedné hodiny (nebo 100 mA po 10 h)', 'baterie má napětí 1 000 mV', 'baterie dodá proud 1 000 A', 'baterie vydrží 1 000 hodin'], why: 'mAh = miliampér krát hodina.' },
@@ -2173,14 +2189,14 @@ const QBANK = {
   { q: 'MOSFET se řídí:', a: ['napětím na hradle', 'proudem do báze', 'teplotou', 'světlem'], why: 'Hradlem teče proud jen při nabíjení jeho kapacity.' },
   { q: 'Jaký je hlavní rozdíl v řízení bipolárního tranzistoru a MOSFETu?', a: ['bipolární se řídí proudem do báze, MOSFET napětím na hradle', 'oba se řídí proudem', 'MOSFET se řídí světlem', 'bipolární se řídí napětím na hradle'], why: 'Proto MOSFET z GPIO skoro nic neodebírá.' },
   { q: 'Proč hradlem MOSFETu teče téměř nulový proud?', a: ['hradlo je od kanálu izolované tenkou vrstvou oxidu', 'hradlo je z plastu', 'proud teče emitorem', 'hradlo má uvnitř velký rezistor'], why: 'Hradlo a kanál tvoří kondenzátor.' },
-  { q: 'Který MOSFET zvolíš pro spínání z GPIO 3,3 V?', a: ['logic-level s R_DS(on) udaným pro 2,5 V', 'jakýkoli výkonový, např. IRF520', 'ten s nejvyšším prahovým napětím', 'P-MOSFET s hradlem na 12 V'], why: 'Standardní typy potřebují k plnému sepnutí 10 V.' },
+  { q: 'Který MOSFET zvolíš pro spínání z GPIO 3,3 V?', a: ['typ s R_DS(on) udaným pro U_GS = 2,5 V', 'jakýkoli výkonový, třeba IRF520', 'ten s nejvyšším prahovým napětím', 'kterýkoli s nápisem logic-level'], why: 'Standardní typy potřebují k plnému sepnutí 10 V a mnohé logic-level typy 4,5–5 V. Z 3,3 V spolehlivě sepne jen typ, který má R_DS(on) udané pro 2,5 V.' },
   { q: 'Proč se standardní IRF520 při řízení z GPIO 3,3 V hřeje?', a: ['otevře se jen napůl, plně až při 10 V', 'teče do něj velký proud z GPIO', 'je to PNP typ', 'má příliš malé pouzdro'], why: 'Napůl otevřený kanál má velký odpor a mění výkon v teplo.' },
   { q: 'K čemu je rezistor 100 kΩ mezi hradlem a GND?', a: ['aby hradlo neplavalo a MOSFET nesepnul při startu', 'omezuje proud zátěží', 'zvyšuje napětí hradla', 'chrání LED'], why: 'Nepřipojené hradlo si náboj „nachytá" náhodně.' },
   { q: 'Co je R_DS(on)?', a: ['odpor sepnutého kanálu', 'prahové napětí hradla', 'maximální proud', 'odpor rezistoru u hradla'], why: 'U dobrých MOSFETů jen desítky miliohmů.' },
   { q: 'Proč MOSFET spíná ampéry a skoro se nehřeje?', a: ['sepnutý kanál má velmi malý odpor', 'má uvnitř ventilátor', 'proud jím neteče', 'je celý z kovu'], why: 'Teplo P = I² · R a R je jen miliohmy.' },
   { q: 'Co je prahové napětí U_GS(th)?', a: ['napětí hradla, při kterém kanál začíná vést', 'napětí, při kterém je MOSFET plně sepnutý', 'maximální napětí mezi D a S', 'napětí zdroje'], why: 'Plně sepnutý je až při vyšším napětí.' },
   { q: 'Proč je MOSFET citlivý na statickou elektřinu?', a: ['tenkou izolaci hradla prorazí i malý výboj', 'protože má tři vývody', 'protože je z plastu', 'citlivý není'], why: 'Vrstva oxidu je velmi tenká.' },
-  { q: 'Jak se jmenují vývody MOSFETu?', a: ['hradlo G, zdroj S a kolektor D (drain)', 'báze, kolektor a emitor', 'anoda, katoda a hradlo', 'plus, minus a zem'], why: 'Báze, kolektor a emitor má bipolární tranzistor.' },
+  { q: 'Jak se jmenují vývody MOSFETu?', a: ['hradlo G, S (source) a D (drain)', 'báze B, kolektor C a emitor E', 'anoda A, katoda K a hradlo G', 'plus, minus a zem GND'], why: 'Báze, kolektor a emitor má bipolární tranzistor.' },
 ],
 'l3-08': [
   { q: 'Pouzdro DIP-8 je vidět shora, pin 1 je u tečky. Kde je pin 8?', img: QF.dip(), a: ['A', 'B', 'C', 'D'], why: 'Čísluje se od pinu 1 proti směru hodinových ručiček: 1–4 dole, 5–8 zpátky nahoře. Pin 8 je přímo naproti pinu 1.' },
@@ -2197,7 +2213,7 @@ const QBANK = {
   { q: 'Na GP26 je přesně 3,3 V. Co vrátí ADC(26).read_u16()?', a: ['nejvyšší hodnotu, asi 65 535', '3,3', '0', '1'], why: 'read_u16 vrací 0 pro 0 V až 65 535 pro 3,3 V.' },
 ],
 'l3-09': [
-  { q: 'Která měděná cesta je navržená správně?', img: QF.opts(QF.pcbTrace(false), QF.pcbTrace(true)), a: ['B, se zkosenými ohyby', 'A, s pravými úhly', 'obě', 'žádná, cesty mají být rovné'], why: 'V ostrém rohu je silnější pole a měď se snáz odlupuje. Lomí se po 45° nebo obloukem.' },
+  { q: 'Která měděná cesta je navržená lépe?', img: QF.opts(QF.pcbTrace(false), QF.pcbTrace(true)), a: ['B, lomí se po 45°', 'A, lomí se ostrým úhlem', 'obě stejně dobře', 'žádná, cesta má být vždy rovná'], why: 'V úhlu ostřejším než 90° se při leptání drží leptadlo a cestu může naleptat. Lom po 45° nebo obloukem je bezpečný zvyk.' },
   { q: 'Mezera mezi cestami musí být dost velká, aby:', a: ['nedošlo k průrazu napětí', 'se deska snadno leptala', 'se dala dobře čistit', 'šla přemostit pájkou'], why: 'Vyšší napětí = větší mezera.' },
   { q: 'Podle čeho se volí šířka měděné cesty?', a: ['podle proudu, který jí poteče', 'podle barvy desky', 'podle napětí baterie', 'podle počtu součástek'], why: 'Širší cesta se při stejném proudu méně ohřeje.' },
   { q: 'Co ukazuje potisk (legenda)?', a: ['umístění a označení součástek', 'měděné cesty', 'elektrické zapojení', 'čísla otvorů'], why: 'Elektrické zapojení ukazuje schéma.' },
@@ -2206,7 +2222,8 @@ const QBANK = {
   { q: 'Cínovo-olověná pájka s nejnižším bodem tání má poměr cín/olovo:', a: ['63/37', '60/40', '40/60', '37/63'], why: 'Eutektická slitina 63/37 taje při 183 °C.' },
   { q: 'Jaké jádro má pájka pro elektroniku?', a: ['kalafunové (tavidlo)', 'kyselinové', 'duté bez náplně', 'měděné'], why: 'Kyselina by součástky a cesty poškodila.' },
   { q: 'Jak správně pájíš vývod do plošky?', a: ['ohřeješ zároveň plošku i vývod a přidáš pájku', 'roztavíš pájku na hrotu a kápneš ji na spoj', 'ohřeješ jen pájku', 'pájku přidáš na studený spoj'], why: 'Pájka teče k teplu. Na studeném vývodu se nespojí.' },
-  { q: 'Jak vypadá správný pájený spoj?', a: ['lesklý kužel', 'matná kulička', 'šedá hrudka', 'tenký drátek'], why: 'Matný nebo kulovitý spoj bývá „studený" a nespolehlivý.' },
+  { q: 'Jak vypadá správný pájený spoj?', a: ['kužel, ve kterém pájka obtekla vývod i plošku', 'kulička, která se plošky skoro nedotýká', 'velká hrudka, která přetéká na sousední plošku', 'tenká vrstva pájky jen na špičce vývodu'], why: 'Kulička bez kontaktu s ploškou je „studený" spoj. Lesk nerozhoduje: bezolovnatá pájka bývá matná i u dobrého spoje.' },
+  { q: 'Které pravidlo při pájení platí?', a: ['páječka patří do stojánku a výpary je třeba odvětrat', 'kouř z kalafuny je jen pára, větrat není potřeba', 'horkou páječku stačí na chvíli položit na stůl', 'brýle jsou potřeba jen při pájení síťových přístrojů'], why: 'Hrot má přes 300 °C a výpary z tavidla dráždí dýchací cesty. Brýle chrání oči při štípání vývodů i před odstřikující pájkou.' },
   { q: 'Proč se od roku 2006 v EU používá v nové elektronice bezolovnatá pájka?', a: ['olovo škodí zdraví a přírodě', 'bezolovnatá taje při nižší teplotě', 'je levnější', 'lépe vede proud'], why: 'Bezolovnatá pájka naopak taje při vyšší teplotě, kolem 217–227 °C.' },
 ],
 };
