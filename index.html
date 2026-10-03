@@ -384,12 +384,12 @@ const FIG = {
 
   'l1-04': () => figWrap('Součástka a značka', 'rezistor', duo(PART.resistor(), S.svg(120, 70, S.res(60, 24, false) + S.w('10,56 30,56 35,46 45,66 55,46 65,66 75,46 85,66 90,56 110,56')), 'vzhled', 'značka ČSN/IEC (nahoře) a USA'), 'V českých schématech se kreslí obdélník. Klikatá čára je americká značka; najdeš ji v mnoha anglických návodech.'),
 
-  'l1-05': () => figWrap('LED a zapojení', 'GPIO17 → rezistor → LED → GND', duo(PART.led, S.svg(120, 80, S.diode(60, 40, 'down', '', 'led')), 'delší nožička = anoda', 'značka LED')
-    + S.svg(320, 110, S.pinT(30, 50, 'GPIO17') + S.w('34,50 90,50') + S.res(120, 50, false, '220 Ω') + S.w('150,50 180,50') + S.diode(210, 50, 'right', 'LED', 'led') + S.w('240,50 280,50 280,75') + S.gnd(280, 85), 'GPIO17, rezistor 220 ohmů, LED, zem'),
+  'l1-05': () => figWrap('LED a zapojení', 'GP15 → rezistor → LED → GND', duo(PART.led, S.svg(120, 80, S.diode(60, 40, 'down', '', 'led')), 'delší nožička = anoda', 'značka LED')
+    + S.svg(320, 110, S.pinT(30, 50, 'GP15') + S.w('34,50 90,50') + S.res(120, 50, false, '330 Ω') + S.w('150,50 180,50') + S.diode(210, 50, 'right', 'LED', 'led') + S.w('240,50 280,50 280,75') + S.gnd(280, 85), 'GP15, rezistor 330 ohmů, LED, zem'),
     'Na pořadí rezistoru a LED nezáleží. Důležité je, aby LED mířila „šipkou" ke GND.'),
 
   'l1-07': () => figWrap('Pull-up rezistor', 'tlačítko proti GND', S.svg(300, 200,
-    S.t(80, 18, '3,3 V', 'txc', 'middle') + S.w('80,24 80,40') + S.res(80, 70, true, '10 kΩ') + S.w('80,100 80,120') + S.dot(80, 120) + S.w('80,120 200,120') + S.pin(204, 120, 'GPIO27', 'start')
+    S.t(80, 18, '3,3 V', 'txc', 'middle') + S.w('80,24 80,40') + S.res(80, 70, true, '10 kΩ') + S.w('80,100 80,120') + S.dot(80, 120) + S.w('80,120 200,120') + S.pin(204, 120, 'GP14', 'start')
     + S.btn(80, 150, true, '') + S.gnd(80, 190) + S.t(100, 154, 'tlačítko', 'txm'),
     'Pull-up rezistor 10 kiloohmů ke 3,3 V, tlačítko ke GND'), 'V klidu teče rezistorem zanedbatelný proud a pin „vidí" 3,3 V (1). Stisk spojí pin s GND (0).'),
 
@@ -405,12 +405,12 @@ const FIG = {
     'NPN tranzistor spíná motor, báze přes rezistor 1 kiloohm z GPIO'),
     'Malý proud tekoucí z GPIO do báze otevře cestu z kolektoru do emitoru. Motorem pak teče proud ze zdroje 5 V, ne z GPIO.'),
 
-  'l1-10': () => figWrap('Dva zdroje, jedna zem', 'Raspberry Pi + motor', S.svg(330, 170,
-    `<rect x="20" y="20" width="110" height="60" rx="6" class="sy"/>` + S.t(75, 45, 'Raspberry Pi', 'tx', 'middle') + S.t(75, 64, '5 V / 3 A', 'txm', 'middle')
+  'l1-10': () => figWrap('Dva zdroje, jedna zem', 'Pico W + motor', S.svg(330, 170,
+    `<rect x="20" y="20" width="110" height="60" rx="6" class="sy"/>` + S.t(75, 45, 'Pico W', 'tx', 'middle') + S.t(75, 64, 'USB 5 V', 'txm', 'middle')
     + `<rect x="200" y="20" width="110" height="60" rx="6" class="sy"/>` + S.t(255, 45, 'ovladač motoru', 'tx', 'middle') + S.t(255, 64, 'baterie 6 V', 'txm', 'middle')
     + S.w('130,40 200,40') + S.t(165, 34, 'signál', 'txm', 'middle')
     + `<path d="M75 80V130H255V80" style="fill:none;stroke:var(--good);stroke-width:3"/>` + S.t(165, 148, 'společná GND', 'tx', 'middle') + S.dot(75, 130) + S.dot(255, 130),
-    'Raspberry Pi a ovladač motoru s vlastním zdrojem, propojené zemí'), 'Každý zdroj napájí svou část, ale země (GND) musí být propojené. Jinak signál z GPIO nemá společnou „nulu" a nefunguje.'),
+    'Pico W a ovladač motoru s vlastním zdrojem, propojené zemí'), 'Každý zdroj napájí svou část, ale země (GND) musí být propojené. Jinak signál z GPIO nemá společnou „nulu" a nefunguje.'),
 
   'l2-01': () => figWrap('Druhy rezistorů', 'řez a povrch', `<div class="duo" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr))">
     <div><svg viewBox="0 0 200 60" aria-hidden="true"><line class="ld" x1="0" y1="30" x2="200" y2="30"/><rect x="34" y="16" width="132" height="28" rx="3" fill="#e8e1d0" class="ed"/><path d="M42 16 l6 28 M52 16 l6 28 M62 16 l6 28 M72 16 l6 28 M82 16 l6 28 M92 16 l6 28 M102 16 l6 28 M112 16 l6 28 M122 16 l6 28 M132 16 l6 28 M142 16 l6 28 M152 16 l6 28" stroke="#b8692f" stroke-width="2.5"/><rect x="26" y="13" width="12" height="34" rx="2" fill="#9aa0a6"/><rect x="162" y="13" width="12" height="34" rx="2" fill="#9aa0a6"/></svg><small>drátový</small></div>
@@ -529,7 +529,7 @@ const FIG = {
 
 /* ================= Lekce ================= */
 const LEVELS = [
-  { n: 1, key: 'l1', name: 'Začátečník', sub: 'Raspberry Pi prakticky', desc: 'Minimum, které potřebuješ k prvním projektům s Raspberry Pi: rozsvítit LED, přečíst tlačítko, bezpečně připojit senzor a spínat motor.' },
+  { n: 1, key: 'l1', name: 'Začátečník', sub: 'Pico W prakticky', desc: 'Minimum, které potřebuješ k prvním projektům s Raspberry Pi Pico W a MicroPythonem: rozsvítit LED, přečíst tlačítko, bezpečně připojit senzor a spínat motor.' },
   { n: 2, key: 'l2', name: 'Mírně pokročilý', sub: 'Součástky do hloubky', desc: 'Jak jednotlivé součástky fungují uvnitř: druhy rezistorů, kondenzátory, cívky, diody, tranzistory, PWM a relé.' },
   { n: 3, key: 'l3', name: 'Pokročilý', sub: 'Hlubší porozumění', desc: 'Střídavý proud, filtry, rezonance, transformátor, polovodiče zevnitř, MOSFET, operační zesilovač a plošné spoje.' },
 ];
@@ -553,19 +553,19 @@ const LESSONS = [
   idea: 'Proud teče jen uzavřeným okruhem. Zkrat je cesta bez odporu, a proto je nebezpečný.',
   terms: [['Elektrický obvod', 'Uzavřená cesta od zdroje přes součástky zpět ke zdroji.'], ['GND (zem)', 'Společný bod s napětím 0 V. K němu se vztahují všechna ostatní napětí.'], ['Zkrat', 'Přímé spojení + a − bez součástky, která by omezila proud. Teče obrovský proud.'], ['Schéma', 'Výkres obvodu. Čáry jsou vodiče, součástky mají dohodnuté značky.']],
   body: `<p>Voda v našem modelu koluje dokola: z čerpadla trubkami přes součástky a zpátky. Když okruh někde přerušíš (rozepneš spínač), proud se zastaví <em>všude</em>, nejen za spínačem.</p>
-  <p>Bod, ke kterému vztahujeme všechna napětí, se jmenuje <b class="c">GND</b> (ground, zem) a má 0 V. Když se řekne „pin má 3,3 V", myslí se 3,3 V vůči GND. Proto musí mít všechny části projektu, třeba Raspberry Pi a zdroj pro motor, <b>společnou zem</b>: jejich GND se propojí drátem.</p>
-  <p><b class="c">Zkrat</b> vznikne, když spojíš + a − zdroje přímo, bez součástky, která by proud omezila. Podle Ohmova zákona je při téměř nulovém odporu proud obrovský. Baterie se zahřeje, tenký drát se může roztavit a Raspberry Pi se může nevratně poškodit.</p>
+  <p>Bod, ke kterému vztahujeme všechna napětí, se jmenuje <b class="c">GND</b> (ground, zem) a má 0 V. Když se řekne „pin má 3,3 V", myslí se 3,3 V vůči GND. Proto musí mít všechny části projektu, třeba Pico a zdroj pro motor, <b>společnou zem</b>: jejich GND se propojí drátem.</p>
+  <p><b class="c">Zkrat</b> vznikne, když spojíš + a − zdroje přímo, bez součástky, která by proud omezila. Podle Ohmova zákona je při téměř nulovém odporu proud obrovský. Baterie se zahřeje, tenký drát se může roztavit a Pico se může nevratně poškodit.</p>
   <div class="note try"><h4>Bezpečnostní pravidlo</h4><p>Zapojení měň vždy s odpojeným napájením. Před zapnutím zkontroluj, že nikde nejsou přímo spojené 5 V (nebo 3,3 V) a GND.</p></div>`,
   sim: 'circuit', task: 'Sepni spínač a podívej se na proud. Pak zkus zkrat. Kolikrát je proud větší?' },
 
 { id: 'l1-03', lvl: 1, title: 'Nepájivé pole', sub: 'Stavíme bez pájení',
   idea: 'Nepájivé pole spojuje díry v pěticích pod sebou. Dlouhé krajní lišty slouží pro napájení.',
-  terms: [['Nepájivé pole (breadboard)', 'Destička s dírami a pružinovými kontakty pro rychlé zapojování.'], ['Sloupec pěti děr', 'Díry a–e (a zvlášť f–j) v jednom sloupci jsou vodivě spojené.'], ['Napájecí lišta', 'Dlouhá řada označená + a −, spojená po celé délce.'], ['Středová drážka', 'Odděluje horní a dolní polovinu. Přes ni se zasazují integrované obvody.'], ['Propojovací vodiče', 'Dupont kabely. K GPIO se připojují koncovkou „samice".']],
+  terms: [['Nepájivé pole (breadboard)', 'Destička s dírami a pružinovými kontakty pro rychlé zapojování.'], ['Sloupec pěti děr', 'Díry a–e (a zvlášť f–j) v jednom sloupci jsou vodivě spojené.'], ['Napájecí lišta', 'Dlouhá řada označená + a −, spojená po celé délce.'], ['Středová drážka', 'Odděluje horní a dolní polovinu. Přes ni se zasazují integrované obvody i samotné Pico.'], ['Propojovací vodiče', 'Dupont kabely. Na nepájivém poli se používají vodiče samec–samec.']],
   body: `<p>Nepájivé pole je plastová destička s dírami. Uvnitř jsou kovové pružinky, které spojují vždy několik děr dohromady. Součástky do nich zastrčíš a můžeš je kdykoli přeskládat.</p>
   <ul><li>Uprostřed jsou <b>sloupce po pěti dírách</b> (a–e a f–j). Pět děr v jednom sloupci je spojených, sousední sloupce ne.</li>
   <li>Středová <b>drážka</b> dělí pole na dvě poloviny: horní a dolní pětice spojené nejsou.</li>
   <li>Po okrajích jsou <b>napájecí lišty</b> + a −, spojené po celé délce. U některých delších polí je lišta v polovině přerušená; ověř si to.</li></ul>
-  <p>K Raspberry Pi se pole připojuje vodiči samice–samec: samice na pin, samec do pole. Obvyklý začátek: pin 3,3 V na lištu +, pin GND na lištu −.</p>
+  <p>Pico s připájenými kolíky (Pico WH) se zasouvá přímo do pole přes středovou drážku, stejně jako integrovaný obvod. Každý pin Pica tak má vlastní sloupec a volné díry v něm použiješ pro vodiče. Obvyklý začátek: z pinu 3V3(OUT) vede drát na lištu +, z pinu GND na lištu −.</p>
   <div class="note limit"><h4>Nejčastější chyba</h4><p>Obě nožičky součástky ve stejném sloupci. Pak jsou spojené nakrátko a proud součástku obejde.</p></div>`,
   sim: 'breadboard', task: 'Klikej na díry a sleduj, které se rozsvítí. Pak klikni na horní lištu.' },
 
@@ -578,34 +578,45 @@ const LESSONS = [
   <p>Příklad: červená (2), fialová (7), oranžová (×1 000), zlatá → 27 × 1 000 = 27 000 Ω = 27 kΩ ±5 %.</p>
   <p>Přesné metalizované rezistory mají pět pruhů: tři číslice, násobitel a toleranci (hnědá = ±1 %). Při pochybnostech hodnotu změř multimetrem.</p>
   <p>Ve schématech se píše 4k7 místo 4,7 kΩ nebo 2R2 místo 2,2 Ω. Písmeno nahrazuje desetinnou čárku, kterou by šlo na výkresu přehlédnout.</p>`,
-  sim: 'colorcode', task: 'Najdi pruhy pro 220 Ω a 10 kΩ. S Raspberry Pi je budeš používat nejčastěji.' },
+  sim: 'colorcode', task: 'Najdi pruhy pro 330 Ω a 10 kΩ. S Picem je budeš používat nejčastěji.' },
 
-{ id: 'l1-05', lvl: 1, title: 'LED a předřadný rezistor', sub: 'První světlo z Raspberry Pi',
+{ id: 'l1-05', lvl: 1, title: 'LED a předřadný rezistor', sub: 'První světlo z Pica',
   idea: 'LED vždy zapoj s rezistorem: R = (U zdroje − U LED) / I.',
   terms: [['LED', 'Svítivá dioda. Vede proud jen jedním směrem a přitom svítí.'], ['Anoda (+)', 'Delší nožička. Připojuje se ke kladnějšímu napětí.'], ['Katoda (−)', 'Kratší nožička, u zploštělé strany pouzdra. Směřuje ke GND.'], ['Úbytek napětí U_F', 'Napětí, které LED „spotřebuje": červená asi 2 V, modrá a bílá asi 3 V.'], ['Předřadný rezistor', 'Rezistor v sérii s LED, který omezuje její proud.']],
   body: `<p>LED sama proud neomezuje. Dokud je napětí pod asi 2 V, nesvítí. Jakmile ho překročí, proud prudce roste a LED se během chvilky zničí. Proto s ní vždy zapojujeme rezistor.</p>
   <p>Výpočet: od napětí zdroje odečteme úbytek na LED a zbytek „padne" na rezistoru.</p><p class="formula">R = (U zdroje − U_F) / I</p>
-  <p>Pro GPIO (3,3 V), červenou LED (2,0 V) a proud 6 mA: R = (3,3 − 2,0) / 0,006 ≈ 217 Ω. Zvolíme nejbližší vyšší běžnou hodnotu: <b>220 Ω</b>. Pro napájení 5 V a 10 mA vychází 300 Ω, tedy 330 Ω.</p>
-  <p>Zapojení: GPIO17 → rezistor 220 Ω → anoda LED, katoda → GND. Program v Pythonu s knihovnou gpiozero:</p>
-  ${code(`from gpiozero import LED
-from signal import pause
+  <p>Na Picu počítáme s proudem kolem 4 mA, protože s ním počítá výchozí nastavení jeho pinů. Pro GPIO (3,3 V) a červenou LED (2,0 V): R = (3,3 − 2,0) / 0,004 ≈ 325 Ω. Zvolíme nejbližší vyšší běžnou hodnotu: <b>330 Ω</b>. Pro napájení 5 V a 10 mA vychází 300 Ω, tedy také 330 Ω.</p>
+  <p>Zapojení: GP15 → rezistor 330 Ω → anoda LED, katoda → GND. Program v MicroPythonu s knihovnou machine:</p>
+  ${code(`from machine import Pin
+import time
 
-led = LED(17)      # GPIO17 = fyzický pin 11
-led.blink()        # bliká v pozadí
-pause()`)}`,
-  sim: 'led', task: 'Zvol zdroj 3,3 V (GPIO) a hledej nejmenší rezistor, se kterým LED ještě nepřekročí 16 mA. Pak LED otoč.' },
+led = Pin(15, Pin.OUT)  # GP15
+while True:             # dokola:
+    led.toggle()        # přepni LED
+    time.sleep(0.5)     # čekej 0,5 s`)}`,
+  sim: 'led', task: 'Zvol zdroj 3,3 V (GPIO) a hledej nejmenší rezistor, se kterým proud LED nepřekročí 4 mA. Pak LED otoč.' },
 
-{ id: 'l1-06', lvl: 1, title: 'Piny GPIO na Raspberry Pi', sub: '40 pinů a jejich pravidla',
-  idea: 'Piny GPIO pracují s 3,3 V a snesou jen malý proud. 5 V na GPIO Raspberry Pi zničí.',
-  terms: [['GPIO', 'General Purpose Input/Output: pin, který v programu nastavíš jako vstup nebo výstup.'], ['HIGH a LOW', 'HIGH = 3,3 V (logická 1), LOW = 0 V (logická 0).'], ['BCM číslování', 'Číslo GPIO v čipu (GPIO17). Používá ho gpiozero.'], ['Fyzické číslování', 'Pozice na konektoru 1–40. GPIO17 je fyzicky pin 11.'], ['Napájecí piny', '3V3 a 5V dávají napětí stále, nejdou vypnout. GND je na konektoru osmkrát.']],
-  body: `<p>Raspberry Pi má 40pinový konektor. Většina pinů jsou <b class="c">GPIO</b>. V programu určíš, jestli pin bude <em>výstup</em> (zapíná LED) nebo <em>vstup</em> (čte tlačítko).</p>
+{ id: 'l1-06', lvl: 1, title: 'Piny GPIO na Picu W', sub: '40 pinů a jejich pravidla',
+  idea: 'Piny GPIO pracují s 3,3 V a snesou jen malý proud. 5 V na GPIO Pico zničí.',
+  terms: [['GPIO', 'General Purpose Input/Output: pin, který v programu nastavíš jako vstup nebo výstup. Na Picu se jmenují GP0 až GP28.'], ['HIGH a LOW', 'HIGH = 3,3 V (logická 1), LOW = 0 V (logická 0).'], ['Číslo GP', 'Číslo pinu v čipu (GP15). Píše se do kódu: Pin(15).'], ['Fyzické číslování', 'Pozice na okraji desky 1–40. GP15 je fyzicky pin 20.'], ['Napájecí piny', 'VBUS (5 V z USB), VSYS (napájení desky) a 3V3(OUT) (3,3 V pro senzory). Nejdou vypnout programem. GND je na desce osmkrát.'], ['Analogový vstup (ADC)', 'Piny GP26, GP27 a GP28 umí změřit napětí mezi 0 a 3,3 V.']],
+  body: `<p>Raspberry Pi Pico W má po obou dlouhých stranách 40 pinů. Většina z nich jsou <b class="c">GPIO</b>: GP0 až GP28, použitelných je 26. V programu určíš, jestli pin bude <em>výstup</em> (zapíná LED) nebo <em>vstup</em> (čte tlačítko).</p>
   <ul><li>Výstup HIGH = 3,3 V, LOW = 0 V.</li>
-  <li>Vstup čte napětí: blízko 3,3 V je 1, blízko 0 V je 0. <b>Nikdy na něj nepřiváděj 5 V.</b> Raspberry Pi nemá ochranu a pin, případně celý čip, se může zničit.</li>
-  <li>Z jednoho pinu ber jen pár miliampérů: bezpečně do asi 8 mA, nejvýš 16 mA. Ze všech GPIO dohromady zhruba do 50 mA. Na LED to stačí, na motor, relé nebo LED pásek ne. Na ty je tranzistor (lekce 9).</li>
-  <li>Piny <b>5V</b> a <b>3V3</b> jsou napájecí a nedají se ovládat.</li></ul>
-  <p>Pozor na dvojí číslování. <b>Fyzické</b> číslo je pozice na konektoru. <b>BCM</b> je číslo GPIO v čipu. Když v kódu napíšeš <span class="mono">LED(17)</span>, myslíš GPIO17, a ten je fyzicky na pinu 11.</p>
-  <div class="note"><h4>Jak se zorientovat</h4><p>Pin 1 má na desce čtvercovou pájecí plošku a je na konci konektoru, který je dál od USB portů. V terminálu Raspberry Pi vypíše mapu pinů příkaz <span class="mono">pinout</span>.</p></div>`,
-  sim: 'gpio', task: 'Najdi GPIO17 a GPIO18. Pak spočítej, kolik pinů GND konektor má.' },
+  <li>Vstup čte napětí: blízko 3,3 V je 1, blízko 0 V je 0. <b>Nikdy na něj nepřiváděj 5 V.</b> Čip Pica vyšší napětí nesnese a pin, případně celý čip, se může zničit.</li>
+  <li>Z jednoho pinu ber jen pár miliampérů. Výchozí nastavení počítá se 4 mA, nejvíc se dá nastavit 12 mA. Na LED to stačí, na motor, relé nebo LED pásek ne. Na ty je tranzistor (lekce 9).</li>
+  <li>Piny <b>VBUS</b>, <b>VSYS</b> a <b>3V3(OUT)</b> jsou napájecí a nedají se ovládat. Z 3V3(OUT) napájej senzory a pull-up rezistory.</li>
+  <li>Tři piny, GP26 až GP28, umí změřit i napětí mezi 0 a 3,3 V (analogový vstup, lekce 3.8).</li></ul>
+  <p>Pozor na dvojí číslování. <b>Fyzické</b> číslo je pozice na okraji desky (1 až 40). <b>Číslo GP</b> je číslo pinu v čipu a to se píše do kódu. <span class="mono">Pin(15)</span> znamená GP15, a ten je fyzicky na pinu 20.</p>
+  ${code(`from machine import Pin
+
+led = Pin(15, Pin.OUT)  # GP15 výstup
+led.on()                # 3,3 V
+led.off()               # 0 V
+
+# LED přímo na desce Pica W:
+deska = Pin("LED", Pin.OUT)
+deska.toggle()          # přepne ji`)}
+  <div class="note"><h4>Jak se zorientovat</h4><p>Polož Pico tak, aby konektor USB byl nahoře. Pin 1 je vlevo nahoře, fyzická čísla jdou po levé straně dolů (1–20) a po pravé straně zpátky nahoru (21–40). Popisky GP0, GP1… jsou natištěné na spodní straně desky. Nejjistější je mít vedle sebe vytištěnou mapu pinů (pinout).</p></div>`,
+  sim: 'gpio', task: 'Najdi GP15 a GP16. Pak spočítej, kolik pinů GND deska má.' },
 
 { id: 'l1-07', lvl: 1, title: 'Tlačítko a pull-up rezistor', sub: 'Jak číst vstup spolehlivě',
   idea: 'Nepřipojený vstup „plave". Pull-up nebo pull-down rezistor mu dá jasný klidový stav.',
@@ -613,15 +624,26 @@ pause()`)}`,
   body: `<p>Tlačítko jen spojuje dva kontakty. Zapojíš ho mezi GPIO a GND. Když ho pustíš, pin není připojený k ničemu. Takový vstup <b class="c">plave</b>: chytá rušení ze vzduchu i z tvé ruky a náhodně čte 0 a 1.</p>
   <p>Řešením je rezistor, který pin v klidu jemně „drží" v jednom stavu:</p>
   <ul><li><b>Pull-up</b> ke 3,3 V: v klidu 1, stisk spojí pin s GND → 0.</li><li><b>Pull-down</b> ke GND: v klidu 0, tlačítko ke 3,3 V → 1.</li></ul>
-  <p>Rezistor musí být dost velký (typicky 10 kΩ), aby při stisku netekl zbytečný proud: 3,3 V / 10 kΩ = 0,33 mA. Raspberry Pi má pull-up i pull-down rezistory přímo v čipu (kolem 50 kΩ) a gpiozero pull-up zapne samo:</p>
-  ${code(`from gpiozero import Button, LED
-from signal import pause
+  <p>Rezistor musí být dost velký (typicky 10 kΩ), aby při stisku netekl zbytečný proud: 3,3 V / 10 kΩ = 0,33 mA. Pico má pull-up i pull-down rezistory přímo v čipu (kolem 50 kΩ). Zapneš je při vytvoření pinu parametrem <span class="mono">Pin.PULL_UP</span> nebo <span class="mono">Pin.PULL_DOWN</span>:</p>
+  ${code(`from machine import Pin
+import time
 
-tlacitko = Button(27, bounce_time=0.05)  # GPIO27 ↔ tlačítko ↔ GND
-led = LED(17)
-tlacitko.when_pressed = led.toggle
-pause()`)}
-  <p>Parametr <span class="mono">bounce_time</span> potlačí zákmity: po stisku 50 ms ignoruje další změny.</p>`,
+# GP14 ↔ tlačítko ↔ GND
+tlacitko = Pin(14, Pin.IN,
+               Pin.PULL_UP)
+led = Pin(15, Pin.OUT)
+predtim = tlacitko.value()
+
+while True:
+    # 1 = puštěno, 0 = stisknuto
+    ted = tlacitko.value()
+    if ted != predtim:   # změna?
+        if ted == 0:     # stisk
+            led.toggle()
+        predtim = ted
+        # přečkej zákmity:
+        time.sleep_ms(50)`)}
+  <p>Řádek <span class="mono">time.sleep_ms(50)</span> potlačí zákmity: 50 ms po každé změně se program na tlačítko nedívá, takže odskoky kontaktů nepočítá jako další stisky.</p>`,
   sim: 'pullup', task: 'Přepni na „bez rezistoru" a sleduj graf. Pak zapni pull-up a stiskni tlačítko.' },
 
 { id: 'l1-08', lvl: 1, title: 'Dělič napětí', sub: 'Jak z 5 V udělat 3,3 V',
@@ -629,7 +651,7 @@ pause()`)}
   terms: [['Sériové zapojení', 'Součástky za sebou. Teče jimi stejný proud, odpory se sčítají.'], ['Dělič napětí', 'Dva rezistory v sérii. Z jejich středu odebíráš nižší napětí.'], ['Úbytek napětí', 'Část napětí, která „padne" na jedné součástce.'], ['Převodník úrovní', 'Obvod pro obousměrné rychlé signály mezi 5 V a 3,3 V.']],
   body: `<p>Když zapojíš dva rezistory za sebou, teče oběma stejný proud. Napětí se mezi ně rozdělí v poměru jejich odporů. Na větším rezistoru „padne" větší část.</p>
   <p class="formula">U_výst = U_vst · R2 / (R1 + R2)</p>
-  <p>Typické použití s Raspberry Pi: ultrazvukový dálkoměr HC-SR04 vrací na pinu ECHO 5 V. S děličem R1 = 1 kΩ (nahoře) a R2 = 2 kΩ (dole) dostaneš 5 · 2 / 3 ≈ 3,3 V a GPIO je v bezpečí.</p>
+  <p>Typické použití s Picem: ultrazvukový dálkoměr HC-SR04 vrací na pinu ECHO 5 V. S děličem R1 = 1 kΩ (nahoře) a R2 = 2 kΩ (dole) dostaneš 5 · 2 / 3 ≈ 3,3 V a GPIO je v bezpečí.</p>
   <p>Potenciometr je vlastně nastavitelný dělič: jezdec rozdělí odporovou dráhu na R1 a R2.</p>
   <div class="note limit"><h4>Na co se dělič nehodí</h4><p>Dělič je dobrý pro signály, ne pro napájení. Jakmile z jeho středu začneš odebírat proud (motor, LED pásek), napětí poklesne. Pro napájení se používá stabilizátor nebo měnič.</p></div>`,
   sim: 'divider', task: 'Nastav 5 V a hledej R1 a R2 tak, aby výstup byl mezi 3,0 a 3,3 V.' },
@@ -647,13 +669,14 @@ pause()`)}
 
 { id: 'l1-10', lvl: 1, title: 'Napájení a baterie', sub: 'Kolik proudu a na jak dlouho',
   idea: 'Zdroj musí dodat dost proudu. Výdrž baterie ≈ kapacita (mAh) / odběr (mA).',
-  terms: [['Napájecí zdroj', 'Raspberry Pi 4 potřebuje 5 V / 3 A přes USB-C, Pi 5 oficiálně 5 V / 5 A.'], ['Kapacita (mAh)', 'Kolik proudu baterie dodá za hodinu. 1 000 mAh = 1 A po dobu jedné hodiny.'], ['Výkon P = U · I', 'Ve wattech (W). 5 V · 3 A = 15 W.'], ['Podpětí', 'Zdroj nestíhá, napětí klesá. Raspberry Pi hlásí varování a může se restartovat.']],
-  body: `<p>Každý zdroj má dvě důležitá čísla: <b class="c">napětí</b> (musí sedět, pro Raspberry Pi 5 V) a <b class="c">maximální proud</b> (musí stačit). Slabý adaptér nebo tenký dlouhý kabel způsobí <b>podpětí</b>: Raspberry Pi zpomalí, hlásí varování a může se náhodně restartovat.</p>
-  <p>Motory a LED pásky napájej z vlastního zdroje, ne z pinu 5V na Raspberry Pi. Země obou zdrojů propoj.</p>
-  <p>U baterií a powerbank se kapacita udává v mAh. Hrubý odhad výdrže:</p>
+  terms: [['Napájení Pica', 'Pico W se napájí 5 V přes micro-USB (pin VBUS). Baterie se připojuje na pin VSYS (1,8 až 5,5 V).'], ['Kapacita (mAh)', 'Kolik proudu baterie dodá za hodinu. 1 000 mAh = 1 A po dobu jedné hodiny.'], ['Výkon P = U · I', 'Ve wattech (W). 5 V · 2 A = 10 W.'], ['Podpětí', 'Zdroj nestíhá, napětí klesá. Pico se může náhodně restartovat, třeba když se rozjede motor na stejném zdroji.']],
+  body: `<p>Každý zdroj má dvě důležitá čísla: <b class="c">napětí</b> (musí sedět) a <b class="c">maximální proud</b> (musí stačit). Pico W samo odebírá jen desítky miliampérů, se zapnutou Wi-Fi o něco víc. Stačí mu tedy skoro každá USB nabíječka nebo port počítače.</p>
+  <p>Problém nastane, když ze stejného zdroje napájíš motor, servo nebo LED pásek. Ty berou stovky mA a při rozběhu ještě víc. Napětí poklesne (<b>podpětí</b>) a Pico se může restartovat nebo zaseknout. Motory a LED pásky proto napájej z vlastního zdroje a země obou zdrojů propoj. Pin 3V3(OUT) unese nejvýš asi 300 mA, a to jen pro senzory a drobnosti.</p>
+  <p>Na baterie se Pico připojuje přes pin <b>VSYS</b>, který přijme 1,8 až 5,5 V: třeba tři tužkové články (4,5 V) nebo jeden Li-ion článek (3,7 V). Jinak stačí powerbanka přes USB. Hrubý odhad výdrže:</p>
   <p class="formula">t [h] ≈ kapacita [mAh] / odběr [mA]</p>
-  <p>Ve skutečnosti vydrží méně, obvykle 70–80 % výpočtu: napětí se převádí (3,7 V článek → 5 V) a část energie se ztratí jako teplo.</p>`,
-  sim: 'battery', task: 'Kolik hodin vydrží Raspberry Pi 4 v klidu na powerbance 10 000 mAh? A kolik při plné zátěži?' },
+  <p>Ve skutečnosti vydrží méně, obvykle 70–80 % výpočtu: napětí se převádí a část energie se ztratí jako teplo.</p>
+  <div class="note limit"><h4>Dvě časté potíže</h4><p>Některé powerbanky se při malém odběru (pod zhruba 50–100 mA) samy vypnou, protože si myslí, že nic není připojené. Pico je pro ně příliš úsporné.</p><p>Když necháš baterii na VSYS a zároveň připojíš USB, patří do cesty od baterie Schottkyho dioda. Jinak by USB baterii „nabíjelo".</p></div>`,
+  sim: 'battery', task: 'Kolik hodin vydrží Pico W, které jen bliká LED, na powerbance 10 000 mAh? A kolik, když pohání motorek?' },
 
 /* ---------- ÚROVEŇ 2 ---------- */
 { id: 'l2-01', lvl: 2, title: 'Druhy rezistorů a výkon', sub: 'Teplo, materiály a normalizované řady',
@@ -666,7 +689,7 @@ pause()`)}
   <li><b>Metalizovaný</b>: místo uhlíku kovová slitina. Přesnější, stabilnější, méně šumí. Obvykle modrý s pěti pruhy.</li>
   <li><b>Nelineární</b>: termistor (teplota), fotorezistor (světlo), varistor (napětí, ochrana proti přepětí).</li></ul>
   <p>Rezistory se dřív vyrobily a pak roztřídily. Tak vznikly <b class="c">normalizované řady</b>: v řadě E24 jsou sousední hodnoty asi 10 % od sebe, takže se jejich tolerance ±5 % dotýkají.</p>
-  <p>Kolik tepla rezistor snese, závisí hlavně na jeho <b>velikosti</b>: 1/8 W (3,5 mm), 1/4 W (6 mm), 1/2 W (9 mm). Rezistor pro LED z GPIO (220 Ω, 6 mA) má jen P = 0,006² · 220 ≈ 8 mW. Rezistor 10 Ω na 5 V už 2,5 W a potřebuje 5W typ.</p>`,
+  <p>Kolik tepla rezistor snese, závisí hlavně na jeho <b>velikosti</b>: 1/8 W (3,5 mm), 1/4 W (6 mm), 1/2 W (9 mm). Rezistor pro LED z GPIO (330 Ω, 4 mA) má jen P = 0,004² · 330 ≈ 5 mW. Rezistor 10 Ω na 5 V už 2,5 W a potřebuje 5W typ.</p>`,
   sim: 'power', task: 'Jaký výkon vzniká na rezistoru 47 Ω připojeném na 12 V? Jaký typ zvolíš?' },
 
 { id: 'l2-02', lvl: 2, title: 'Kondenzátor: membrána v trubce', sub: 'Nabíjení, vybíjení a časová konstanta',
@@ -737,23 +760,28 @@ pause()`)}
   <p class="formula">U_průměr = střída · U</p>
   <p>Při nízké frekvenci (1–10 Hz) vidíš blikání. Nad zhruba 100 Hz oko blikání nerozliší. Motor PWM „vyhladí" svou setrvačností.</p>
   <p>Proč ne rezistorem? Rezistor by přebytečnou energii měnil v teplo. Spínač při PWM je buď plně sepnutý, nebo plně rozepnutý, a v obou stavech se téměř nehřeje. Proto PWM řídí motory, ventilátory i jas displejů.</p>
-  ${code(`from gpiozero import PWMLED
-from signal import pause
+  ${code(`from machine import Pin, PWM
+import time
 
-led = PWMLED(18)
-led.value = 0.25   # střída 25 %
-led.pulse()        # plynulé „dýchání"
-pause()`)}
-  <p>Hardwarové PWM má Raspberry Pi na GPIO12, 13, 18 a 19. Servomotory používají PWM 50 Hz s pulzem 1–2 ms.</p>`,
+led = PWM(Pin(15))   # GP15 jako PWM
+led.freq(1000)       # 1 000 Hz
+led.duty_u16(16384)  # střída 25 %
+time.sleep(2)
+
+# plynulé rozsvícení
+for jas in range(0, 65536, 1024):
+    led.duty_u16(jas)
+    time.sleep_ms(20)`)}
+  <p>Metoda <span class="mono">duty_u16</span> bere čísla od 0 (vypnuto) do 65 535 (trvale zapnuto). Polovina, 32 768, je střída 50 %. Pico umí hardwarové PWM na každém GPIO pinu. Servomotory používají PWM 50 Hz s pulzem 1–2 ms.</p>`,
   sim: 'pwm', task: 'Nastav 2 Hz a střídu 25 %. Pak zvyšuj frekvenci, dokud LED nepřestane blikat.' },
 
 { id: 'l2-09', lvl: 2, title: 'Relé a ochranná dioda', sub: 'Spínač ovládaný cívkou',
   idea: 'Relé je spínač ovládaný cívkou. Paralelně k cívce vždy zapoj diodu, jinak špička zničí tranzistor.',
   terms: [['Relé', 'Elektromagnet přitahuje kontakty. Ovládací a spínaný obvod jsou oddělené.'], ['COM, NO, NC', 'Společný kontakt, v klidu rozpojený (NO) a v klidu spojený (NC).'], ['Ochranná dioda', 'Dioda paralelně k cívce, katodou k +. Tlumí špičku při vypnutí.'], ['Galvanické oddělení', 'Obvody nejsou vodivě spojené; ovlivňují se jen magneticky nebo světlem.']],
-  body: `<p>Relé má uvnitř <b>cívku</b> a pohyblivé kontakty. Proud cívkou vytvoří magnetické pole, které kontakty přitáhne. Malý proud tak spíná obvod, který je od Raspberry Pi úplně oddělený: lampu, čerpadlo nebo motor.</p>
+  body: `<p>Relé má uvnitř <b>cívku</b> a pohyblivé kontakty. Proud cívkou vytvoří magnetické pole, které kontakty přitáhne. Malý proud tak spíná obvod, který je od Pica úplně oddělený: lampu, čerpadlo nebo motor.</p>
   <p>Cívka ale má setrvačnost (lekce Cívka). Když ji tranzistor vypne, vznikne na kolektoru <b class="c">napěťová špička</b> desítek až stovek voltů. Malý tranzistor ji nemusí přežít.</p>
   <p>Řešením je <b>ochranná dioda</b> paralelně k cívce, zapojená katodou k +. Za běžného provozu nevede. Po vypnutí převezme proud cívky, ten pomalu doběhne v kroužku cívka–dioda a špička nevznikne. Totéž platí pro motory a elektromagnetické ventily.</p>
-  <p>Hotové moduly relé pro Raspberry Pi mají tranzistor, diodu i kontrolku už na desce. Některé přidávají optočlen pro úplné oddělení.</p>
+  <p>Hotové moduly relé mají tranzistor, diodu i kontrolku už na desce. Některé přidávají optočlen pro úplné oddělení. Pro Pico vybírej modul, který spolehlivě sepne signálem 3,3 V.</p>
   <div class="note limit"><h4>Síťové napětí</h4><p>Relé zvládne spínat 230 V, ale práce se síťovým napětím je životu nebezpečná. Jako začátečník spínej jen bezpečná nízká napětí.</p></div>`,
   sim: 'relay', task: 'Rozepni spínač bez diody a pak s diodou. Porovnej velikost špičky.' },
 
@@ -776,7 +804,7 @@ pause()`)}
   <p class="formula">f_m = 1 / (2π · R · C)</p>
   <p>Na mezní frekvenci má výstup asi 71 % amplitudy. Nad ní klesá asi desetkrát na každou desetinásobnou frekvenci (−20 dB na dekádu).</p>
   <p>Prohodíš-li R a C, dostaneš <b>horní propust</b>, která propustí jen rychlé změny.</p>
-  <p>S Raspberry Pi: Pi nemá analogový výstup. PWM signál ale můžeš vyhladit dolní propustí s f_m hluboko pod frekvencí PWM a dostaneš plynulé napětí. Podobně RC článek potlačí zákmity tlačítka.</p>`,
+  <p>S Picem: Pico nemá analogový výstup. PWM signál ale můžeš vyhladit dolní propustí s f_m hluboko pod frekvencí PWM a dostaneš plynulé napětí. Podobně RC článek potlačí zákmity tlačítka.</p>`,
   sim: 'rcfilter', task: 'Nastav R = 10 kΩ a C = 100 nF. Jaká je mezní frekvence? Kolik projde z PWM s frekvencí 1 kHz?' },
 
 { id: 'l3-03', lvl: 3, title: 'Indukčnost: jak se počítá', sub: 'Závity, průřez, délka, jádro',
@@ -824,12 +852,12 @@ pause()`)}
   sim: null },
 
 { id: 'l3-07', lvl: 3, title: 'FET a MOSFET', sub: 'Spínání napětím',
-  idea: 'Tranzistor řízený polem spíná napětím na hradle, téměř bez proudu. Pro Raspberry Pi vybírej MOSFET s logickou úrovní.',
+  idea: 'Tranzistor řízený polem spíná napětím na hradle, téměř bez proudu. Pro Pico vybírej MOSFET s logickou úrovní.',
   terms: [['FET', 'Field Effect Transistor. Vývody: hradlo G, zdroj S (source), kolektor D (drain).'], ['Prahové napětí U_GS(th)', 'Napětí hradla, při kterém kanál začne vést.'], ['R_DS(on)', 'Odpor sepnutého kanálu, často jen miliohmy.'], ['Logic-level MOSFET', 'Plně sepne už při 2,5–4,5 V, takže ho lze řídit přímo z GPIO.'], ['Citlivost na statiku', 'Tenkou izolaci hradla prorazí i výboj statické elektřiny.']],
   body: `<p>Představ si trubku, jejíž část je z tenké pružné gumy. Kolem ní je voda z třetí trubky, <b>hradla</b>. Když v hradle zvýšíš tlak, guma kanál přiškrtí. Hradlem přitom žádná voda neteče. To je tranzistor řízený polem, <b class="c">FET</b>.</p>
   <p>U <b>MOSFETu</b> je hradlo od kanálu oddělené tenkou vrstvou oxidu. Chová se jako malý kondenzátor: proud teče jen při přepínání. U N-MOSFETu kladné napětí na hradle kanál otevře a sepnutý kanál má odpor jen desítky miliohmů. Proto MOSFET spíná ampéry a skoro se nehřeje.</p>
-  <p>Pozor na napětí hradla. Mnoho výkonových MOSFETů (IRF520, IRFZ44N) se plně otevře až při 10 V; při 3,3 V z GPIO zůstanou napůl sepnuté a hřejí se. Pro Raspberry Pi vybírej <b>logic-level</b> typ, jehož R_DS(on) výrobce udává pro U_GS = 2,5 V (například AO3400, IRLZ44N je hraniční).</p>
-  <p>Zapojení: GPIO → rezistor 100 Ω → hradlo; mezi hradlo a GND rezistor 100 kΩ, aby hradlo při startu Raspberry Pi „neplavalo" a MOSFET náhodně nesepnul.</p>`,
+  <p>Pozor na napětí hradla. Mnoho výkonových MOSFETů (IRF520, IRFZ44N) se plně otevře až při 10 V; při 3,3 V z GPIO zůstanou napůl sepnuté a hřejí se. Pro Pico vybírej <b>logic-level</b> typ, jehož R_DS(on) výrobce udává pro U_GS = 2,5 V (například AO3400, IRLZ44N je hraniční).</p>
+  <p>Zapojení: GPIO → rezistor 100 Ω → hradlo; mezi hradlo a GND rezistor 100 kΩ, aby hradlo při startu Pica „neplavalo" a MOSFET náhodně nesepnul.</p>`,
   sim: 'mosfet', task: 'Nastav hradlo na 3,3 V a porovnej logic-level a standardní MOSFET při zátěži 2 A.' },
 
 { id: 'l3-08', lvl: 3, title: 'Integrované obvody a operační zesilovač', sub: 'Tisíce součástek v jednom pouzdře',
@@ -837,7 +865,7 @@ pause()`)}
   terms: [['Integrovaný obvod (IO)', 'Tranzistory, diody, rezistory a malé kondenzátory vyrobené na jednom kousku křemíku.'], ['Pouzdro DIP / SMD', 'DIP má nožičky do děr (vhodné do nepájivého pole), SMD se pájí na povrch.'], ['Datasheet', 'Katalogový list: zapojení vývodů, limity, doporučená zapojení.'], ['Operační zesilovač', 'Zesilovač s obrovským zesílením, které zpětná vazba zkrotí na přesnou hodnotu.'], ['A = 1 + R2 / R1', 'Zesílení neinvertujícího zapojení.']],
   body: `<p>Kdybys všechny vodovodní modely rezistorů, diod a tranzistorů vyfrézoval do jednoho ocelového bloku, dostal bys obdobu <b class="c">integrovaného obvodu</b>. V elektronice jsou ale součástky tak malé, že se jich na čip velikosti nehtu vejdou miliardy. Vyrábějí se fotolitografií: vzor se opticky zmenší a „vyleptá" do křemíku, mnoho čipů najednou.</p>
   <p>Číslování vývodů: pin 1 je u tečky nebo zářezu a čísluje se proti směru hodinových ručiček (pohled shora).</p>
-  <p>Užitečné IO pro Raspberry Pi: <b>MCP3008</b> (A/D převodník; Pi nemá analogové vstupy), <b>74HC595</b> (posuvný registr, víc výstupů), <b>DRV8833</b> nebo <b>L293D</b> (ovladače motorů), <b>ULN2003</b> (sada spínacích tranzistorů).</p>
+  <p>Pico má A/D převodník přímo v čipu. Piny GP26, GP27 a GP28 změří napětí mezi 0 a 3,3 V: <span class="mono">ADC(26).read_u16()</span> vrátí číslo od 0 do 65 535. Další užitečné IO: <b>74HC595</b> (posuvný registr, víc výstupů), <b>DRV8833</b> nebo <b>L293D</b> (ovladače motorů), <b>ULN2003</b> (sada spínacích tranzistorů). Když nestačí tři analogové vstupy, pomůže externí převodník <b>MCP3008</b>.</p>
   <p><b>Operační zesilovač</b> má dva vstupy (+ a −) a jeden výstup. Zesiluje rozdíl mezi vstupy obrovským zesílením. Když část výstupu vrátíš na vstup − (zpětná vazba), ustálí se zesílení přesně podle rezistorů:</p>
   <p class="formula">A = 1 + R2 / R1</p>
   <p>Výstup ale nemůže přesáhnout napájecí napětí. Když by měl, „narazí" (saturuje).</p>`,
@@ -1016,7 +1044,7 @@ SIMS.led = (root) => {
   const q = mount(root, figT('Simulace', 'LED s předřadným rezistorem') + `<div class="fig-body"><div id="lSvg"></div><div class="controls">
   <div class="ctl"><label for="lSrc">Zdroj</label><select id="lSrc"><option value="3.3">GPIO pin (3,3 V)</option><option value="5">5 V</option><option value="9">baterie 9 V</option></select></div>
   <div class="ctl"><label for="lCol">Barva LED</label><select id="lCol"><option value="2.0|#e63b2e">červená (≈ 2,0 V)</option><option value="2.2|#35b34a">zelená (≈ 2,2 V)</option><option value="3.0|#3d7dff">modrá (≈ 3,0 V)</option></select></div>
-  ${rng('lR', 'Rezistor R', 0, Rs.length - 1, 1, Rs.indexOf(220))}
+  ${rng('lR', 'Rezistor R', 0, Rs.length - 1, 1, Rs.indexOf(330))}
   <div class="btns"><button class="btn" id="lFlip" type="button">Otočit LED</button><button class="btn primary" id="lNew" type="button" hidden>Vyměnit LED</button></div>
   <div class="readouts">${ro('rI', 'Proud', 'w')}${ro('rUR', 'Napětí na R', 'c')}${ro('rPR', 'Výkon na R')}</div><div id="lSt"></div><p class="cap" id="lHint"></p></div></div>`);
   let flip = false, dead = false;
@@ -1033,12 +1061,12 @@ SIMS.led = (root) => {
     if (dead) st = '<span class="state bad">LED se zničila, proud byl přes 30 mA</span>';
     else if (flip) st = '<span class="state info">závěrný směr: proud neteče</span>';
     else if (U <= Vf) st = '<span class="state info">napětí nestačí na otevření LED</span>';
-    else if (gpio && I > 0.016) st = '<span class="state bad">přetížený GPIO pin (víc než 16 mA)</span>';
-    else if (gpio && I > 0.008) st = '<span class="state warn">GPIO na hraně (8–16 mA)</span>';
+    else if (gpio && I > 0.012) st = '<span class="state bad">přetížený GPIO pin (víc než 12 mA)</span>';
+    else if (gpio && I > 0.0042) st = '<span class="state warn">GPIO nad 4 mA: víc, než počítá výchozí nastavení pinu</span>';
     else if (I > 0.02) st = '<span class="state warn">LED přes 20 mA, zkracuje se jí život</span>';
     else st = '<span class="state good">v pořádku</span>';
     q('#lSt').innerHTML = st; q('#lNew').hidden = !dead;
-    const target = gpio ? 0.006 : 0.01, need = (U - Vf) / target, pick = Rs.find((r) => r >= need);
+    const target = gpio ? 0.004 : 0.01, need = (U - Vf) / target, pick = Rs.find((r) => r >= need);
     q('#lHint').textContent = U > Vf ? `Pro ${si(target, 'A')} vychází R = (${num(U)} − ${num(Vf)}) / ${num(target)} ≈ ${si(need, 'Ω')} → běžná hodnota ${si(pick, 'Ω')}.` : '';
   };
   onInputs(q, ['lSrc', 'lCol', 'lR'], upd);
@@ -1046,24 +1074,32 @@ SIMS.led = (root) => {
   return {};
 };
 
-/* ---------- 6 GPIO piny ---------- */
-const PINS = (() => {
-  const t = { 1: ['3V3', 'p3'], 2: ['5V', 'p5'], 4: ['5V', 'p5'], 17: ['3V3', 'p3'] }; [6, 9, 14, 20, 25, 30, 34, 39].forEach((n) => t[n] = ['GND', 'g']);
-  const g = { 3: [2, 'I²C SDA, vlastní pull-up 1,8 kΩ'], 5: [3, 'I²C SCL, vlastní pull-up 1,8 kΩ'], 7: [4, ''], 8: [14, 'UART TX (sériová linka)'], 10: [15, 'UART RX'], 11: [17, ''], 12: [18, 'hardwarové PWM'], 13: [27, ''], 15: [22, ''], 16: [23, ''], 18: [24, ''], 19: [10, 'SPI MOSI'], 21: [9, 'SPI MISO'], 22: [25, ''], 23: [11, 'SPI SCLK'], 24: [8, 'SPI CE0'], 26: [7, 'SPI CE1'], 27: [0, 'ID EEPROM (nepoužívat)'], 28: [1, 'ID EEPROM (nepoužívat)'], 29: [5, ''], 31: [6, ''], 32: [12, 'hardwarové PWM'], 33: [13, 'hardwarové PWM'], 35: [19, 'hardwarové PWM, SPI1'], 36: [16, ''], 37: [26, ''], 38: [20, 'SPI1'], 40: [21, 'SPI1'] };
-  const out = []; for (let n = 1; n <= 40; n++) { if (t[n]) out.push({ n, name: t[n][0], k: t[n][1] }); else { const [b, f] = g[n]; out.push({ n, name: 'GPIO' + b, bcm: b, k: f ? (b <= 1 ? 'id' : 'sp') : 'io', f }); } }
-  return out;
-})();
+/* ---------- 6 GPIO piny (Pico W shora, USB nahoře) ---------- */
+// fyzické piny 1–40: levá strana shora dolů 1–20, pravá strana zdola nahoru 21–40
+const PINS = ['GP0', 'GP1', 'GND', 'GP2', 'GP3', 'GP4', 'GP5', 'GND', 'GP6', 'GP7', 'GP8', 'GP9', 'GND', 'GP10', 'GP11', 'GP12', 'GP13', 'GND', 'GP14', 'GP15',
+  'GP16', 'GP17', 'GND', 'GP18', 'GP19', 'GP20', 'GP21', 'GND', 'GP22', 'RUN', 'GP26', 'GP27', 'GND', 'GP28', 'ADC_VREF', '3V3(OUT)', '3V3_EN', 'GND', 'VSYS', 'VBUS']
+  .map((name, i) => { const gp = name.startsWith('GP') ? +name.slice(2) : null; return { n: i + 1, gp, name: gp >= 26 ? `${name}/ADC${gp - 26}` : name, k: gp !== null ? (gp >= 26 ? 'sp' : 'io') : name === 'GND' ? 'g' : name === '3V3(OUT)' ? 'p3' : name.startsWith('V') ? 'p5' : 'id' }; });
 const PINCOL = { p3: '#e0913a', p5: '#d0312d', g: '#222', io: 'var(--water)', sp: 'var(--good)', id: 'var(--muted)' };
+const PIN_INFO = {
+  'GND': 'Zem (0 V). Všechny piny GND jsou propojené. Pin 33 se v mapě pinů někdy značí AGND, protože ho používají analogové vstupy.',
+  '3V3(OUT)': 'Stálé napájení 3,3 V z regulátoru na desce. Hodí se pro senzory a pull-up rezistory, odběr drž pod asi 300 mA. Nedá se vypnout programem.',
+  'VBUS': '5 V přímo z USB (jen když je Pico napájené z USB). <b>Nikdy ho nespojuj s žádným GPIO.</b> Na motory ber raději samostatný zdroj.',
+  'VSYS': 'Hlavní napájení desky, 1,8 až 5,5 V. Sem se připojuje baterie. <b>Nikdy ho nespojuj s žádným GPIO.</b>',
+  'RUN': 'Když ho spojíš s GND, Pico se restartuje. Běžně se nezapojuje.',
+  '3V3_EN': 'Spojením s GND vypneš regulátor 3,3 V, a tím celé Pico. Běžně se nezapojuje.',
+  'ADC_VREF': 'Referenční napětí pro analogové vstupy. Běžně se nezapojuje.',
+};
 SIMS.gpio = (root) => {
-  const q = mount(root, figT('Konektor Raspberry Pi', 'pin 1 vlevo nahoře') + `<div class="fig-body"><div class="legend"><span><i style="background:#e0913a"></i>3,3 V</span><span><i style="background:#d0312d"></i>5 V</span><span><i style="background:var(--ink)"></i>GND</span><span><i style="background:var(--water)"></i>GPIO</span><span><i style="background:var(--good)"></i>GPIO se zvláštní funkcí</span></div>
-  <div class="pins" id="pins">${PINS.map((p) => `<button type="button" class="pin" data-n="${p.n}" aria-pressed="false"><i style="background:${PINCOL[p.k]}"></i><span>${p.name}</span><b>${p.n}</b></button>`).join('')}</div><div class="note" id="pinInfo"><p>Klepni na pin.</p></div></div>`);
+  const order = []; for (let r = 1; r <= 20; r++) order.push(PINS[r - 1], PINS[40 - r]);
+  const q = mount(root, figT('Piny Pica W', 'pohled shora, USB nahoře') + `<div class="fig-body"><div class="legend"><span><i style="background:#e0913a"></i>3,3 V</span><span><i style="background:#d0312d"></i>5 V a napájení</span><span><i style="background:var(--ink)"></i>GND</span><span><i style="background:var(--water)"></i>GPIO</span><span><i style="background:var(--good)"></i>GPIO s analogovým vstupem</span><span><i style="background:var(--muted)"></i>ostatní</span></div>
+  <p class="cap" style="text-align:center">▲ konektor USB</p>
+  <div class="pins" id="pins">${order.map((p) => `<button type="button" class="pin" data-n="${p.n}" aria-pressed="false"><i style="background:${PINCOL[p.k]}"></i><span>${p.name}</span><b>${p.n}</b></button>`).join('')}</div><div class="note" id="pinInfo"><p>Klepni na pin.</p></div></div>`);
   q('#pins').addEventListener('click', (e) => {
     const b = e.target.closest('.pin'); if (!b) return; root.querySelectorAll('.pin').forEach((x) => x.setAttribute('aria-pressed', x === b)); const p = PINS[+b.dataset.n - 1];
     let t = `<h4>Fyzický pin ${p.n} · ${p.name}</h4>`;
-    if (p.k === 'p3') t += '<p>Stálé napájení 3,3 V. Hodí se pro senzory a pull-up rezistory. Nedá se vypnout programem.</p>';
-    else if (p.k === 'p5') t += '<p>Stálé napájení 5 V přímo z adaptéru. <b>Nikdy ho nespojuj s žádným GPIO.</b> Na motory ber raději samostatný zdroj.</p>';
-    else if (p.k === 'g') t += '<p>Zem (0 V). Všechny piny GND jsou propojené.</p>';
-    else t += `<p>${p.f ? p.f + '. ' : ''}Obecný vstup/výstup, logika 3,3 V. V gpiozero: <span class="mono">LED(${p.bcm})</span> nebo <span class="mono">Button(${p.bcm})</span>.</p>`;
+    if (p.k === 'io') t += `<p>Obecný vstup/výstup, logika 3,3 V, umí i PWM. V MicroPythonu: <span class="mono">Pin(${p.gp}, Pin.OUT)</span> nebo <span class="mono">Pin(${p.gp}, Pin.IN, Pin.PULL_UP)</span>.</p>`;
+    else if (p.k === 'sp') t += `<p>Obecný vstup/výstup a navíc analogový vstup: změří napětí od 0 do 3,3 V. V MicroPythonu: <span class="mono">ADC(${p.gp}).read_u16()</span> vrátí 0 až 65 535.</p>`;
+    else t += `<p>${PIN_INFO[p.name]}</p>`;
     q('#pinInfo').innerHTML = t;
   });
   return {};
@@ -1135,7 +1171,7 @@ SIMS.tswitch = (root) => {
     else if (beta * IB >= 2 * IL) st.push('<span class="state good">nasycení: plně sepnuto</span>');
     else if (beta * IB >= IL) st.push('<span class="state warn">sepnuto, ale bez rezervy</span>');
     else st.push('<span class="state bad">nedosepnuto: zátěž dostane jen část proudu, tranzistor se hřeje</span>');
-    if (IB > 0.016) st.push('<span class="state bad">GPIO přetížen (přes 16 mA)</span>'); else if (IB > 0.008) st.push('<span class="state warn">GPIO nad 8 mA</span>');
+    if (IB > 0.012) st.push('<span class="state bad">GPIO přetížen (přes 12 mA)</span>'); else if (IB > 0.0042) st.push('<span class="state warn">GPIO nad 4 mA</span>');
     if (IL > 0.5) st.push('<span class="state warn">600 mA je pro malý tranzistor moc, použij MOSFET</span>');
     q('#tSt').innerHTML = st.join('');
     q('#tG').textContent = g ? 'GPIO: HIGH (3,3 V)' : 'GPIO: LOW (0 V)'; q('#tG').setAttribute('aria-pressed', g);
@@ -1151,10 +1187,10 @@ SIMS.tswitch = (root) => {
 SIMS.battery = (root) => {
   const q = mount(root, figT('Kalkulačka', 'výdrž baterie') + `<div class="fig-body"><div class="controls">
   <div class="ctl"><label for="bC">Kapacita powerbanky</label><select id="bC"><option>2500</option><option>5000</option><option selected>10000</option><option>20000</option></select></div>
-  ${rng('bI', 'Odběr', 50, 3000, 10, 600)}${rng('bE', 'Účinnost převodu', 50, 100, 5, 80)}
-  <div class="btns"><button class="btn small" data-i="120" type="button">Pi Zero 2 W v klidu ≈ 120 mA</button><button class="btn small" data-i="600" type="button">Pi 4 v klidu ≈ 600 mA</button><button class="btn small" data-i="1300" type="button">Pi 4 při zátěži ≈ 1,3 A</button></div>
-  <div><span class="eyebrow">Výdrž</span><div class="bigval" id="bOut"></div><p class="cap" id="bCap"></p></div><div class="progress" style="height:14px"><i id="bBar"></i></div><p class="cap">Pruh ukazuje výdrž vůči 24 hodinám. Hodnoty odběru jsou přibližné; závisí na zátěži a připojených zařízeních.</p></div></div>`);
-  const upd = () => { const Cc = +q('#bC').value, I = +q('#bI').value, e = +q('#bE').value / 100, t = Cc / I * e; q('#bIo').textContent = I + ' mA'; q('#bEo').textContent = Math.round(e * 100) + ' %'; const hh = Math.floor(t), mm = Math.round((t - hh) * 60); q('#bOut').textContent = `${hh} h ${mm} min`; q('#bCap').textContent = `${Cc} mAh / ${I} mA · ${Math.round(e * 100)} % = ${num(t)} h`; q('#bBar').style.width = clamp(t / 24 * 100, 1, 100) + '%'; };
+  ${rng('bI', 'Odběr', 10, 1000, 5, 25)}${rng('bE', 'Účinnost převodu', 50, 100, 5, 80)}
+  <div class="btns"><button class="btn small" data-i="25" type="button">Pico W bliká LED ≈ 25 mA</button><button class="btn small" data-i="50" type="button">Pico W s Wi-Fi ≈ 50 mA</button><button class="btn small" data-i="300" type="button">Pico W s motorkem ≈ 300 mA</button></div>
+  <div><span class="eyebrow">Výdrž</span><div class="bigval" id="bOut"></div><p class="cap" id="bCap"></p></div><div class="progress" style="height:14px"><i id="bBar"></i></div><p class="cap">Pruh ukazuje výdrž vůči jednomu týdnu. Hodnoty odběru jsou přibližné; závisí na programu a připojených součástkách.</p></div></div>`);
+  const upd = () => { const Cc = +q('#bC').value, I = +q('#bI').value, e = +q('#bE').value / 100, t = Cc / I * e; q('#bIo').textContent = I + ' mA'; q('#bEo').textContent = Math.round(e * 100) + ' %'; const hh = Math.floor(t), mm = Math.round((t - hh) * 60); q('#bOut').textContent = `${hh} h ${mm} min`; q('#bCap').textContent = `${Cc} mAh / ${I} mA · ${Math.round(e * 100)} % = ${num(t)} h` + (t >= 48 ? `, tedy asi ${Math.round(t / 24)} ${pl(Math.round(t / 24), 'den', 'dny', 'dní')}` : ''); q('#bBar').style.width = clamp(t / 168 * 100, 1, 100) + '%'; };
   onInputs(q, ['bC', 'bI', 'bE'], upd); root.querySelectorAll('[data-i]').forEach((b) => b.onclick = () => { q('#bI').value = b.dataset.i; upd(); });
   return {};
 };
@@ -1519,12 +1555,12 @@ const QF = {
   // jednoduchá smyčka: baterie vlevo, prvek nahoře (střed 78,18) a vpravo (střed 125,62); bez prvku je tam drát
   loop: (top, right, lab = '') => S.svg(175, 115, S.bat(30, 62, lab) + S.w('30,32 30,18 48,18') + (top || S.w('48,18 108,18')) + S.w('108,18 125,18 125,32') + (right || S.w('125,32 125,92')) + S.w('125,92 125,106 30,106 30,92'), 'Schéma obvodu'),
   // GPIO → rezistor → LED → GND, svisle; rev = LED otočená
-  ledGpio: (rev) => S.svg(110, 196, S.t(50, 14, 'GPIO17', 'txc', 'middle') + S.w('50,20 50,30') + S.res(50, 60, true, '220 Ω') + S.w('50,90 50,100')
+  ledGpio: (rev) => S.svg(110, 196, S.t(50, 14, 'GP15', 'txc', 'middle') + S.w('50,20 50,30') + S.res(50, 60, true, '330 Ω') + S.w('50,90 50,100')
     + (rev ? `<g transform="rotate(180 50 130)">${S.diode(50, 130, 'down', '', 'led')}</g>` : S.diode(50, 130, 'down', '', 'led')) + S.w('50,160 50,170') + S.gnd(50, 180), 'GPIO, rezistor, LED a zem'),
   // pull-up (tlačítko ke GND) nebo pull-down (tlačítko ke 3,3 V)
   pull: (down) => S.svg(280, 205, S.t(80, 16, '3,3 V', 'txc', 'middle') + S.w('80,22 80,40')
     + (down ? S.btn(80, 70, true, '') + S.t(96, 74, 'tlačítko', 'txm') : S.res(80, 70, true, '10 kΩ'))
-    + S.w('80,100 80,120') + S.dot(80, 120) + S.w('80,120 190,120') + S.pin(194, 120, 'GPIO27', 'start')
+    + S.w('80,100 80,120') + S.dot(80, 120) + S.w('80,120 190,120') + S.pin(194, 120, 'GP14', 'start')
     + (down ? S.res(80, 150, true, '10 kΩ') : S.btn(80, 150, true, '') + S.t(96, 154, 'tlačítko', 'txm')) + S.gnd(80, 190),
     down ? 'Pull-down: tlačítko ke 3,3 V, rezistor ke GND' : 'Pull-up: rezistor ke 3,3 V, tlačítko ke GND'),
   // dělič napětí
@@ -1595,8 +1631,8 @@ const QBANK = {
     a: ['B', 'A', 'C', 'D'], why: 'V B spojuje drát + a − baterie přímo, bez součástky, která by omezila proud. V D je spínač rozepnutý a proud neteče vůbec.' },
   { q: 'Ve kterém místě schématu jsou vodiče vodivě spojené?', img: QF.opts(S.svg(120, 80, S.w('15,40 105,40') + S.w('60,10 60,70'), 'Křížení bez tečky'), S.svg(120, 80, S.w('15,40 105,40') + S.w('60,10 60,70') + S.dot(60, 40), 'Křížení s tečkou')),
     a: ['B, kde je tečka', 'A, kde se čáry jen kříží', 'v obou', 'v žádném, spoj se kreslí jinak'], why: 'Spoj se kreslí tečkou. Křížení bez tečky znamená, že vodiče jdou přes sebe, ale nejsou spojené.' },
-  { q: 'Motor napájí vlastní baterie, řídí ho Raspberry Pi. Co je nutné propojit?', a: ['GND baterie a GND Raspberry Pi', '+ baterie a pin 3,3 V', '+ baterie a pin 5 V', 'nic, jsou to oddělené obvody'], why: 'Signál z GPIO potřebuje společnou nulu s obvodem, který ovládá.' },
-  { q: 'Kdy je bezpečné měnit zapojení na nepájivém poli?', a: ['když je napájení odpojené', 'kdykoli, napětí 5 V je malé', 'jen když svítí LED', 'když běží program'], why: 'Při přepojování pod napětím snadno vznikne zkrat, který může Raspberry Pi zničit.' },
+  { q: 'Motor napájí vlastní baterie, řídí ho Pico. Co je nutné propojit?', a: ['GND baterie a GND Pica', '+ baterie a pin 3V3(OUT)', '+ baterie a pin VBUS', 'nic, jsou to oddělené obvody'], why: 'Signál z GPIO potřebuje společnou nulu s obvodem, který ovládá.' },
+  { q: 'Kdy je bezpečné měnit zapojení na nepájivém poli?', a: ['když je napájení odpojené', 'kdykoli, napětí 5 V je malé', 'jen když svítí LED', 'když běží program'], why: 'Při přepojování pod napětím snadno vznikne zkrat, který může Pico zničit.' },
   { q: 'Co při zkratu baterie omezuje proud?', a: ['jen vnitřní odpor baterie a vodičů', 'spínač', 'GND', 'nic, proud je nekonečný'], why: 'Jiný odpor v cestě není. Proto je proud obrovský, ale ne nekonečný.' },
   { q: 'Proč proud teče jen uzavřeným okruhem?', a: ['náboj se musí mít kudy vrátit ke zdroji', 'zdroj jinak ztratí napětí', 'vodiče jinak ztratí elektrony', 'protože GND je kladný pól'], why: 'Jako voda v uzavřeném potrubí: čerpadlo ji tlačí dokola. Když je smyčka přerušená, nic neteče.' },
 ],
@@ -1615,8 +1651,8 @@ const QBANK = {
     a: ['ano, každá nožička je v jiném sloupci', 'ne, je zkratovaný', 'ne, musí ležet přes drážku', 'ne, rezistor patří jen na lištu'], why: 'Nožičky v různých sloupcích nejsou spojené, proud musí projít rezistorem.' },
   { q: 'Kolik děr spojuje jeden kovový pásek v půlce sloupce?', a: ['pět', 'dvě', 'deset', 'celý řádek'], why: 'Díry a–e (a zvlášť f–j) v jednom sloupci.' },
   { q: 'Proč se integrovaný obvod zasouvá přes středovou drážku?', a: ['aby protější nožičky nebyly spojené', 'aby se nepřehříval', 'jinak se do pole nevejde', 'aby byl blíž napájecí liště'], why: 'Kdyby ležel jen na jedné straně, protější nožičky by byly ve stejném sloupci a spojené.' },
-  { q: 'Jak obvykle připojíš napájení z Raspberry Pi na nepájivé pole?', a: ['pin 3,3 V na lištu +, GND na lištu −', 'pin 3,3 V a GND do stejného sloupce', 'GPIO17 na lištu +', 'napájení se připojuje jen přes rezistor'], why: 'Lišty pak rozvádějí napájení po celém poli. Pin 3,3 V a GND ve stejném sloupci by byl zkrat.' },
-  { q: 'Jakým vodičem propojíš pin Raspberry Pi s nepájivým polem?', a: ['samice–samec: samice na pin, samec do pole', 'samec–samec', 'samice–samice', 'holým drátem bez koncovek'], why: 'Piny Raspberry Pi jsou kolíky, takže na ně patří koncovka samice.' },
+  { q: 'Jak obvykle přivedeš napájení z Pica na nepájivé pole?', a: ['pin 3V3(OUT) na lištu +, GND na lištu −', 'pin 3V3(OUT) a GND do stejného sloupce', 'GP15 na lištu +', 'napájení se připojuje jen přes rezistor'], why: 'Lišty pak rozvádějí napájení po celém poli. 3V3(OUT) a GND ve stejném sloupci by byl zkrat.' },
+  { q: 'Jak se Pico WH (s připájenými kolíky) obvykle připojí k nepájivému poli?', a: ['zasune se přímo do pole přes středovou drážku', 'celé se zasune do jedné poloviny pole', 'jen vodiči samice–samice', 'nijak, Pico se do nepájivého pole nedává'], why: 'Přes drážku má každý pin Pica vlastní sloupec a nic se nezkratuje, stejně jako u integrovaného obvodu.' },
 ],
 'l1-04': [
   { q: 'Přečti hodnotu rezistoru. Pomůže ti tabulka barev pod ním.', img: QF.rc([2, 2, 1, 10]), a: ['220 Ω', '22 Ω', '2,2 kΩ', '221 Ω'], why: 'Červená 2, červená 2, hnědá = jedna nula → 220 Ω.' },
@@ -1637,39 +1673,43 @@ const QBANK = {
   { q: 'Podle čeho poznáš katodu LED?', a: ['kratší nožička a zploštělá strana pouzdra', 'delší nožička', 'barva světla', 'katoda je vždy vlevo'], why: 'Katoda (−) míří ke GND.' },
   { q: 'Kterým vzorcem spočítáš předřadný rezistor pro LED?', a: ['R = (U zdroje − U_F) / I', 'R = U zdroje / I', 'R = (U zdroje + U_F) / I', 'R = U_F · I'], why: 'Na rezistoru „padne" jen to napětí, které nespotřebuje LED.' },
   { q: 'Proč se při výpočtu od napětí zdroje odečítá U_F?', a: ['část napětí „spotřebuje" LED, na rezistor zbývá jen zbytek', 'aby výsledek vyšel menší', 'protože LED napětí zvyšuje', 'kvůli toleranci rezistoru'], why: 'Napětí zdroje se rozdělí: U_F na LED, zbytek na rezistoru.' },
-  { q: 'Výpočet vyšel 217 Ω. Jaký rezistor použiješ?', a: ['nejbližší vyšší běžnou hodnotu, 220 Ω', 'nejbližší nižší, 200 Ω', 'přesně 217 Ω, jinak LED nebude svítit', '100 Ω, aby svítila jasněji'], why: 'Vyšší odpor znamená o trochu menší proud, a tedy rezervu pro LED i GPIO.' },
+  { q: 'Výpočet vyšel 325 Ω. Jaký rezistor použiješ?', a: ['nejbližší vyšší běžnou hodnotu, 330 Ω', 'nejbližší nižší, 270 Ω', 'přesně 325 Ω, jinak LED nebude svítit', '100 Ω, aby svítila jasněji'], why: 'Vyšší odpor znamená o trochu menší proud, a tedy rezervu pro LED i GPIO.' },
   { q: 'Co se stane, když LED připojíš bez rezistoru přímo na 5 V?', a: ['proud prudce vzroste a LED se zničí', 'LED bude svítit slaběji', 'nic, LED si proud omezí sama', 'LED nebude svítit vůbec'], why: 'Nad prahovým napětím odpor LED rychle klesá a proud nic neomezuje.' },
   { q: 'LED zapojíš obráceně. Co se stane?', a: ['nesvítí, v tomto směru proud nevede', 'svítí jinou barvou', 'okamžitě shoří', 'svítí slaběji'], why: 'LED je dioda: v závěrném směru proud neteče. Při nízkém napětí se nic nezničí.' },
-  { q: 'GPIO17 je ve stavu HIGH. Ve kterém zapojení LED svítí?', img: QF.opts(QF.ledGpio(false), QF.ledGpio(true)),
+  { q: 'GP15 je ve stavu HIGH. Ve kterém zapojení LED svítí?', img: QF.opts(QF.ledGpio(false), QF.ledGpio(true)),
     a: ['A', 'B', 'v obou', 'v žádném'], why: 'Proud teče z GPIO přes rezistor do anody a z katody do GND. Trojúhelník značky musí mířit ke GND. V B je LED otočená a nevede.' },
-  { q: 'Rezistor vyměníš z 220 Ω za 470 Ω. Jak bude LED svítit?', a: ['slaběji, poteče menší proud', 'jasněji', 'stejně', 'vůbec, LED potřebuje přesně 220 Ω'], why: 'Větší odpor = menší proud = slabší světlo.' },
+  { q: 'Rezistor vyměníš z 330 Ω za 1 kΩ. Jak bude LED svítit?', a: ['slaběji, poteče menší proud', 'jasněji', 'stejně', 'vůbec, LED potřebuje přesně 330 Ω'], why: 'Větší odpor = menší proud = slabší světlo.' },
   { q: 'Záleží na tom, jestli je rezistor před LED, nebo za ní?', a: ['ne, v sérii teče oběma stejný proud', 'ano, rezistor musí být před anodou', 'ano, rezistor musí být u GND', 'ano, jinak LED shoří'], why: 'V jednoduché smyčce teče všude stejný proud, pořadí součástek je jedno.' },
-  { q: 'Co udělá příkaz led.blink() z knihovny gpiozero?', a: ['LED začne blikat v pozadí', 'LED jednou blikne a program skončí', 'LED zhasne', 'zjistí, jestli je LED připojená'], why: 'Blikání běží v pozadí. Proto program končí příkazem pause(), aby se hned neukončil.' },
+  { q: 'Co udělá tato smyčka: while True: led.toggle(); time.sleep(0.5)', a: ['LED bliká, každou půlsekundu se přepne', 'LED jednou blikne a program skončí', 'LED svítí půl sekundy a pak natrvalo zhasne', 'LED svítí napůl jasu'], why: 'while True opakuje pořád dokola: přepni LED, počkej půl sekundy.' },
 ],
 'l1-06': [
-  { q: 'Jaké napětí má výstup GPIO ve stavu HIGH?', a: ['3,3 V', '5 V', '1 V', '12 V'], why: 'Raspberry Pi pracuje s logikou 3,3 V.' },
-  { q: 'Senzor posílá signál 5 V. Můžeš ho připojit přímo na GPIO?', a: ['ne, potřebuješ dělič napětí nebo převodník úrovní', 'ano, bez problému', 'ano, když ho připojíš na pin 5V', 'ano, když pin v programu nastavíš jako vstup'], why: 'GPIO nesnese víc než 3,3 V. Úroveň snížíš děličem (lekce 8).' },
-  { q: 'V kódu je LED(17). Co znamená číslo 17?', a: ['číslo GPIO v čipu (BCM), fyzický pin najdeš v mapě pinů', 'fyzický pin číslo 17 na konektoru', 'napětí 1,7 V', 'sedmnáctou LED v pořadí'], why: 'gpiozero používá BCM čísla. GPIO17 je na konektoru jinde (fyzicky pin 11).' },
-  { q: 'Jak nejsnáz zjistíš, na kterém fyzickém pinu je GPIO17?', a: ['podle mapy pinů, třeba z příkazu pinout', 'odpočítáš 17 pinů od kraje', 'je to vždy prostřední pin', 'vyzkoušíš postupně všechny piny'], why: 'Čísla GPIO a pozice na konektoru se liší. Mapu pinů vypíše příkaz pinout.' },
+  { q: 'Jaké napětí má výstup GPIO ve stavu HIGH?', a: ['3,3 V', '5 V', '1 V', '12 V'], why: 'Pico pracuje s logikou 3,3 V.' },
+  { q: 'Senzor posílá signál 5 V. Můžeš ho připojit přímo na GPIO Pica?', a: ['ne, potřebuješ dělič napětí nebo převodník úrovní', 'ano, bez problému', 'ano, když ho připojíš na pin VBUS', 'ano, když pin v programu nastavíš jako vstup'], why: 'GPIO Pica nesnese víc než 3,3 V. Úroveň snížíš děličem (lekce 8).' },
+  { q: 'V kódu je Pin(15, Pin.OUT). Co znamená číslo 15?', a: ['číslo GP15 v čipu, fyzický pin najdeš v mapě pinů', 'fyzický pin číslo 15 na okraji desky', 'napětí 1,5 V', 'patnáctou LED v pořadí'], why: 'Do kódu se píše číslo GP. GP15 je na okraji desky jinde, fyzicky je to pin 20.' },
+  { q: 'Jak v MicroPythonu nastavíš GP15 jako výstup?', a: ['led = Pin(15, Pin.OUT)', 'led = Pin(20, Pin.OUT)', 'led = Pin(15, Pin.IN)', 'led = LED(15)'], why: 'Píše se číslo GP (15), ne fyzický pin (20). Pin.OUT znamená výstup.' },
+  { q: 'Jak nejsnáz zjistíš, na kterém fyzickém pinu je GP15?', a: ['z mapy pinů (pinoutu) nebo z popisků na spodní straně desky', 'odpočítáš 15 pinů od kraje', 'je to vždy prostřední pin', 'vyzkoušíš postupně všechny piny'], why: 'Mezi piny GP jsou vložené piny GND, proto čísla nesedí s pořadím na okraji.' },
+  { q: 'Jak rozsvítíš LED přímo na desce Pica W?', a: ['Pin("LED", Pin.OUT).on()', 'Pin(25, Pin.OUT).on()', 'LED(25).on()', 'nejde to, Pico W žádnou LED nemá'], why: 'Na Picu W je LED připojená přes čip Wi-Fi, proto se jmenuje „LED", ne číslem. Pin(25) platí jen pro původní Pico bez Wi-Fi.' },
   { q: 'Proč nepřipojíš motorek přímo na GPIO?', a: ['pin dá jen pár mA, motor potřebuje stovky mA', 'motor potřebuje střídavý proud', 'GPIO má napětí 5 V', 'motor by se točil obráceně'], why: 'Motor by pin přetížil. Motor spínej tranzistorem nebo ovladačem.' },
-  { q: 'Kolik proudu můžeš bezpečně odebírat z jednoho GPIO pinu?', a: ['jen pár miliampérů, asi do 8 mA', 'až 1 A', 'kolik potřebuješ, Raspberry Pi si to omezí', 'asi 500 mA'], why: 'Nejvýš 16 mA na pin a zhruba 50 mA ze všech GPIO dohromady.' },
-  { q: 'Můžeš pin 5V v programu vypnout?', a: ['ne, napájecí piny dávají napětí stále', 'ano, příkazem LED(5).off()', 'ano, když ho nastavíš jako vstup', 'jen na Raspberry Pi 5'], why: 'Piny 5V a 3V3 jsou napájecí, nejsou to GPIO.' },
-  { q: 'Pin je nastavený jako vstup a je na něm napětí blízko 0 V. Co program přečte?', a: ['0 (LOW)', '1 (HIGH)', 'náhodnou hodnotu', 'chybu'], why: 'Blízko 0 V je logická 0, blízko 3,3 V logická 1.' },
-  { q: 'Co znamená, že je GPIO nastavený jako výstup?', a: ['program na něm zapíná a vypíná napětí', 'pin čte napětí z tlačítka', 'pin trvale dává 5 V', 'pin je odpojený'], why: 'Výstup HIGH = 3,3 V, LOW = 0 V. Tak rozsvítíš LED.' },
-  { q: 'Proč 5 V na vstupu GPIO Raspberry Pi škodí?', a: ['čip pracuje s 3,3 V a proti vyššímu napětí nemá ochranu', '5 V je střídavé napětí', 'pin se přepne na výstup', 'neškodí, pin jen přečte 1'], why: 'Pin, případně celý čip, se může nevratně zničit.' },
+  { q: 'Kolik proudu můžeš bezpečně odebírat z jednoho GPIO pinu?', a: ['jen pár miliampérů, výchozí nastavení počítá se 4 mA', 'až 1 A', 'kolik potřebuješ, Pico si to omezí', 'asi 500 mA'], why: 'Nastavit se dá nejvýš 12 mA. Na větší proud je tranzistor.' },
+  { q: 'Můžeš pin VBUS v programu vypnout?', a: ['ne, napájecí piny dávají napětí stále', 'ano, příkazem Pin(40).off()', 'ano, když ho nastavíš jako vstup', 'jen na Picu W'], why: 'VBUS, VSYS a 3V3(OUT) jsou napájecí piny, nejsou to GPIO.' },
+  { q: 'Pin je nastavený jako vstup a je na něm napětí blízko 0 V. Co vrátí pin.value()?', a: ['0', '1', 'náhodnou hodnotu', 'chybu'], why: 'Blízko 0 V je logická 0, blízko 3,3 V logická 1.' },
+  { q: 'Které piny Pica umí změřit napětí mezi 0 a 3,3 V?', a: ['GP26, GP27 a GP28', 'všechny GPIO', 'jen VBUS', 'žádné'], why: 'Mají připojený A/D převodník. Ostatní piny rozliší jen 0 a 1.' },
+  { q: 'Proč 5 V na vstupu GPIO Pica škodí?', a: ['čip pracuje s 3,3 V a vyšší napětí nesnese', '5 V je střídavé napětí', 'pin se přepne na výstup', 'neškodí, pin jen přečte 1'], why: 'Pin, případně celý čip, se může nevratně zničit.' },
   { q: 'Co znamená zkratka GPIO?', a: ['vstup/výstup pro obecné použití (General Purpose Input/Output)', 'zem pro všechny piny', 'grafický port', 'napájecí pin 3,3 V'], why: 'Je to pin, který v programu nastavíš jako vstup nebo výstup.' },
 ],
 'l1-07': [
   { q: 'Co znamená, že vstup „plave"?', a: ['není připojený k určitému napětí a čte náhodné hodnoty', 'je připojený ke 3,3 V', 'teče jím velký proud', 'je nastavený jako výstup'], why: 'Bez pull-up nebo pull-down rezistoru nemá pin určený klidový stav.' },
-  { q: 'V zapojení na obrázku nikdo nemačká tlačítko. Co čte GPIO27?', img: QF.pull(false), a: ['1, rezistor ho drží na 3,3 V', '0', 'náhodně 0 a 1', 'nic, pin je odpojený'], why: 'Rezistorem neteče skoro žádný proud, takže na pinu zůstane 3,3 V.' },
-  { q: 'Tlačítko na obrázku stiskneš. Co teď čte GPIO27?', img: QF.pull(false), a: ['0, tlačítko spojí pin s GND', '1', 'střídavě 0 a 1', 'pin se zničí'], why: 'Stisk propojí pin přímo se zemí. Rezistor jen omezí proud ze 3,3 V.' },
+  { q: 'V zapojení na obrázku nikdo nemačká tlačítko. Co vrátí tlacitko.value()?', img: QF.pull(false), a: ['1, rezistor ho drží na 3,3 V', '0', 'náhodně 0 a 1', 'nic, pin je odpojený'], why: 'Rezistorem neteče skoro žádný proud, takže na pinu zůstane 3,3 V.' },
+  { q: 'Tlačítko na obrázku stiskneš. Co teď vrátí tlacitko.value()?', img: QF.pull(false), a: ['0, tlačítko spojí pin s GND', '1', 'střídavě 0 a 1', 'pin se zničí'], why: 'Stisk propojí pin přímo se zemí. Rezistor jen omezí proud ze 3,3 V.' },
   { q: 'Tady je rezistor ke GND a tlačítko ke 3,3 V. Co čte pin, když tlačítko nikdo nemačká?', img: QF.pull(true), a: ['0, rezistor ho drží na GND', '1', 'náhodně 0 a 1', '3,3'], why: 'To je pull-down: v klidu 0, při stisku 1.' },
   { q: 'Proč má pull-up rezistor velkou hodnotu, třeba 10 kΩ?', a: ['aby při stisku tekl jen malý proud', 'aby tlačítko reagovalo rychleji', 'protože menší rezistory se nevyrábějí', 'aby pin v klidu četl 0'], why: 'Při stisku je rezistor zapojený mezi 3,3 V a GND. Malý odpor by znamenal zbytečně velký proud.' },
-  { q: 'Program zaregistruje jeden stisk jako tři. Příčina?', a: ['zákmity kontaktů', 'plovoucí vstup', 'špatně zapojená LED', 'příliš nízké napětí'], why: 'Mechanické kontakty odskakují. Pomůže bounce_time nebo kondenzátor.' },
-  { q: 'Co dělá parametr bounce_time=0.05 v Button(27, bounce_time=0.05)?', a: ['po změně 50 ms ignoruje další změny', 'zpozdí program o 50 sekund', 'zapne pull-down rezistor', 'nastaví napětí pinu na 0,05 V'], why: 'Tím potlačí zákmity kontaktů.' },
-  { q: 'Tlačítko zapojíš mezi GPIO a GND a použiješ Button z gpiozero. Potřebuješ vnější pull-up rezistor?', a: ['ne, gpiozero zapne vnitřní pull-up v čipu', 'ano, bez něj to nefunguje', 'ano, ale pull-down', 'ne, tlačítka pull-up nikdy nepotřebují'], why: 'Raspberry Pi má pull-up i pull-down rezistory přímo v čipu (kolem 50 kΩ).' },
+  { q: 'Program zaregistruje jeden stisk jako tři. Příčina?', a: ['zákmity kontaktů', 'plovoucí vstup', 'špatně zapojená LED', 'příliš nízké napětí'], why: 'Mechanické kontakty odskakují. Pomůže krátké čekání v programu (time.sleep_ms) nebo kondenzátor.' },
+  { q: 'K čemu je v programu pro tlačítko řádek time.sleep_ms(50) hned po změně stavu?', a: ['přečká zákmity kontaktů', 'zpomalí blikání LED', 'zapne pull-up rezistor', 'nastaví napětí pinu na 0,05 V'], why: '50 ms se program na tlačítko nedívá, takže odskoky kontaktů nepočítá jako další stisky.' },
+  { q: 'Tlačítko je mezi GP14 a GND a v kódu je Pin(14, Pin.IN, Pin.PULL_UP). Potřebuješ vnější pull-up rezistor?', a: ['ne, Pin.PULL_UP zapne vnitřní pull-up v čipu', 'ano, bez něj to nefunguje', 'ano, ale pull-down', 'ne, tlačítka pull-up nikdy nepotřebují'], why: 'Pico má pull-up i pull-down rezistory přímo v čipu (kolem 50 kΩ).' },
   { q: 'Kam se připojuje pull-down rezistor?', a: ['mezi pin a GND', 'mezi pin a 3,3 V', 'do série s tlačítkem', 'mezi 3,3 V a GND'], why: 'Táhne pin „dolů" k nule.' },
   { q: 'Proč plovoucí vstup reaguje i na přiblížení ruky?', a: ['není připojený k pevnému napětí, takže chytá rušení', 'ruka vede proud vzduchem', 'pin má vlastní senzor', 'ruka mění napětí zdroje'], why: 'Nepřipojený pin se chová jako anténa.' },
+  { q: 'Jak v MicroPythonu nastavíš GP14 jako vstup s vnitřním pull-down rezistorem?', a: ['Pin(14, Pin.IN, Pin.PULL_DOWN)', 'Pin(14, Pin.OUT, Pin.PULL_DOWN)', 'Pin(14, Pin.IN, Pin.PULL_UP)', 'Pin(19, Pin.IN, Pin.PULL_DOWN)'], why: 'Pin.IN = vstup, Pin.PULL_DOWN = rezistor ke GND. Do kódu patří číslo GP (14), ne fyzický pin (19).' },
+  { q: 'Tlačítko spojuje GP14 s GND a pin má pull-up. Která podmínka v programu znamená, že je tlačítko stisknuté?', a: ['tlacitko.value() == 0', 'tlacitko.value() == 1', 'tlacitko.value() == 3.3', 'tlacitko.value() == 14'], why: 'S pull-upem je pin v klidu 1. Stisk ho spojí se zemí, takže čte 0.' },
 ],
 'l1-08': [
   { q: 'Který vzorec platí pro výstupní napětí děliče na obrázku?', img: QF.div('R1', 'R2', 'U vstup', 'U výstup'),
@@ -1704,13 +1744,15 @@ const QBANK = {
   { q: 'Powerbanka 5 000 mAh, odběr 500 mA, bez ztrát. Výdrž?', a: ['10 h', '2,5 h', '100 h', '1 h'], why: '5 000 / 500 = 10 hodin.' },
   { q: 'Odběr zařízení se zdvojnásobí. Co udělá výdrž baterie?', a: ['klesne na polovinu', 'zdvojnásobí se', 'nezmění se', 'klesne na čtvrtinu'], why: 'Odběr je ve jmenovateli.' },
   { q: 'Proč vydrží baterie ve skutečnosti méně, než ukáže výpočet?', a: ['část energie se ztratí při převodu napětí a jako teplo', 'kapacita se udává s rezervou', 'baterie se vybíjí jen do poloviny', 'nevydrží méně, výpočet je přesný'], why: 'Počítej asi se 70–80 % výpočtu.' },
-  { q: 'Raspberry Pi se náhodně restartuje a hlásí podpětí. Nejpravděpodobnější příčina?', a: ['slabý adaptér nebo tenký kabel', 'chybný program', 'příliš studená místnost', 'příliš velká SD karta'], why: 'Zdroj nedodá dost proudu a napětí poklesne.' },
+  { q: 'Pico se restartuje pokaždé, když se rozjede motor napájený ze stejného zdroje. Proč?', a: ['motor při rozběhu stáhne napětí zdroje (podpětí)', 'v programu je chyba', 'motor ruší Wi-Fi', 'motor je zapojený obráceně'], why: 'Rozbíhající se motor odebere velký proud a napětí poklesne. Motor patří na vlastní zdroj se společnou GND.' },
   { q: 'Jaký výkon odebírá zařízení na 5 V při proudu 2 A?', a: ['10 W', '2,5 W', '7 W', '3 W'], why: 'P = U · I = 5 · 2 = 10 W.' },
   { q: 'Co znamená kapacita 1 000 mAh?', a: ['baterie dodá 1 A po dobu jedné hodiny (nebo 100 mA po 10 h)', 'baterie má napětí 1 000 mV', 'baterie dodá proud 1 000 A', 'baterie vydrží 1 000 hodin'], why: 'mAh = miliampér krát hodina.' },
-  { q: 'Adaptér má 5 V / 1 A, Raspberry Pi 4 potřebuje 5 V / 3 A. Co se stane?', a: ['adaptér nestačí, hrozí podpětí a restarty', 'Pi si vezme jen 1 A a poběží normálně', 'Raspberry Pi shoří', 'adaptér zvýší napětí'], why: 'Napětí sedí, ale proud nestačí.' },
+  { q: 'Pico W odebírá kolem 50 mA. Stačí mu nabíječka 5 V / 1 A?', a: ['ano, s velkou rezervou', 'ne, potřebuje nabíječku přesně na 50 mA', 'ne, nabíječka do něj „natlačí" 1 A a Pico shoří', 'jen s rezistorem v sérii'], why: 'Zařízení si bere jen tolik proudu, kolik potřebuje. Zdroj ho musí umět dodat, víc nevadí.' },
   { q: 'Co na zdroji musí sedět?', a: ['napětí musí odpovídat a proud musí stačit', 'stačí, aby seděl proud', 'stačí co nejvyšší napětí', 'jen výkon ve wattech'], why: 'Vyšší napětí zařízení zničí. Proud si zařízení bere samo, zdroj ho jen musí umět dodat.' },
-  { q: 'Motor má vlastní zdroj. Co musí být propojené s Raspberry Pi?', a: ['GND', 'pin 5V', 'pin 3V3', 'nic'], why: 'Společná zem je podmínkou, aby signál z GPIO fungoval.' },
-  { q: 'Odkud napájet LED pásek nebo motor?', a: ['z vlastního zdroje, ne z pinu 5V Raspberry Pi', 'z pinu 3V3', 'přímo z GPIO', 'z pinu 5V, ten zvládne cokoli'], why: 'Velký odběr by Raspberry Pi způsobil podpětí.' },
+  { q: 'Na který pin Pica W připojíš baterii, třeba tři tužkové články (4,5 V)?', a: ['VSYS', 'GP15', '3V3(OUT)', 'ADC_VREF'], why: 'VSYS přijme 1,8 až 5,5 V. 3V3(OUT) je výstup 3,3 V a vyšší napětí by Pico zničilo.' },
+  { q: 'Pico W napájené z powerbanky se po chvíli samo vypne. Proč?', a: ['powerbanka se při malém odběru sama vypne', 'Pico se po chvíli samo uspí', 'Wi-Fi vybila powerbanku', 'powerbanka dává příliš velké napětí'], why: 'Pico odebírá tak málo, že si powerbanka myslí, že nic není připojené.' },
+  { q: 'Motor má vlastní zdroj. Co musí být propojené s Picem?', a: ['GND', 'VBUS', '3V3(OUT)', 'nic'], why: 'Společná zem je podmínkou, aby signál z GPIO fungoval.' },
+  { q: 'Odkud napájet LED pásek nebo motor?', a: ['z vlastního zdroje, ne z pinů Pica', 'z pinu 3V3(OUT)', 'přímo z GPIO', 'z pinu VBUS, ten zvládne cokoli'], why: 'Velký odběr by způsobil podpětí a Pico by se restartovalo. 3V3(OUT) unese nejvýš asi 300 mA.' },
 ],
 'l2-01': [
   { q: 'Jak spočítáš výkon, který se na rezistoru mění v teplo?', a: ['P = U · I', 'P = U / I', 'P = R / I', 'P = U + I'], why: 'Platí také P = I² · R a P = U² / R.' },
@@ -1814,23 +1856,24 @@ const QBANK = {
   { q: 'Proč LED řízená PWM s frekvencí 500 Hz nebliká?', a: ['oko nestihne vnímat tak rychlé změny', 'LED se nestihne vypnout', 'při 500 Hz teče stejnosměrný proud', 'rezistor blikání vyhladí'], why: 'Zrak vnímá jen průměrný jas.' },
   { q: 'Frekvenci PWM zvýšíš z 2 Hz na 500 Hz a střídu necháš. Co uvidíš?', a: ['LED přestane blikat, průměrný jas zůstane stejný', 'LED bude svítit jasněji', 'LED zhasne', 'LED bude viditelně blikat rychleji'], why: 'Jas určuje střída, frekvence jen to, jestli blikání vidíš.' },
   { q: 'Proč je PWM úspornější než stmívání rezistorem?', a: ['spínač je buď plně zapnutý, nebo vypnutý, a skoro nehřeje', 'PWM zvyšuje napětí', 'LED při PWM potřebuje méně energie na světlo', 'rezistor nelze použít'], why: 'Rezistor by přebytek výkonu měnil v teplo.' },
-  { q: 'Který objekt gpiozero použiješ pro stmívání LED?', a: ['PWMLED', 'Button', 'LED', 'DistanceSensor'], why: 'PWMLED má vlastnost value od 0 do 1.' },
-  { q: 'Co znamená led.value = 0.25 u objektu PWMLED?', a: ['střídu 25 %', 'napětí 0,25 V', 'frekvenci 25 Hz', 'zhasnutí za 0,25 s'], why: 'Hodnota 0 je vypnuto, 1 je trvale zapnuto.' },
+  { q: 'Kterou třídu z knihovny machine použiješ pro stmívání LED?', a: ['PWM', 'Pin', 'ADC', 'Timer'], why: 'Samotný Pin umí jen zapnuto a vypnuto. Stmívání zařídí PWM(Pin(15)).' },
+  { q: 'Metoda duty_u16 bere čísla od 0 do 65 535. Jakou střídu nastaví led.duty_u16(32768)?', a: ['asi 50 %', 'asi 33 %', '32 768 %', '100 %'], why: '32 768 je polovina z 65 535.' },
   { q: 'Co je střída 100 %?', a: ['pin je trvale zapnutý', 'pin je trvale vypnutý', 'signál bliká 100krát za sekundu', 'napětí je 100 V'], why: 'Zapnuto po celou periodu.' },
   { q: 'Co udává frekvence PWM?', a: ['kolik period proběhne za sekundu', 'jak dlouho je pulz zapnutý', 'jaké napětí má pulz', 'kolik procent času je signál zapnutý'], why: 'Podíl času „zapnuto" je střída, ne frekvence.' },
+  { q: 'Jak nastavíš frekvenci PWM na 1 000 Hz?', a: ['led.freq(1000)', 'led.duty_u16(1000)', 'time.sleep(1000)', 'Pin(1000)'], why: 'freq nastavuje frekvenci, duty_u16 střídu.' },
 ],
 'l2-09': [
   { q: 'Jak se zapojuje ochranná dioda k cívce relé?', a: ['paralelně k cívce, katodou k +', 'do série s cívkou', 'paralelně, katodou ke GND', 'mezi bázi a emitor'], why: 'Za provozu je v závěrném směru, po vypnutí umožní proudu doběhnout.' },
   { q: 'Které zapojení ochranné diody k cívce relé je správné?', img: QF.opts(QF.relay(false), QF.relay(true)),
     a: ['A, katoda je u +5 V', 'B, katoda je u tranzistoru', 'obě', 'žádné, dioda patří do série'], why: 'V A dioda za provozu nevede a zapojí se až po vypnutí. V B by po sepnutí tranzistoru vedla a zkratovala zdroj.' },
-  { q: 'Co se stane bez diody při vypnutí relé?', a: ['vznikne napěťová špička, která může zničit tranzistor', 'relé zůstane sepnuté', 'nic', 'Raspberry Pi se restartuje'], why: 'Cívka se brání změně proudu a vyrobí vysoké napětí.' },
+  { q: 'Co se stane bez diody při vypnutí relé?', a: ['vznikne napěťová špička, která může zničit tranzistor', 'relé zůstane sepnuté', 'nic', 'Pico se restartuje'], why: 'Cívka se brání změně proudu a vyrobí vysoké napětí.' },
   { q: 'Proč ochranná dioda za běžného provozu nevede?', a: ['je zapojená v závěrném směru', 'je přerušená', 'teče přes ni jen střídavý proud', 'má příliš velký odpor'], why: 'Katoda je na +5 V, anoda na nižším napětí.' },
   { q: 'Kontakt NO znamená:', a: ['v klidu rozpojený, při aktivaci sepne', 'v klidu sepnutý', 'bez funkce', 'vždy spojený s cívkou'], why: 'NO = normally open.' },
   { q: 'Kontakt NC znamená:', a: ['v klidu spojený, při aktivaci rozepne', 'v klidu rozpojený', 'společný kontakt', 'nezapojený'], why: 'NC = normally closed.' },
   { q: 'Proč použít relé místo tranzistoru?', a: ['oddělí ovládání od silového obvodu a spíná i střídavé napětí', 'je rychlejší', 'je menší', 'nepotřebuje napájení'], why: 'Tranzistor spíná jen stejnosměrný proud a obvody nejsou oddělené.' },
   { q: 'Co znamená galvanické oddělení?', a: ['obvody nejsou vodivě spojené, ovlivňují se jen magneticky nebo světlem', 'obvody mají společnou zem', 'obvody jsou spojené přes rezistor', 'obvod je pozinkovaný'], why: 'U relé spojuje ovládání a kontakty jen magnetické pole.' },
   { q: 'Co v relé pohybuje kontakty?', a: ['magnetické pole cívky', 'malý motorek', 'tlak vzduchu', 'teplo'], why: 'Cívka je elektromagnet, který kontakty přitáhne.' },
-  { q: 'Co mají hotové moduly relé pro Raspberry Pi obvykle už na desce?', a: ['tranzistor, ochrannou diodu a kontrolku', 'jen samotné relé', 'baterii', 'vlastní Raspberry Pi'], why: 'Některé přidávají i optočlen pro úplné oddělení.' },
+  { q: 'Co mají hotové moduly relé obvykle už na desce?', a: ['tranzistor, ochrannou diodu a kontrolku', 'jen samotné relé', 'baterii', 'vlastní Pico'], why: 'Některé přidávají i optočlen pro úplné oddělení.' },
   { q: 'Relé zvládne spínat 230 V. Co z toho plyne pro začátečníka?', a: ['spínat jen bezpečná nízká napětí, síť je životu nebezpečná', 'může bez obav spínat zásuvky', 's ochrannou diodou je to bezpečné', 'stačí silnější vodiče'], why: 'Práce se síťovým napětím patří odborníkům.' },
 ],
 'l3-01': [
@@ -1934,13 +1977,14 @@ const QBANK = {
   { q: 'Jak spočítáš zesílení neinvertujícího zesilovače na obrázku?', img: QF.opamp(), a: ['A = 1 + R2 / R1', 'A = R1 / R2', 'A = R1 + R2', 'A = 1 + R1 / R2'], why: 'R2 vede zpětnou vazbu z výstupu, R1 jde k zemi.' },
   { q: 'Neinvertující zesilovač, R1 = 1 kΩ, R2 = 9 kΩ. Zesílení?', a: ['10', '9', '0,11', '1'], why: 'A = 1 + 9 / 1 = 10.' },
   { q: 'Napájení 5 V, zesílení 10, vstup 1 V. Výstup?', a: ['asi 5 V (saturace)', '10 V', '1 V', '0 V'], why: 'Výstup nepřekročí napájecí napětí.' },
-  { q: 'Jak s Raspberry Pi změříš napětí z potenciometru?', a: ['přes A/D převodník, např. MCP3008', 'přímo na GPIO', 'přes pin 5V', 'přes LED'], why: 'GPIO umí jen 0 a 1, ne hodnoty mezi nimi.' },
+  { q: 'Jak s Picem změříš napětí z potenciometru?', a: ['jezdec připojíš na GP26 a čteš ADC(26).read_u16()', 'jezdec připojíš na libovolný GPIO a čteš Pin.value()', 'připojíš ho na pin VBUS', 'přes LED'], why: 'Pin.value() rozliší jen 0 a 1. Napětí mezi tím změří A/D převodník, který má Pico na GP26 až GP28.' },
   { q: 'Jaké pouzdro integrovaného obvodu zasuneš do nepájivého pole?', a: ['DIP, má nožičky do děr', 'SMD', 'jakékoli', 'žádné, IO se vždy pájí'], why: 'SMD se pájí na povrch desky.' },
-  { q: 'Kde najdeš zapojení vývodů a limity integrovaného obvodu?', a: ['v katalogovém listu (datasheetu)', 'na pouzdře', 'v Ohmově zákoně', 'v nastavení Raspberry Pi'], why: 'Datasheet má i doporučená zapojení.' },
+  { q: 'Kde najdeš zapojení vývodů a limity integrovaného obvodu?', a: ['v katalogovém listu (datasheetu)', 'na pouzdře', 'v Ohmově zákoně', 'v souboru main.py'], why: 'Datasheet má i doporučená zapojení.' },
   { q: 'Kam se v neinvertujícím zapojení vrací zpětná vazba?', a: ['na invertující vstup (−)', 'na neinvertující vstup (+)', 'na napájení', 'nikam'], why: 'Záporná zpětná vazba zkrotí obrovské zesílení na přesnou hodnotu.' },
   { q: 'Co operační zesilovač zesiluje?', a: ['rozdíl napětí mezi vstupy + a −', 'jen proud', 'součet vstupů', 'napájecí napětí'], why: 'Proto má dva vstupy.' },
-  { q: 'Potřebuješ ovládat víc LED, než má Raspberry Pi volných pinů. Co pomůže?', a: ['posuvný registr, např. 74HC595', 'A/D převodník MCP3008', 'větší rezistory', 'operační zesilovač'], why: 'Pár pinů pak ovládá osm i víc výstupů.' },
+  { q: 'Potřebuješ ovládat víc LED, než má Pico volných pinů. Co pomůže?', a: ['posuvný registr, např. 74HC595', 'A/D převodník MCP3008', 'větší rezistory', 'operační zesilovač'], why: 'Pár pinů pak ovládá osm i víc výstupů.' },
   { q: 'Jak se vyrábějí integrované obvody?', a: ['fotolitografií: vzor se opticky zmenší a vyleptá do křemíku', 'ručním pájením malých součástek', 'odléváním z plastu', '3D tiskem'], why: 'Najednou se vyrobí mnoho čipů.' },
+  { q: 'Na GP26 je přesně 3,3 V. Co vrátí ADC(26).read_u16()?', a: ['nejvyšší hodnotu, asi 65 535', '3,3', '0', '1'], why: 'read_u16 vrací 0 pro 0 V až 65 535 pro 3,3 V.' },
 ],
 'l3-09': [
   { q: 'Která měděná cesta je navržená správně?', img: QF.opts(QF.pcbTrace(false), QF.pcbTrace(true)), a: ['B, se zkosenými ohyby', 'A, s pravými úhly', 'obě', 'žádná, cesty mají být rovné'], why: 'V ostrém rohu je silnější pole a měď se snáz odlupuje. Lomí se po 45° nebo obloukem.' },
@@ -2063,7 +2107,7 @@ function todoBlock(date) {
   const les = sch.filter((x) => x.id).map((x) => { const l = LBY[x.id]; return `<label class="${x.st === 'done' ? 'done' : ''}"><input type="checkbox" data-les="${l.id}" ${x.st === 'done' ? 'checked' : ''}><span>Lekce ${l.code}: ${esc(l.title)}</span><a class="btn small ghost" href="#${l.id}" style="margin-left:auto">Otevřít</a></label>`; }).join('');
   const own = items.map((it, i) => `<label class="${it.x ? 'done' : ''}"><input type="checkbox" data-todo="${i}" ${it.x ? 'checked' : ''}><span>${esc(it.t)}</span><button class="x" type="button" data-del="${i}" aria-label="Smazat úkol">×</button></label>`).join('');
   return `<div class="todo" data-date="${date}">${les}${own}${!les && !own ? '<p class="muted" style="padding:.3rem 0">Na tento den nic naplánovaného.</p>' : ''}</div>
-  <form class="addtodo" data-date="${date}"><input type="text" id="todo-${date}" placeholder="Přidat úkol (např. koupit rezistory 220 Ω)" autocomplete="off" aria-label="Nový úkol"><button class="btn small primary" type="submit">Přidat</button></form>`;
+  <form class="addtodo" data-date="${date}"><input type="text" id="todo-${date}" placeholder="Přidat úkol (např. koupit rezistory 330 Ω)" autocomplete="off" aria-label="Nový úkol"><button class="btn small primary" type="submit">Přidat</button></form>`;
 }
 function bindTodos(root, rerender) {
   root.querySelectorAll('.todo').forEach((box) => box.addEventListener('change', (e) => {
