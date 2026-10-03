@@ -233,6 +233,9 @@ td.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
 .q .qimg .duo{width:100%;grid-template-columns:repeat(auto-fit,minmax(110px,1fr))}
 .q .qimg .duo svg{max-width:200px}
 .q .qimg .duo small{font-size:.95rem;font-weight:800;color:var(--ink);letter-spacing:0}
+.q .qimg pre.code{justify-self:stretch;text-align:left}
+.code-gap{display:inline-block;min-width:6ch;border:2px dashed var(--copper);border-radius:4px;background:var(--copper-soft);color:var(--copper);font-weight:700;text-align:center;line-height:1.25}
+.q.mono-ans .ans label span{font-family:var(--f-mono);font-size:.9rem}
 .tpick{display:grid;gap:.3rem}
 .tpick label{display:flex;align-items:center;gap:.6rem;padding:.45rem .6rem;border:1px solid var(--line);border-radius:6px;background:var(--bg);cursor:pointer}
 .tpick input{width:20px;height:20px;accent-color:var(--copper);flex:none;margin:0}
@@ -635,6 +638,7 @@ const PY_LIB = new Set(['machine', 'time', 'Pin', 'PWM', 'ADC', 'Timer']);
 function pyHi(src) {
   const h = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const vars = new Set([...src.matchAll(/^\s*([A-Za-z_]\w*)\s*=(?!=)/gm), ...src.matchAll(/\bfor\s+([A-Za-z_]\w*)\s+in\b/g)].map((m) => m[1]));
+  const libs = new Set([...src.matchAll(/^\s*from\s+\w+\s+import\s+(.+)$/gm)].flatMap((m) => m[1].split(',').map((x) => x.trim())));
   return src.split('\n').map((line) => {
     let out = '', i = 0;
     while (i < line.length) {
@@ -643,7 +647,7 @@ function pyHi(src) {
       if ((m = rest.match(/^("[^"]*"|'[^']*')/))) out += `<span class="t-str">${h(m[0])}</span>`;
       else if ((m = rest.match(/^\d[\d_.]*/))) out += `<span class="t-num">${m[0]}</span>`;
       else if ((m = rest.match(/^[A-Za-z_]\w*/))) {
-        const w = m[0], cls = PY_KW.has(w) ? 't-kw' : PY_LIB.has(w) || /\b(Pin|PWM|ADC)\.$/.test(line.slice(0, i)) ? 't-lib' : /^\s*\(/.test(rest.slice(w.length)) ? 't-fn' : vars.has(w) ? 't-var' : '';
+        const w = m[0], cls = PY_KW.has(w) ? 't-kw' : PY_LIB.has(w) || libs.has(w) || /\b(Pin|PWM|ADC)\.$/.test(line.slice(0, i)) ? 't-lib' : /^\s*\(/.test(rest.slice(w.length)) ? 't-fn' : vars.has(w) ? 't-var' : '';
         out += cls ? `<span class="${cls}">${w}</span>` : w;
       } else { m = [rest[0]]; out += h(rest[0]); }
       i += m[0].length;
@@ -651,10 +655,11 @@ function pyHi(src) {
     return `<span class="ln${/^\s*#/.test(line) ? ' cm-line' : ''}">${out}</span>`;
   }).join('');
 }
-const CODE_LEGEND = more('Co znamenají barvy a znak #?', `<ul class="legend-code">
+const CODE_LEGEND = more('Co znamenají barvy, tečka a znak #?', `<ul class="legend-code">
   <li><code><span class="t-var">led</span></code><span><b>Proměnná:</b> jméno, které si program zvolil a uložil do něj hodnotu. Mohla by se jmenovat i jinak, třeba <span class="mono">svetlo</span>.</span></li>
   <li><code><span class="t-fn">toggle</span>()</code><span><b>Příkaz (funkce):</b> něco, co se má udělat. Poznáš ho podle závorek.</span></li>
-  <li><code><span class="t-lib">Pin</span></code><span><b>Z knihovny:</b> hotový nástroj, který si program na začátku načte příkazem <span class="mono">import</span>.</span></li>
+  <li><code><span class="t-lib">Pin</span></code><span><b>Z knihovny:</b> hotový nástroj, který si program na začátku načte řádkem <span class="mono">from … import …</span>, třeba <span class="mono">Pin</span> nebo <span class="mono">sleep</span>. Pak se píše bez dalšího jména před ním.</span></li>
+  <li><code><span class="t-var">led</span>.<span class="t-fn">on</span>()</code><span><b>Tečka:</b> příkaz patří k tomu, co je před tečkou. <span class="mono">led.on()</span> zapne právě LED uloženou v <span class="mono">led</span>. Podobně <span class="mono">Pin.OUT</span> je nastavení, které patří k nástroji <span class="mono">Pin</span>.</span></li>
   <li><code><span class="t-num">15</span> <span class="t-str">"LED"</span></code><span><b>Číslo a text:</b> hodnoty, které se do příkazů dosazují. Text je vždy v uvozovkách.</span></li>
   <li><code><span class="t-kw">while</span></code><span><b>Slovo Pythonu:</b> řídí, co se opakuje nebo kdy se co stane.</span></li>
   <li><code><span class="cm"># poznámka</span></code><span><b>Komentář:</b> poznámka pro člověka. Všechno od znaku # do konce řádku Pico přeskočí.</span></li></ul>
@@ -775,20 +780,20 @@ const LESSONS = [
   <p class="hint"><b>Kontrola zkratkou z lekce 1.1:</b> 1,3&nbsp;V / 0,33&nbsp;kΩ ≈ 3,9&nbsp;mA. Sedí.</p>`)}
   <p>Zapojení: GP15 → rezistor 330 Ω → anoda LED, katoda → GND. Program v MicroPythonu s knihovnou machine:</p>
   ${code(`from machine import Pin
-import time
+from time import sleep
 
 led = Pin(15, Pin.OUT)  # GP15
 while True:             # dokola:
     led.toggle()        # přepni LED
-    time.sleep(0.5)     # čekej 0,5 s`)}
+    sleep(0.5)          # čekej 0,5 s`)}
   ${more('Jak program funguje řádek po řádku?', `<ul><li><span class="mono">from machine import Pin</span>: z knihovny <span class="mono">machine</span> si vezmi nástroj <span class="mono">Pin</span>, který ovládá piny.</li>
-  <li><span class="mono">import time</span>: načti knihovnu pro práci s časem.</li>
+  <li><span class="mono">from time import sleep</span>: z knihovny <span class="mono">time</span> (čas) si vezmi příkaz <span class="mono">sleep</span>, který čeká.</li>
   <li><span class="mono">led = Pin(15, Pin.OUT)</span>: nastav GP15 jako výstup a pojmenuj ho <span class="mono">led</span>. Jméno si vybíráš ty.</li>
   <li><span class="mono">while True:</span> opakuj pořád dokola všechno, co je pod tím odsazené.</li>
   <li><span class="mono">led.toggle()</span>: přepni LED. Když svítila, zhasne, a naopak.</li>
-  <li><span class="mono">time.sleep(0.5)</span>: počkej půl sekundy.</li></ul>
+  <li><span class="mono">sleep(0.5)</span>: počkej půl sekundy.</li></ul>
   <p><b>Odsazení</b> (mezery na začátku řádku) není jen pro hezký vzhled. Pythonu říká, které řádky patří do smyčky.</p>
-  <p class="hint"><b>Co kdyby chybělo <span class="mono">time.sleep</span>?</b> LED by se přepínala mnohotisíckrát za sekundu a oko by vidělo jen slabě svítící LED.</p>`)}`,
+  <p class="hint"><b>Co kdyby chybělo <span class="mono">sleep(0.5)</span>?</b> LED by se přepínala mnohotisíckrát za sekundu a oko by vidělo jen slabě svítící LED.</p>`)}`,
   sim: 'led', task: 'Zvol zdroj 3,3 V (GPIO) a hledej nejmenší rezistor, se kterým proud LED nepřekročí 4 mA. Pak LED otoč.' },
 
 { id: 'l1-06', lvl: 1, title: 'Piny GPIO na Picu W', sub: '40 pinů a jejich pravidla',
@@ -831,7 +836,7 @@ deska.toggle()          # přepne ji`)}
   <p class="hint">Proto je s pull-upem logika obrácená: stisknuto = 0, puštěno = 1.</p>`)}
   <p>Rezistor musí být dost velký (typicky 10 kΩ), aby při stisku netekl zbytečný proud: 3,3 V / 10 kΩ = 0,33 mA. Pico má pull-up i pull-down rezistory přímo v čipu (kolem 50 kΩ). Zapneš je při vytvoření pinu parametrem <span class="mono">Pin.PULL_UP</span> nebo <span class="mono">Pin.PULL_DOWN</span>:</p>
   ${code(`from machine import Pin
-import time
+from time import sleep_ms
 
 # GP14 ↔ tlačítko ↔ GND
 tlacitko = Pin(14, Pin.IN,
@@ -847,8 +852,8 @@ while True:
             led.toggle()
         predtim = ted
         # přečkej zákmity:
-        time.sleep_ms(50)`)}
-  <p>Řádek <span class="mono">time.sleep_ms(50)</span> potlačí zákmity: 50 ms po každé změně se program na tlačítko nedívá, takže odskoky kontaktů nepočítá jako další stisky.</p>
+        sleep_ms(50)`)}
+  <p>Řádek <span class="mono">sleep_ms(50)</span> potlačí zákmity: 50 ms po každé změně se program na tlačítko nedívá, takže odskoky kontaktů nepočítá jako další stisky.</p>
   ${more('Proč program hlídá proměnnou predtim?', `<p>Smyčka <span class="mono">while True</span> přečte tlačítko mnohokrát za sekundu. Kdyby program přepnul LED pokaždé, když vidí 0, přepínal by ji celou dobu, co tlačítko držíš. LED by blikala a jestli nakonec zůstane svítit, by byla náhoda.</p>
   <p>Nás ale zajímá jen <b>okamžik stisku</b>. Program si proto pamatuje, co přečetl minule (<span class="mono">predtim</span>), a porovná to s tím, co čte teď (<span class="mono">ted</span>):</p>
   <ul><li>minule 1, teď 0: tlačítko se právě stisklo → přepni LED,</li><li>minule 0, teď 0: pořád ho držíš → nedělej nic,</li><li>minule 0, teď 1: tlačítko se právě pustilo → nedělej nic.</li></ul>`)}`,
@@ -986,17 +991,17 @@ while True:
   <p>Při nízké frekvenci (1–10 Hz) vidíš blikání. Nad zhruba 100 Hz oko blikání nerozliší. Motor PWM „vyhladí" svou setrvačností.</p>
   <p>Proč ne rezistorem? Rezistor by přebytečnou energii měnil v teplo. Spínač při PWM je buď plně sepnutý, nebo plně rozepnutý, a v obou stavech se téměř nehřeje. Proto PWM řídí motory, ventilátory i jas displejů.</p>
   ${code(`from machine import Pin, PWM
-import time
+from time import sleep, sleep_ms
 
 led = PWM(Pin(15))   # GP15 jako PWM
 led.freq(1000)       # 1 000 Hz
 led.duty_u16(16384)  # střída 25 %
-time.sleep(2)
+sleep(2)
 
 # plynulé rozsvícení
 for jas in range(0, 65536, 1024):
     led.duty_u16(jas)
-    time.sleep_ms(20)`)}
+    sleep_ms(20)`)}
   <p>Metoda <span class="mono">duty_u16</span> bere čísla od 0 (vypnuto) do 65 535 (trvale zapnuto). Polovina, 32 768, je střída 50 %. PWM umí každý GPIO pin. Piny se ale dělí o 16 kanálů: třeba GP0 a GP16 sdílejí jeden kanál, takže by měly stejnou střídu. Pro dvě různě svítící LED vyber sousední piny, například GP14 a GP15. Servomotory používají PWM 50 Hz s pulzem 1–2 ms.</p>`,
   sim: 'pwm', task: 'Nastav 2 Hz a střídu 25 % a sleduj LED. Pak přepni na 50 Hz. Proč LED přestala blikat, i když se pořád zapíná a vypíná? (Přesnou hranici, kdy oko blikání přestane vidět, simulace neukáže. Na skutečném Picu ji najdeš změnou čísla v led.freq().)' },
 
@@ -1091,7 +1096,7 @@ for jas in range(0, 65536, 1024):
   terms: [['Integrovaný obvod (IO)', 'Tranzistory, diody, rezistory a malé kondenzátory vyrobené na jednom kousku křemíku.'], ['Pouzdro DIP / SMD', 'DIP má nožičky do děr (vhodné do nepájivého pole), SMD se pájí na povrch.'], ['Datasheet', 'Katalogový list: zapojení vývodů, limity, doporučená zapojení.'], ['Operační zesilovač', 'Zesilovač s obrovským zesílením, které zpětná vazba zkrotí na přesnou hodnotu.'], ['A = 1 + R2 / R1', 'Zesílení neinvertujícího zapojení.']],
   body: `<p>Kdybys všechny vodovodní modely rezistorů, diod a tranzistorů vyfrézoval do jednoho ocelového bloku, dostal bys obdobu <b class="c">integrovaného obvodu</b>. V elektronice jsou ale součástky tak malé, že se jich na čip velikosti nehtu vejdou miliardy. Vyrábějí se fotolitografií: vzor se opticky zmenší a „vyleptá" do křemíku, mnoho čipů najednou.</p>
   <p>Číslování vývodů: pin 1 je u tečky nebo zářezu a čísluje se proti směru hodinových ručiček (pohled shora).</p>
-  <p>Pico má A/D převodník přímo v čipu. Piny GP26, GP27 a GP28 změří napětí mezi 0 a 3,3 V: <span class="mono">ADC(26).read_u16()</span> vrátí číslo od 0 do 65 535. Další užitečné IO: <b>74HC595</b> (posuvný registr, víc výstupů), <b>DRV8833</b> nebo <b>L293D</b> (ovladače motorů), <b>ULN2003</b> (sada spínacích tranzistorů). Když nestačí tři analogové vstupy, pomůže externí převodník <b>MCP3008</b>.</p>
+  <p>Pico má A/D převodník přímo v čipu. Piny GP26, GP27 a GP28 změří napětí mezi 0 a 3,3 V: po řádku <span class="mono">from machine import ADC</span> vrátí <span class="mono">ADC(26).read_u16()</span> číslo od 0 do 65 535. Další užitečné IO: <b>74HC595</b> (posuvný registr, víc výstupů), <b>DRV8833</b> nebo <b>L293D</b> (ovladače motorů), <b>ULN2003</b> (sada spínacích tranzistorů). Když nestačí tři analogové vstupy, pomůže externí převodník <b>MCP3008</b>.</p>
   <p><b>Operační zesilovač</b> má dva vstupy (+ a −) a jeden výstup. Zesiluje rozdíl mezi vstupy obrovským zesílením. Když část výstupu vrátíš na vstup − (zpětná vazba), ustálí se zesílení přesně podle rezistorů:</p>
   <p class="formula">A = 1 + R2 / R1</p>
   <p>Výstup ale nemůže přesáhnout napájecí napětí. Když by měl, „narazí" (saturuje).</p>`,
@@ -1821,6 +1826,8 @@ const QF = {
   // elektrolytický kondenzátor s očíslovanými vývody
   elyt: () => S.svg(120, 104, `<line class="ld" x1="48" y1="56" x2="48" y2="82"/><line class="ld" x1="72" y1="56" x2="72" y2="70"/><rect x="36" y="3" width="48" height="55" rx="6" fill="#1f3d78" class="ed"/><rect x="69" y="3" width="13" height="55" fill="#b9c8e0"/>`
     + `<text x="75.5" y="24" text-anchor="middle" font-size="15" font-weight="700" fill="#1f3d78">–</text><text x="75.5" y="46" text-anchor="middle" font-size="15" font-weight="700" fill="#1f3d78">–</text>` + QF.tag(48, 93, '1') + QF.tag(72, 81, '2'), 'Elektrolytický kondenzátor s vývody 1 a 2'),
+  // kód s jedním chybějícím místem: __GAP__ se zobrazí jako rámeček s otazníkem
+  code: (src) => `<pre class="code">${pyHi(src).replace('__GAP__', '<span class="code-gap">?</span>')}</pre>`,
   pcbTrace: (bend) => S.svg(160, 110, `<rect x="5" y="5" width="150" height="100" rx="6" style="fill:var(--pcb)"/>` + (bend
     ? `<path d="M25 85H75L95 65V45L115 25H135" style="fill:none;stroke:#c98b4a;stroke-width:9;stroke-linejoin:round"/>`
     : `<path d="M25 85H100L60 30H135" style="fill:none;stroke:#c98b4a;stroke-width:9;stroke-linejoin:miter"/>`), 'Měděná cesta na plošném spoji'),
@@ -1909,7 +1916,11 @@ const QBANK = {
     a: ['A', 'B', 'v obou', 'v žádném'], why: 'Proud teče z GPIO přes rezistor do anody a z katody do GND. Trojúhelník značky musí mířit ke GND. V B je LED otočená a nevede.' },
   { q: 'Rezistor vyměníš z 330 Ω za 1 kΩ. Jak bude LED svítit?', a: ['slaběji, poteče menší proud', 'jasněji', 'stejně', 'vůbec, LED potřebuje přesně 330 Ω'], why: 'Větší odpor = menší proud = slabší světlo.' },
   { q: 'Záleží na tom, jestli je rezistor před LED, nebo za ní?', a: ['ne, v sérii teče oběma stejný proud', 'ano, rezistor musí být před anodou', 'ano, rezistor musí být u GND', 'ano, jinak LED shoří'], why: 'V jednoduché smyčce teče všude stejný proud, pořadí součástek je jedno.' },
-  { q: 'Co udělá tato smyčka: while True: led.toggle(); time.sleep(0.5)', a: ['LED bliká, každou půlsekundu se přepne', 'LED jednou blikne a program skončí', 'LED svítí půl sekundy a pak natrvalo zhasne', 'LED svítí napůl jasu'], why: 'while True opakuje pořád dokola: přepni LED, počkej půl sekundy.' },
+  { q: 'Co udělá tato smyčka: while True: led.toggle(); sleep(0.5)', a: ['LED bliká, každou půlsekundu se přepne', 'LED jednou blikne a program skončí', 'LED svítí půl sekundy a pak natrvalo zhasne', 'LED svítí napůl jasu'], why: 'while True opakuje pořád dokola: přepni LED, počkej půl sekundy.' },
+  { q: 'Program má LED blikat. Co patří na označené místo?', mono: true, img: QF.code('from machine import Pin\nfrom time import sleep\n\nled = Pin(15, Pin.OUT)\nwhile True:\n    led.toggle()\n    __GAP__'),
+    a: ['sleep(0.5)', 'led.on()', 'led.toggle()', 'sleep = 0.5'], why: 'Bez čekání by se LED přepínala tisíckrát za sekundu a blikání bys neviděl. sleep(0.5) počká půl sekundy.' },
+  { q: 'Program hlásí, že nezná Pin. Který řádek chybí na začátku?', mono: true, img: QF.code('__GAP__\nfrom time import sleep\n\nled = Pin(15, Pin.OUT)'),
+    a: ['from machine import Pin', 'from time import Pin', 'import Pin', 'from machine import sleep'], why: 'Pin je nástroj z knihovny machine. Načte ho řádek from machine import Pin.' },
 ],
 'l1-06': [
   { q: 'Jaké napětí má výstup GPIO ve stavu HIGH?', a: ['3,3 V', '5 V', '1 V', '12 V'], why: 'Pico pracuje s logikou 3,3 V.' },
@@ -1925,6 +1936,8 @@ const QBANK = {
   { q: 'Které piny Pica umí změřit napětí mezi 0 a 3,3 V?', a: ['GP26, GP27 a GP28', 'všechny GPIO piny', 'jen VBUS a VSYS', 'žádné, umí jen 0 a 1'], why: 'Mají připojený A/D převodník. Ostatní piny rozliší jen 0 a 1.' },
   { q: 'Proč 5 V na vstupu GPIO Pica škodí?', a: ['čip je stavěný jen na 3,3 V', '5 V z USB je střídavé napětí', 'pin se sám přepne na výstup', 'neškodí, pin jen přečte 1'], why: 'Pin, případně celý čip, se může nevratně zničit.' },
   { q: 'Co znamená zkratka GPIO?', a: ['obecný vstup/výstup (General Purpose I/O)', 'zem pro všechny piny (Ground Pin Output)', 'grafický port (Graphics Port I/O)', 'napájecí pin (General Power Output)'], why: 'Je to pin, který v programu nastavíš jako vstup nebo výstup.' },
+  { q: 'Chceš rozsvítit LED přímo na desce Pica W. Co patří na označené místo?', mono: true, img: QF.code('from machine import Pin\n\ndeska = __GAP__\ndeska.on()'),
+    a: ['Pin("LED", Pin.OUT)', 'Pin(25, Pin.OUT)', 'Pin("LED", Pin.IN)', 'Pin("LED", Pin.PULL_UP)'], why: 'Na Picu W je LED připojená přes čip Wi-Fi, proto se jmenuje "LED". Pin.OUT z ní udělá výstup. Pin(25) platí jen pro Pico bez Wi-Fi.' },
 ],
 'l1-07': [
   { q: 'Co znamená, že vstup „plave"?', a: ['nemá pevné napětí a čte náhodně', 'je připojený ke 3,3 V přes rezistor', 'teče jím velký proud a hřeje se', 'je nastavený jako výstup místo vstupu'], why: 'Bez pull-up nebo pull-down rezistoru nemá pin určený klidový stav.' },
@@ -1932,13 +1945,17 @@ const QBANK = {
   { q: 'Tlačítko na obrázku stiskneš. Co teď vrátí tlacitko.value()?', img: QF.pull(false), a: ['0, tlačítko spojí pin s GND', '1, rezistor drží pin nahoře', 'střídavě 0 a 1 kvůli rezistoru', 'pin se zničí zkratem'], why: 'Stisk propojí pin přímo se zemí. Rezistor jen omezí proud ze 3,3 V.' },
   { q: 'Tady je rezistor ke GND a tlačítko ke 3,3 V. Co čte pin, když tlačítko nikdo nemačká?', img: QF.pull(true), a: ['0, rezistor ho drží na GND', '1, tlačítko je u 3,3 V', 'náhodně 0 a 1, pin plave', '3,3, tedy plné napětí'], why: 'To je pull-down: v klidu 0, při stisku 1.' },
   { q: 'Proč má pull-up rezistor velkou hodnotu, třeba 10 kΩ?', a: ['aby při stisku tekl jen malý proud', 'aby tlačítko reagovalo rychleji', 'protože menší rezistory se nevyrábějí', 'aby pin v klidu četl 0'], why: 'Při stisku je rezistor zapojený mezi 3,3 V a GND. Malý odpor by znamenal zbytečně velký proud.' },
-  { q: 'Program zaregistruje jeden stisk jako tři. Příčina?', a: ['zákmity kontaktů', 'plovoucí vstup', 'špatně zapojená LED', 'příliš nízké napětí'], why: 'Mechanické kontakty odskakují. Pomůže krátké čekání v programu (time.sleep_ms) nebo kondenzátor.' },
-  { q: 'K čemu je v programu pro tlačítko řádek time.sleep_ms(50) hned po změně stavu?', a: ['přečká zákmity kontaktů', 'zpomalí blikání LED', 'zapne pull-up rezistor', 'nastaví napětí pinu na 0,05 V'], why: '50 ms se program na tlačítko nedívá, takže odskoky kontaktů nepočítá jako další stisky.' },
+  { q: 'Program zaregistruje jeden stisk jako tři. Příčina?', a: ['zákmity kontaktů', 'plovoucí vstup', 'špatně zapojená LED', 'příliš nízké napětí'], why: 'Mechanické kontakty odskakují. Pomůže krátké čekání v programu (sleep_ms) nebo kondenzátor.' },
+  { q: 'K čemu je v programu pro tlačítko řádek sleep_ms(50) hned po změně stavu?', a: ['přečká zákmity kontaktů', 'zpomalí blikání LED', 'zapne pull-up rezistor', 'nastaví napětí pinu na 0,05 V'], why: '50 ms se program na tlačítko nedívá, takže odskoky kontaktů nepočítá jako další stisky.' },
   { q: 'Tlačítko je mezi GP14 a GND a v kódu je Pin(14, Pin.IN, Pin.PULL_UP). Potřebuješ vnější pull-up rezistor?', a: ['ne, Pin.PULL_UP zapne pull-up v čipu', 'ano, bez vnějšího rezistoru to nefunguje', 'ano, ale pull-down ke GND', 'ne, tlačítka pull-up nikdy nepotřebují'], why: 'Pico má pull-up i pull-down rezistory přímo v čipu (kolem 50 kΩ).' },
   { q: 'Kam se připojuje pull-down rezistor?', a: ['mezi pin a GND', 'mezi pin a 3,3 V', 'do série s tlačítkem', 'mezi 3,3 V a GND'], why: 'Táhne pin „dolů" k nule.' },
   { q: 'Proč plovoucí vstup reaguje i na přiblížení ruky?', a: ['bez pevného napětí chytá rušení', 'ruka vede proud vzduchem až do pinu', 'pin má vestavěný senzor přiblížení', 'ruka mění napětí zdroje'], why: 'Nepřipojený pin se chová jako anténa.' },
   { q: 'Jak v MicroPythonu nastavíš GP14 jako vstup s vnitřním pull-down rezistorem?', a: ['Pin(14, Pin.IN, Pin.PULL_DOWN)', 'Pin(14, Pin.OUT, Pin.PULL_DOWN)', 'Pin(14, Pin.IN, Pin.PULL_UP)', 'Pin(19, Pin.IN, Pin.PULL_DOWN)'], why: 'Pin.IN = vstup, Pin.PULL_DOWN = rezistor ke GND. Do kódu patří číslo GP (14), ne fyzický pin (19).' },
   { q: 'Tlačítko spojuje GP14 s GND a pin má pull-up. Která podmínka v programu znamená, že je tlačítko stisknuté?', a: ['tlacitko.value() == 0', 'tlacitko.value() == 1', 'tlacitko.value() == 3.3', 'tlacitko.value() == 14'], why: 'S pull-upem je pin v klidu 1. Stisk ho spojí se zemí, takže čte 0.' },
+  { q: 'Tlačítko spojuje GP14 s GND a vnější rezistor nemáš. Co patří na označené místo?', mono: true, img: QF.code('from machine import Pin\n\ntlacitko = Pin(14, Pin.IN, __GAP__)'),
+    a: ['Pin.PULL_UP', 'Pin.PULL_DOWN', 'Pin.OUT', 'Pin.IN'], why: 'Tlačítko vede ke GND, takže pin musí v klidu držet pull-up ke 3,3 V. S pull-downem by pin četl 0 pořád.' },
+  { q: 'Tlačítko je proti GND a pin má pull-up. Co patří do podmínky, aby se LED přepnula při stisku?', mono: true, img: QF.code('ted = tlacitko.value()\nif ted != predtim:\n    if __GAP__:\n        led.toggle()\n    predtim = ted'),
+    a: ['ted == 0', 'ted == 1', 'ted == 3.3', 'predtim == 0'], why: 'S pull-upem znamená stisk 0. Metoda value() vrací jen 0 nebo 1, ne napětí.' },
 ],
 'l1-08': [
   { q: 'Který vzorec platí pro výstupní napětí děliče na obrázku?', img: QF.div('R1', 'R2', 'U vstup', 'U výstup'),
@@ -2089,7 +2106,11 @@ const QBANK = {
   { q: 'Metoda duty_u16 bere čísla od 0 do 65 535. Jakou střídu nastaví led.duty_u16(32768)?', a: ['asi 50 %', 'asi 33 %', '32 768 %', '100 %'], why: '32 768 je polovina z 65 535.' },
   { q: 'Co je střída 100 %?', a: ['pin je trvale zapnutý', 'pin je trvale vypnutý', 'signál bliká 100krát za sekundu', 'napětí je 100 V'], why: 'Zapnuto po celou periodu.' },
   { q: 'Co udává frekvence PWM?', a: ['kolik period proběhne za sekundu', 'jak dlouho je pulz zapnutý', 'jaké napětí má pulz', 'kolik procent času je signál zapnutý'], why: 'Podíl času „zapnuto" je střída, ne frekvence.' },
-  { q: 'Jak nastavíš frekvenci PWM na 1 000 Hz?', a: ['led.freq(1000)', 'led.duty_u16(1000)', 'time.sleep(1000)', 'Pin(1000)'], why: 'freq nastavuje frekvenci, duty_u16 střídu.' },
+  { q: 'Jak nastavíš frekvenci PWM na 1 000 Hz?', a: ['led.freq(1000)', 'led.duty_u16(1000)', 'sleep(1000)', 'Pin(1000)'], why: 'freq nastavuje frekvenci, duty_u16 střídu.' },
+  { q: 'Chceš LED stmívat. Který řádek patří na začátek programu?', mono: true, img: QF.code('__GAP__\nfrom time import sleep\n\nled = PWM(Pin(15))\nled.freq(1000)'),
+    a: ['from machine import Pin, PWM', 'from machine import Pin', 'from time import Pin, PWM', 'from machine import PWM, sleep'], why: 'Program používá Pin i PWM a oba nástroje jsou z knihovny machine. sleep je z knihovny time.' },
+  { q: 'Na označeném místě se má nastavit střída 50 %. Co tam patří?', mono: true, img: QF.code('led = PWM(Pin(15))\nled.freq(1000)\n__GAP__'),
+    a: ['led.duty_u16(32768)', 'led.duty_u16(50)', 'led.freq(50)', 'led.duty_u16(65535)'], why: 'duty_u16 bere čísla od 0 do 65 535 a polovina je 32 768. Číslo 50 by znamenalo skoro nulovou střídu, 65 535 trvale zapnuto.' },
 ],
 'l2-09': [
   { q: 'Jak se zapojuje ochranná dioda k cívce relé?', a: ['paralelně k cívce, katodou k +', 'do série s cívkou', 'paralelně, katodou ke GND', 'mezi bázi a emitor'], why: 'Za provozu je v závěrném směru, po vypnutí umožní proudu doběhnout.' },
@@ -2537,7 +2558,7 @@ function qBlock(items, name, onDone) {
   const sc = document.createElement('p'); sc.className = 'score';
   items.forEach((it, k) => {
     const order = shuffle(it.qq.a.map((_, j) => j));
-    const fs = document.createElement('fieldset'); fs.className = 'q';
+    const fs = document.createElement('fieldset'); fs.className = 'q' + (it.qq.mono ? ' mono-ans' : '');
     fs.innerHTML = `<legend>${it.from ? `<span class="from">z lekce ${it.l.code} · ${esc(it.l.title)}</span>` : ''}${esc(it.qq.q)}</legend>${it.qq.img ? `<div class="qimg">${it.qq.img}</div>` : ''}<div class="ans">${order.map((j) => `<label><input type="radio" name="${name}-${k}" value="${j}"><span>${esc(it.qq.a[j])}</span></label>`).join('')}</div><p class="why" hidden></p>`;
     qcolor(fs);
     fs.addEventListener('change', (e) => {
