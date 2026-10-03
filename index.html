@@ -10,7 +10,7 @@
   --copper:#a9571f; --copper-soft:rgba(169,87,31,.13); --water:#1c74ab; --water-soft:rgba(28,116,171,.15);
   --good:#2b7a4b; --good-soft:rgba(43,122,75,.13); --bad:#b8352a; --bad-soft:rgba(184,53,42,.11); --warn:#94630f;
   --l1:#2b7a4b; --l2:#1c74ab; --l3:#a9571f;
-  --pcb:#1f5b3e; --silk:#f2f2e6; --lead:#8d949a; --edge:rgba(0,0,0,.25); --code-lib:#7b4bb0;
+  --pcb:#1f5b3e; --silk:#f2f2e6; --lead:#8d949a; --edge:rgba(0,0,0,.25); --code-lib:#7b4bb0; --cU:#1f5bbd; --cI:#146c35; --cR:#b0203c; --cP:#b04a00;
   --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
   --f-body:"Source Serif 4",Georgia,"Times New Roman",serif;
   --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
@@ -21,15 +21,18 @@
   --copper:#e39a62; --copper-soft:rgba(227,154,98,.15); --water:#62b9ec; --water-soft:rgba(98,185,236,.16);
   --good:#62c98f; --good-soft:rgba(98,201,143,.14); --bad:#ef6f60; --bad-soft:rgba(239,111,96,.13); --warn:#e2b25a;
   --l1:#62c98f; --l2:#62b9ec; --l3:#e39a62;
-  --pcb:#2f7f56; --silk:#f2f2e6; --lead:#9aa2a8; --edge:rgba(255,255,255,.2); --code-lib:#c3a2f0;
+  --pcb:#2f7f56; --silk:#f2f2e6; --lead:#9aa2a8; --edge:rgba(255,255,255,.2); --code-lib:#c3a2f0; --cU:#82b4ff; --cI:#5fd38f; --cR:#ff8375; --cP:#f2b33d;
   color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0e1615; --surface:#15201e; --sunk:#1b2826; --ink:#dde7e2; --muted:#93a6a0; --line:#2c3c39; --grid:rgba(140,200,180,.05);
   --copper:#e39a62; --copper-soft:rgba(227,154,98,.15); --water:#62b9ec; --water-soft:rgba(98,185,236,.16);
   --good:#62c98f; --good-soft:rgba(98,201,143,.14); --bad:#ef6f60; --bad-soft:rgba(239,111,96,.13); --warn:#e2b25a;
   --l1:#62c98f; --l2:#62b9ec; --l3:#e39a62;
-  --pcb:#2f7f56; --silk:#f2f2e6; --lead:#9aa2a8; --edge:rgba(255,255,255,.2); --code-lib:#c3a2f0;
+  --pcb:#2f7f56; --silk:#f2f2e6; --lead:#9aa2a8; --edge:rgba(255,255,255,.2); --code-lib:#c3a2f0; --cU:#82b4ff; --cI:#5fd38f; --cR:#ff8375; --cP:#f2b33d;
   color-scheme:dark}
+/* barvy veličin: napětí U (V), proud I (A), odpor R (Ω), výkon P (W); vypnuto = původní vzhled */
+:root{--qU:var(--cU);--qI:var(--cI);--qR:var(--cR);--qP:var(--cP)}
+:root[data-qc="off"]{--qU:var(--copper);--qI:var(--water);--qR:var(--ink);--qP:var(--copper)}
 
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -54,7 +57,8 @@ b.c{color:var(--copper);font-weight:600} b.w{color:var(--water);font-weight:600}
 /* app shell */
 .app{max-width:760px;margin:0 auto;padding-inline:16px;padding-block:0 calc(88px + env(safe-area-inset-bottom,0px))}
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);margin-inline:-16px;padding:.55rem 16px;display:flex;align-items:center;gap:.8rem}
-.brand{font-family:var(--f-display);font-weight:850;font-stretch:112%;font-size:1.05rem;white-space:nowrap}
+.brand{font-family:var(--f-display);font-weight:850;font-stretch:112%;font-size:1.05rem;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:359px){.top{gap:.5rem}.brand{font-size:.95rem;font-stretch:100%}}
 .brand span{color:var(--copper)}
 .top .sp{flex:1}
 .streak{display:flex;align-items:center;gap:.35rem;font-family:var(--f-mono);font-weight:600;font-size:.9rem;padding:.2rem .6rem;border:1px solid var(--line);border-radius:99px;background:var(--surface)}
@@ -265,6 +269,40 @@ pre.code .ln{display:block;min-height:1.5em}
 .legend-code li{display:grid;grid-template-columns:6.5rem 1fr;gap:.6rem;align-items:baseline}
 .legend-code code{font-family:var(--f-mono);font-size:.86rem;background:var(--sunk);border-radius:4px;padding:.05rem .35rem;justify-self:start}
 
+/* barvy veličin v textu, obrázcích a simulacích */
+.qU{color:var(--qU)}.qI{color:var(--qI)}.qR{color:var(--qR)}.qP{color:var(--qP)}
+span.qU,span.qI,span.qR,span.qP{font-weight:650}
+:root[data-qc="off"] :is(.qU,.qI,.qR,.qP){color:inherit}
+:root[data-qc="off"] span:is(.qU,.qI,.qR,.qP){font-weight:inherit}
+:root:not([data-qc="off"]) :is(b.c,.term b,.formula){color:var(--ink)}
+:root:not([data-qc="off"]) .term.qU{border-left:4px solid var(--qU)}:root:not([data-qc="off"]) .term.qU b{color:var(--qU)}
+:root:not([data-qc="off"]) .term.qI{border-left:4px solid var(--qI)}:root:not([data-qc="off"]) .term.qI b{color:var(--qI)}
+:root:not([data-qc="off"]) .term.qR{border-left:4px solid var(--qR)}:root:not([data-qc="off"]) .term.qR b{color:var(--qR)}
+:root:not([data-qc="off"]) .term.qP{border-left:4px solid var(--qP)}:root:not([data-qc="off"]) .term.qP b{color:var(--qP)}
+.tqU{fill:var(--qU);font:600 12px var(--f-mono)}.tqI{fill:var(--qI);font:600 12px var(--f-mono)}.tqR{fill:var(--qR);font:600 12px var(--f-mono)}.tqP{fill:var(--qP);font:600 12px var(--f-mono)}
+.ro.qU b{color:var(--qU)}.ro.qI b{color:var(--qI)}.ro.qR b{color:var(--qR)}.ro.qP b{color:var(--qP)}
+.ctl.qU output{color:var(--qU)}.ctl.qI output{color:var(--qI)}.ctl.qR output{color:var(--qR)}.ctl.qP output{color:var(--qP)}
+.ctl.qU input[type=range]{accent-color:var(--qU)}.ctl.qI input[type=range]{accent-color:var(--qI)}.ctl.qR input[type=range]{accent-color:var(--qR)}.ctl.qP input[type=range]{accent-color:var(--qP)}
+:root[data-qc="off"] .ctl:is(.qU,.qI,.qR,.qP) output{color:var(--copper)}
+:root[data-qc="off"] .ctl:is(.qU,.qI,.qR,.qP) input[type=range]{accent-color:var(--copper)}
+/* přepínač: písmena U I R v barvách, vypnuté přeškrtnuté */
+.qc{display:inline-flex;align-items:center;gap:.12rem;font:700 .86rem var(--f-mono);padding:.15rem .6rem;border:1px solid var(--line);border-radius:99px;background:var(--surface);color:var(--muted);cursor:pointer;min-height:32px;flex:none}
+.qc:hover{border-color:var(--ink)}
+:root[data-qc="off"] .qc{text-decoration:line-through;text-decoration-thickness:2px}
+.qc-text{background:none;border:1px solid var(--line);border-radius:99px;color:var(--ink);font:650 .8rem var(--f-display);font-stretch:90%;padding:.25rem .7rem;min-height:32px;cursor:pointer}
+.qc-text:hover{border-color:var(--ink)}
+.qc-text .off,:root[data-qc="off"] .qc-text .on{display:none}
+:root[data-qc="off"] .qc-text .off{display:inline}
+/* barevný klíč */
+.qlegend{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:.6rem .85rem .7rem;display:grid;gap:.45rem}
+.qlegend .row{justify-content:space-between}
+.qrow{display:grid;grid-template-columns:12px 4.4rem 1.4rem 1fr auto;gap:.55rem;align-items:center;font-size:.95rem}
+.qrow i{width:12px;height:12px;border-radius:3px}
+.qrow .m{font-family:var(--f-mono);font-weight:600}
+.qrow .why{color:var(--muted);font-family:var(--f-display);font-stretch:88%;font-weight:600;font-size:.85rem}
+.kU{color:var(--cU)}.kI{color:var(--cI)}.kR{color:var(--cR)}.kP{color:var(--cP)}
+:root[data-qc="off"] .qlegend .qrow{opacity:.55}
+
 /* SVG pomocné */
 .ld{stroke:var(--lead);stroke-width:3;fill:none;stroke-linecap:round}
 .ed{stroke:var(--edge);stroke-width:1}
@@ -307,6 +345,7 @@ pre.code .ln{display:block;min-height:1.5em}
   <header class="top">
     <div class="brand">Elektronika <span>15 min</span></div>
     <div class="sp"></div>
+    <button class="qc" type="button" aria-pressed="true" aria-label="Barvy veličin (napětí, proud, odpor)"><span class="qU">U</span><span class="qI">I</span><span class="qR">R</span></button>
     <div class="streak" id="streak" title="Dní v řadě s dokončenou lekcí"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 1 3 9h4l-1 6 6-8H8z" style="fill:var(--copper)"/></svg><span id="streakN">0</span></div>
   </header>
   <main id="view" class="view" aria-live="polite"></main>
@@ -323,10 +362,12 @@ pre.code .ln{display:block;min-height:1.5em}
 <div class="toast" id="toast" hidden></div>
 <script>
 /* ================= Schémata: malý kreslicí jazyk ================= */
+// Popisek s hodnotou dostane barvu veličiny podle jednotky (V modře, A zeleně, Ω červeně, W oranžově).
+const qLabel = (s) => typeof s !== 'string' ? null : /Ω$|^R\d?$/.test(s) ? 'tqR' : /(^|\s)[+−-]?\d+(,\d+)?\s?m?V$|^U(\s|$|[_₀-₉])/.test(s) ? 'tqU' : /\d\s?[mµ]?A$|^I(\s|$|[_₀-₉])/.test(s) ? 'tqI' : /\d\s?m?W$/.test(s) ? 'tqP' : null;
 const S = {
   w: (pts) => `<polyline class="sy" points="${pts}"/>`,
   dot: (x, y) => `<circle class="syf" cx="${x}" cy="${y}" r="3.2"/>`,
-  t: (x, y, s, cls = 'tx', a = 'start') => `<text class="${cls}" x="${x}" y="${y}" text-anchor="${a}">${s}</text>`,
+  t: (x, y, s, cls = 'tx', a = 'start') => `<text class="${(/^tx[cw]?$/.test(cls) && qLabel(s)) || cls}" x="${x}" y="${y}" text-anchor="${a}">${s}</text>`,
   res: (x, y, v, lab, lx, ly) => (v
     ? `<path class="sy" d="M${x} ${y - 30}V${y - 18}M${x} ${y + 18}V${y + 30}"/><rect class="sy" x="${x - 7}" y="${y - 18}" width="14" height="36"/>`
     : `<path class="sy" d="M${x - 30} ${y}H${x - 18}M${x + 18} ${y}H${x + 30}"/><rect class="sy" x="${x - 18}" y="${y - 7}" width="36" height="14"/>`)
@@ -401,7 +442,7 @@ const figWrap = (title, sub, inner, cap) => `<figure class="fig"><div class="fig
 const FIG = {
   'l1-01': () => figWrap('Schéma', 'baterie a rezistor', S.svg(300, 150,
     S.bat(70, 75, '9 V') + S.w('70,45 70,25 230,25 230,45') + S.res(230, 75, true, '100 Ω') + S.w('230,105 230,125 70,125 70,105')
-    + `<path class="cl" style="stroke-width:2" d="M120 15H180"/>` + S.arrowHead(120, 15, 180, 15, 1).replace('syf', 'cf') + S.t(150, 11, 'I = 90 mA', 'txc', 'middle')
+    + `<path style="fill:none;stroke:var(--qI);stroke-width:2" d="M120 15H180"/>` + S.arrowHead(120, 15, 180, 15, 1).replace('class="syf"', 'style="fill:var(--qI)"') + S.t(150, 11, 'I = 90 mA', 'txc', 'middle')
     + S.t(150, 80, 'U = 9 V', 'txw', 'middle'), 'Baterie 9 V připojená k rezistoru 100 ohmů'),
     'Čáry jsou vodiče, obdélník je rezistor (česká norma), dvojice čárek je baterie; delší čárka je plus. Šipka ukazuje směr proudu od + přes součástky k −.'),
 
@@ -505,7 +546,7 @@ const FIG = {
 
   'l3-01': () => figWrap('Fázový posun', 'kondenzátor na střídavém napětí', S.svg(340, 130, (() => {
     let u = '', i = ''; for (let x = 0; x <= 280; x += 4) { const a = x / 280 * Math.PI * 4; u += (x ? 'L' : 'M') + (40 + x) + ' ' + (65 - 40 * Math.sin(a)).toFixed(1); i += (x ? 'L' : 'M') + (40 + x) + ' ' + (65 - 28 * Math.cos(a)).toFixed(1); }
-    return `<path d="M40 65H320" style="stroke:var(--line)"/><path d="${u}" style="fill:none;stroke:var(--copper);stroke-width:2.2"/><path d="${i}" style="fill:none;stroke:var(--water);stroke-width:2.2"/>` + S.t(326, 20, 'U', 'txc', 'end') + S.t(326, 40, 'I', 'txw', 'end');
+    return `<path d="M40 65H320" style="stroke:var(--line)"/><path d="${u}" style="fill:none;stroke:var(--qU);stroke-width:2.2"/><path d="${i}" style="fill:none;stroke:var(--qI);stroke-width:2.2"/>` + S.t(326, 20, 'U', 'txc', 'end') + S.t(326, 40, 'I', 'txw', 'end');
   })(), 'Napětí a proud kondenzátoru'), 'Proud (modře) dosáhne vrcholu o čtvrt periody dřív než napětí (měď). Kondenzátor se musí nejdřív nabít, proto proud předbíhá.'),
 
   'l3-02': () => figWrap('RC dolní propust', '', S.svg(320, 150,
@@ -570,6 +611,10 @@ const LEVELS = [
   { n: 3, key: 'l3', name: 'Pokročilý', sub: 'Hlubší porozumění', desc: 'Střídavý proud, filtry, rezonance, transformátor, polovodiče zevnitř, MOSFET, operační zesilovač a plošné spoje.' },
 ];
 
+// Barevný klíč veličin s vypínačem (lekce 1.1 a záložka Pojmy).
+const QLEGEND = `<div class="qlegend"><div class="row"><span class="eyebrow">Barvy veličin</span><button type="button" class="qc-text"><span class="on">Vypnout barvy</span><span class="off">Zapnout barvy</span></button></div>
+  ${[['U', 'napětí', 'V, mV', 'tlačí'], ['I', 'proud', 'A, mA', 'teče'], ['R', 'odpor', 'Ω, kΩ', 'brzdí'], ['P', 'výkon', 'W, mW', 'hřeje']].map(([q, w, u, why]) => `<div class="qrow"><i style="background:var(--c${q})"></i><b class="k${q}">${w}</b><span class="k${q} m">${q}</span><span class="k${q} m">${u}</span><span class="why">${why}</span></div>`).join('')}
+  <p class="cap">Modrá tlačí, zelená teče, červená brzdí, oranžová hřeje. Barva patří k jednotce: co je ve voltech, je modré.</p></div>`;
 // Dovysvětlení: otázka, kterou si student nejspíš položí, a pod ní rozbalovací vysvětlení.
 const more = (q, html) => `<details class="more"><summary><span class="qm" aria-hidden="true">?</span><span>${q}</span><svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></summary><div class="more-body"><span class="eyebrow">Dovysvětlení</span>${html}<button type="button" class="more-close">Sbalit ▲</button></div></details>`;
 
@@ -639,6 +684,7 @@ const LESSONS = [
   terms: [['Napětí U (volt, V)', '„Tlak", který tlačí elektrony obvodem. Měří se vždy mezi dvěma body.'], ['Proud I (ampér, A)', 'Kolik náboje proteče za sekundu, tedy „průtok". 1 mA = 0,001 A.'], ['Odpor R (ohm, Ω)', 'Jak moc součástka brání průtoku proudu.'], ['Vodič a izolant', 'Vodič (měď) vede proud snadno, izolant (plast, sklo) téměř vůbec.']],
   body: `<p>Elektrony v drátu nevidíme, ale můžeme si je představit jako vodu v trubkách. Baterie je čerpadlo: vytváří <b class="c">napětí</b>, tedy tlak. Ten tlačí vodu trubkami a vzniká <b class="c">proud</b>, průtok. Úzká nebo drsná trubka průtok brzdí. To je <b class="c">odpor</b>.</p>
   <div class="tscroll"><table><thead><tr><th>Ve vodovodu</th><th>V elektronice</th><th>Jednotka</th></tr></thead><tbody><tr><td>tlak</td><td>napětí U</td><td>volt (V)</td></tr><tr><td>průtok</td><td>proud I</td><td>ampér (A)</td></tr><tr><td>tření, zúžení</td><td>odpor R</td><td>ohm (Ω)</td></tr><tr><td>čerpadlo</td><td>zdroj, baterie</td><td>—</td></tr></tbody></table></div>
+  ${QLEGEND}
   <p>Čím vyšší napětí, tím větší proud. Čím větší odpor, tím menší proud. Obojí shrnuje Ohmův zákon:</p><p class="formula">I = U / R</p>
   <p>Příklad: baterie 9 V a rezistor 100 Ω. I = 9 / 100 = 0,09 A = 90 mA.</p>
   ${more('Jak z 0,09 A vzniklo 90 mA?', `<p>Předpona <b>m</b> (mili) znamená tisícinu. Miliampér je tisícina ampéru, takže 1&nbsp;A = 1&nbsp;000&nbsp;mA.</p>
@@ -1057,7 +1103,7 @@ const E12 = [10, 12, 15, 18, 22, 27, 33, 39, 47, 56, 68, 82];
 const E24 = [10, 11, 12, 13, 15, 16, 18, 20, 22, 24, 27, 30, 33, 36, 39, 43, 47, 51, 56, 62, 68, 75, 82, 91];
 const series = (base, from, to) => { const out = []; for (let e = -1; e < 8; e++) for (const b of base) { const v = Math.round(b * Math.pow(10, e) * 1000) / 1000; if (v >= from && v <= to) out.push(v); } return out; };
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
-const rng = (id, label, min, max, step, val) => `<div class="ctl"><label for="${id}">${label} <output id="${id}o"></output></label><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${val}"></div>`;
+const rng = (id, label, min, max, step, val, q) => `<div class="ctl${q ? ' q' + q : ''}"><label for="${id}">${label} <output id="${id}o"></output></label><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${val}"></div>`;
 const ro = (id, label, cls = '') => `<div class="ro ${cls}"><small>${label}</small><b id="${id}">–</b></div>`;
 const figT = (t, s) => `<div class="fig-title"><span>${t}</span><span>${s || ''}</span></div>`;
 function mount(root, html) { root.innerHTML = html; const q = (s) => root.querySelector(s); return q; }
@@ -1065,7 +1111,7 @@ function onInputs(q, ids, fn) { ids.forEach((id) => q('#' + id).addEventListener
 const C = {};
 const KITS = [];
 let THEME_V = 0;
-function readColors() { const cs = getComputedStyle(document.documentElement); ['ink', 'muted', 'line', 'copper', 'water', 'water-soft', 'copper-soft', 'good', 'bad', 'warn', 'surface', 'bg', 'sunk'].forEach((k) => C[k] = cs.getPropertyValue('--' + k).trim()); THEME_V++; }
+function readColors() { const cs = getComputedStyle(document.documentElement); ['qU', 'qI', 'qR', 'qP', 'ink', 'muted', 'line', 'copper', 'water', 'water-soft', 'copper-soft', 'good', 'bad', 'warn', 'surface', 'bg', 'sunk'].forEach((k) => C[k] = cs.getPropertyValue('--' + k).trim()); THEME_V++; }
 function canvasKit(cv) {
   const k = { ctx: cv.getContext('2d'), w: 0, h: 0, dirty: true, tv: -1 };
   const fit = () => { const r = cv.getBoundingClientRect(); if (!r.width) return; const d = Math.min(2, window.devicePixelRatio || 1); k.w = r.width; k.h = r.height; cv.width = Math.round(r.width * d); cv.height = Math.round(r.height * d); k.ctx.setTransform(d, 0, 0, d, 0, 0); k.dirty = true; };
@@ -1098,7 +1144,7 @@ const SIMS = {};
 
 /* ---------- 1 Ohmův zákon: okruh s kapkami ---------- */
 SIMS.ohm = (root) => {
-  const q = mount(root, figT('Simulace', 'uzavřený okruh') + `<div class="fig-body"><canvas style="aspect-ratio:16/11" aria-label="Okruh s čerpadlem a zúženým místem"></canvas><div class="controls">${rng('sU', 'Napětí zdroje U', 0, 12, 0.5, 9)}${rng('sR', 'Odpor R', 50, 1000, 10, 100)}<div class="readouts">${ro('rI', 'Proud I', 'w')}${ro('rP', 'Výkon P = U · I', 'c')}</div><p class="cap">Kapky se pohybují stejně rychle v celém okruhu, i za rezistorem. Rezistor se zahřívá tím víc, čím větší výkon na něm vzniká.</p></div></div>`);
+  const q = mount(root, figT('Simulace', 'uzavřený okruh') + `<div class="fig-body"><canvas style="aspect-ratio:16/11" aria-label="Okruh s čerpadlem a zúženým místem"></canvas><div class="controls">${rng('sU', 'Napětí zdroje U', 0, 12, 0.5, 9, 'U')}${rng('sR', 'Odpor R', 50, 1000, 10, 100, 'R')}<div class="readouts">${ro('rI', 'Proud I', 'qI')}${ro('rP', 'Výkon P = U · I', 'qP')}</div><p class="cap">Kapky se pohybují stejně rychle v celém okruhu, i za rezistorem. Rezistor se zahřívá tím víc, čím větší výkon na něm vzniká.</p></div></div>`);
   const k = canvasKit(q('canvas')); let U, R, I, P; const N = 70; const parts = [...Array(N)].map((_, i) => ({ s: i / N, o: Math.random() * 2 - 1 }));
   onInputs(q, ['sU', 'sR'], () => { U = +q('#sU').value; R = +q('#sR').value; I = U / R; P = U * I; q('#sUo').textContent = num(U) + ' V'; q('#sRo').textContent = R + ' Ω'; q('#rI').textContent = si(I, 'A'); q('#rP').textContent = si(P, 'W'); });
   return { step(dt, motion) {
@@ -1106,25 +1152,25 @@ SIMS.ohm = (root) => {
     const xa = x0 + W * .36, xb = x0 + W * .64; const f = (R - 50) / 950, wch = 16 - 10 * f;
     const v = I / 0.24 * 260; if (motion) for (const p of parts) p.s = (p.s + v * dt / Per) % 1;
     ctx.clearRect(0, 0, w, h); ctx.lineJoin = 'round';
-    if (P > 0.02) { ctx.fillStyle = C.copper; ctx.globalAlpha = clamp(P / 2.5, 0, .55); ctx.beginPath(); ctx.ellipse((xa + xb) / 2, y0, (xb - xa) / 2 + 16, 26, 0, 0, 7); ctx.fill(); ctx.globalAlpha = 1; }
+    if (P > 0.02) { ctx.fillStyle = C.qP; ctx.globalAlpha = clamp(P / 2.5, 0, .55); ctx.beginPath(); ctx.ellipse((xa + xb) / 2, y0, (xb - xa) / 2 + 16, 26, 0, 0, 7); ctx.fill(); ctx.globalAlpha = 1; }
     ctx.strokeStyle = C.ink; ctx.lineWidth = 22; ctx.strokeRect(x0, y0, W, H); ctx.strokeStyle = C.surface; ctx.lineWidth = 17; ctx.strokeRect(x0, y0, W, H); ctx.strokeStyle = C['water-soft']; ctx.strokeRect(x0, y0, W, H);
     ctx.fillStyle = C.surface; ctx.fillRect(xa, y0 - 12, xb - xa, 24); ctx.fillStyle = C['water-soft']; ctx.fillRect(xa, y0 - wch / 2, xb - xa, wch);
     ctx.strokeStyle = C.copper; ctx.lineWidth = 2; const jag = 1 + 3 * f;
     for (const sg of [-1, 1]) { ctx.beginPath(); for (let x = xa, i = 0; x <= xb; x += 5, i++) { const y = y0 + sg * (wch / 2 + 1) + sg * (i % 2 ? jag : -jag * .3); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke(); }
     const pos = (s) => { let d = s * Per; if (d < H) return [x0, y1 - d, 0]; d -= H; if (d < W) return [x0 + d, y0, 1]; d -= W; if (d < H) return [x1, y0 + d, 2]; d -= H; return [x1 - d, y1, 3]; };
-    ctx.fillStyle = C.water;
+    ctx.fillStyle = C.qI;
     for (const p of parts) { const [x, y, seg] = pos(p.s); let half = 6; if (seg === 1 && x > xa && x < xb) half = Math.max(1, wch / 2 - 2.5); const ox = seg === 0 || seg === 2 ? p.o * half : 0, oy = seg === 1 || seg === 3 ? p.o * half : 0; ctx.beginPath(); ctx.arc(x + ox, y + oy, 2.6, 0, 7); ctx.fill(); }
     const cy = (y0 + y1) / 2; ctx.fillStyle = C.surface; ctx.strokeStyle = C.ink; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(x0, cy, 19, 0, 7); ctx.fill(); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(x0, cy + 10); ctx.lineTo(x0, cy - 10); ctx.moveTo(x0 - 6, cy - 3); ctx.lineTo(x0, cy - 10); ctx.lineTo(x0 + 6, cy - 3); ctx.stroke();
     ctx.font = '700 12px "Archivo",sans-serif'; ctx.fillStyle = C.muted; ctx.textAlign = 'left'; ctx.fillText('čerpadlo = zdroj', x0 + 26, cy + 4);
     ctx.textAlign = 'center'; ctx.fillStyle = C.copper; ctx.fillText('rezistor', (xa + xb) / 2, y0 - 18);
-    ctx.fillStyle = C.water; ctx.font = '600 12px "JetBrains Mono",monospace'; ctx.fillText('I = ' + si(I, 'A'), (x0 + x1) / 2, h - 6);
+    ctx.fillStyle = C.qI; ctx.font = '600 12px "JetBrains Mono",monospace'; ctx.fillText('I = ' + si(I, 'A'), (x0 + x1) / 2, h - 6);
   } };
 };
 
 /* ---------- 2 Obvod, spínač a zkrat ---------- */
 SIMS.circuit = (root) => {
-  const q = mount(root, figT('Simulace', 'spínač a zkrat') + `<div class="fig-body"><div id="cSvg"></div><div class="btns"><button class="btn" id="bSw" type="button" aria-pressed="false">Sepnout spínač</button><button class="btn" id="bSh" type="button" aria-pressed="false">Přidat zkrat</button></div><div class="readouts">${ro('rI', 'Proud', 'w')}${ro('rL', 'LED')}${ro('rS', 'Stav')}</div><p class="cap">Baterie 9 V má vnitřní odpor asi 1,5 Ω. Při zkratu je to jediné, co proud omezuje.</p></div>`);
+  const q = mount(root, figT('Simulace', 'spínač a zkrat') + `<div class="fig-body"><div id="cSvg"></div><div class="btns"><button class="btn" id="bSw" type="button" aria-pressed="false">Sepnout spínač</button><button class="btn" id="bSh" type="button" aria-pressed="false">Přidat zkrat</button></div><div class="readouts">${ro('rI', 'Proud', 'qI')}${ro('rL', 'LED')}${ro('rS', 'Stav')}</div><p class="cap">Baterie 9 V má vnitřní odpor asi 1,5 Ω. Při zkratu je to jediné, co proud omezuje.</p></div>`);
   let on = false, sh = false, off = 0; const Rint = 1.5, Rl = 470, Vf = 2;
   const draw = () => {
     const I = !on ? 0 : sh ? 9 / (Rint + 0.05) : (9 - Vf) / (Rl + Rint);
@@ -1206,9 +1252,9 @@ SIMS.led = (root) => {
   const q = mount(root, figT('Simulace', 'LED s předřadným rezistorem') + `<div class="fig-body"><div id="lSvg"></div><div class="controls">
   <div class="ctl"><label for="lSrc">Zdroj</label><select id="lSrc"><option value="3.3">GPIO pin (3,3 V)</option><option value="5">5 V</option><option value="9">baterie 9 V</option></select></div>
   <div class="ctl"><label for="lCol">Barva LED</label><select id="lCol"><option value="2.0|#e63b2e">červená (≈ 2,0 V)</option><option value="2.2|#35b34a">zelená (≈ 2,2 V)</option><option value="3.0|#3d7dff">modrá (≈ 3,0 V)</option></select></div>
-  ${rng('lR', 'Rezistor R', 0, Rs.length - 1, 1, Rs.indexOf(330))}
+  ${rng('lR', 'Rezistor R', 0, Rs.length - 1, 1, Rs.indexOf(330), 'R')}
   <div class="btns"><button class="btn" id="lFlip" type="button">Otočit LED</button><button class="btn primary" id="lNew" type="button" hidden>Vyměnit LED</button></div>
-  <div class="readouts">${ro('rI', 'Proud', 'w')}${ro('rUR', 'Napětí na R', 'c')}${ro('rPR', 'Výkon na R')}</div><div id="lSt"></div><p class="cap" id="lHint"></p></div></div>`);
+  <div class="readouts">${ro('rI', 'Proud', 'qI')}${ro('rUR', 'Napětí na R', 'qU')}${ro('rPR', 'Výkon na R', 'qP')}</div><div id="lSt"></div><p class="cap" id="lHint"></p></div></div>`);
   let flip = false, dead = false;
   const upd = () => {
     const U = +q('#lSrc').value, [vf, col] = q('#lCol').value.split('|'), Vf = +vf, R = Rs[+q('#lR').value]; q('#lRo').textContent = si(R, 'Ω');
@@ -1272,7 +1318,7 @@ SIMS.pullup = (root) => {
   const q = mount(root, figT('Simulace', 'tlačítko na vstupu') + `<div class="fig-body"><div class="fig-cols" style="display:grid;gap:.8rem"><div id="puSvg"></div><canvas style="aspect-ratio:3/1" aria-label="Graf napětí na pinu v čase"></canvas></div>
   <div class="btns" role="group" aria-label="Zapojení"><button class="btn small" data-m="none" type="button">bez rezistoru</button><button class="btn small" data-m="up" type="button">pull-up</button><button class="btn small" data-m="down" type="button">pull-down</button></div>
   <button class="btn primary" id="puBtn" type="button" style="user-select:none;touch-action:none">Drž tlačítko</button>
-  <div class="readouts">${ro('rV', 'Napětí pinu', 'c')}${ro('rR', 'GPIO čte', 'w')}${ro('rI', 'Proud rezistorem')}</div></div>`);
+  <div class="readouts">${ro('rV', 'Napětí pinu', 'qU')}${ro('rR', 'GPIO čte', 'w')}${ro('rI', 'Proud rezistorem', 'qI')}</div></div>`);
   let mode = 'none', pressed = false, vf = 1.6, hist = [], acc = 0;
   const svg = () => {
     const bt = (x, y) => `<path class="sy" d="M${x} ${y - 30}V${y - 12}M${x} ${y + 12}V${y + 30}"/><circle class="sy" cx="${x}" cy="${y - 12}" r="2.5"/><circle class="sy" cx="${x}" cy="${y + 12}" r="2.5"/><path class="sy" style="${pressed ? 'stroke:var(--copper);stroke-width:3' : ''}" d="${pressed ? `M${x} ${y - 12}V${y + 12}` : `M${x - 9} ${y - 14}V${y + 14}`}"/><path class="sy" d="M${pressed ? x : x - 9} ${y}H${x - 22}"/>`;
@@ -1295,15 +1341,15 @@ SIMS.pullup = (root) => {
     const bit = v > 1.65 ? 1 : 0; q('#rV').textContent = num(v, 2) + ' V'; q('#rR').textContent = mode === 'none' && !pressed ? bit + ' (náhodně)' : bit + (bit ? ' (HIGH)' : ' (LOW)');
     q('#rI').textContent = mode !== 'none' && pressed ? '0,33 mA' : '0 mA'; void conn;
     const { ctx, w, h } = k; if (!w) return; const p = plot(k, { x0: 0, x1: 150, y0: 0, y1: 3.3, yt: [0, 1.65, 3.3], yf: (t) => num(t) + ' V', left: 46, bottom: 8, top: 8 });
-    ctx.strokeStyle = C.copper; ctx.lineWidth = 2; ctx.beginPath(); hist.forEach((y, i) => { const x = p.X(150 - hist.length + i); i ? ctx.lineTo(x, p.Y(y)) : ctx.moveTo(x, p.Y(y)); }); ctx.stroke(); p.done();
+    ctx.strokeStyle = C.qU; ctx.lineWidth = 2; ctx.beginPath(); hist.forEach((y, i) => { const x = p.X(150 - hist.length + i); i ? ctx.lineTo(x, p.Y(y)) : ctx.moveTo(x, p.Y(y)); }); ctx.stroke(); p.done();
   } };
 };
 
 /* ---------- 8 Dělič napětí ---------- */
 SIMS.divider = (root) => {
   const Rs = series(E24, 100, 100000);
-  const q = mount(root, figT('Simulace', 'dělič napětí') + `<div class="fig-body"><div id="dSvg"></div><div class="controls">${rng('dU', 'Vstupní napětí', 0, 12, 0.1, 5)}${rng('d1', 'R1 (nahoře)', 0, Rs.length - 1, 1, Rs.indexOf(1000))}${rng('d2', 'R2 (dole)', 0, Rs.length - 1, 1, Rs.indexOf(2000))}
-  <div class="readouts">${ro('rO', 'Výstup', 'c')}${ro('rI', 'Proud děličem', 'w')}</div><div id="dSt"></div></div></div>`);
+  const q = mount(root, figT('Simulace', 'dělič napětí') + `<div class="fig-body"><div id="dSvg"></div><div class="controls">${rng('dU', 'Vstupní napětí', 0, 12, 0.1, 5, 'U')}${rng('d1', 'R1 (nahoře)', 0, Rs.length - 1, 1, Rs.indexOf(1000), 'R')}${rng('d2', 'R2 (dole)', 0, Rs.length - 1, 1, Rs.indexOf(2000), 'R')}
+  <div class="readouts">${ro('rO', 'Výstup', 'qU')}${ro('rI', 'Proud děličem', 'qI')}</div><div id="dSt"></div></div></div>`);
   onInputs(q, ['dU', 'd1', 'd2'], () => {
     const U = +q('#dU').value, R1 = Rs[+q('#d1').value], R2 = Rs[+q('#d2').value], Uo = U * R2 / (R1 + R2), I = U / (R1 + R2);
     q('#dUo').textContent = num(U) + ' V'; q('#d1o').textContent = si(R1, 'Ω'); q('#d2o').textContent = si(R2, 'Ω');
@@ -1320,8 +1366,8 @@ SIMS.tswitch = (root) => {
   const q = mount(root, figT('Simulace', 'GPIO spíná zátěž na 5 V') + `<div class="fig-body"><div id="tSvg"></div><div class="controls">
   <div class="btns"><button class="btn" id="tG" type="button" aria-pressed="false">GPIO: LOW (0 V)</button></div>
   <div class="ctl"><label for="tL">Zátěž</label><select id="tL"><option value="0.02">LED s rezistorem (20 mA)</option><option value="0.25" selected>motorek (250 mA)</option><option value="0.6">LED pásek (600 mA)</option></select></div>
-  ${rng('tR', 'Bázový rezistor', 0, Rs.length - 1, 1, Rs.indexOf(10000))}${rng('tB', 'Zesilovací činitel β', 50, 400, 10, 150)}
-  <div class="readouts">${ro('rB', 'Proud bází (z GPIO)', 'c')}${ro('rC', 'Proud zátěží', 'w')}${ro('rP', 'Teplo v tranzistoru')}</div><div id="tSt" class="stack"></div></div></div>`);
+  ${rng('tR', 'Bázový rezistor', 0, Rs.length - 1, 1, Rs.indexOf(10000), 'R')}${rng('tB', 'Zesilovací činitel β', 50, 400, 10, 150)}
+  <div class="readouts">${ro('rB', 'Proud bází (z GPIO)', 'qI')}${ro('rC', 'Proud zátěží', 'qI')}${ro('rP', 'Teplo v tranzistoru', 'qP')}</div><div id="tSt" class="stack"></div></div></div>`);
   let g = false, ang = 0, frac = 0;
   const upd = () => {
     const RB = Rs[+q('#tR').value], beta = +q('#tB').value, IL = +q('#tL').value; q('#tRo').textContent = si(RB, 'Ω'); q('#tBo').textContent = beta;
@@ -1349,7 +1395,7 @@ SIMS.tswitch = (root) => {
 SIMS.battery = (root) => {
   const q = mount(root, figT('Kalkulačka', 'výdrž baterie') + `<div class="fig-body"><div class="controls">
   <div class="ctl"><label for="bC">Kapacita powerbanky</label><select id="bC"><option>2500</option><option>5000</option><option selected>10000</option><option>20000</option></select></div>
-  ${rng('bI', 'Odběr', 10, 1000, 5, 25)}${rng('bE', 'Účinnost převodu', 50, 100, 5, 80)}
+  ${rng('bI', 'Odběr', 10, 1000, 5, 25, 'I')}${rng('bE', 'Účinnost převodu', 50, 100, 5, 80)}
   <div class="btns"><button class="btn small" data-i="25" type="button">Pico W bliká LED ≈ 25 mA</button><button class="btn small" data-i="50" type="button">Pico W s Wi-Fi ≈ 50 mA</button><button class="btn small" data-i="300" type="button">Pico W s motorkem ≈ 300 mA</button></div>
   <div><span class="eyebrow">Výdrž</span><div class="bigval" id="bOut"></div><p class="cap" id="bCap"></p></div><div class="progress" style="height:14px"><i id="bBar"></i></div><p class="cap">Pruh ukazuje výdrž vůči jednomu týdnu. Hodnoty odběru jsou přibližné; závisí na programu a připojených součástkách.</p></div></div>`);
   const upd = () => { const Cc = +q('#bC').value, I = +q('#bI').value, e = +q('#bE').value / 100, t = Cc / I * e; q('#bIo').textContent = I + ' mA'; q('#bEo').textContent = Math.round(e * 100) + ' %'; const hh = Math.floor(t), mm = Math.round((t - hh) * 60); q('#bOut').textContent = `${hh} h ${mm} min`; q('#bCap').textContent = `${Cc} mAh / ${I} mA · ${Math.round(e * 100)} % = ${num(t)} h` + (t >= 48 ? `, tedy asi ${Math.round(t / 24)} ${pl(Math.round(t / 24), 'den', 'dny', 'dní')}` : ''); q('#bBar').style.width = clamp(t / 168 * 100, 1, 100) + '%'; };
@@ -1360,8 +1406,8 @@ SIMS.battery = (root) => {
 /* ---------- 11 Výkon rezistoru ---------- */
 SIMS.power = (root) => {
   const Rs = series(E24, 10, 10000);
-  const q = mount(root, figT('Kalkulačka', 'výkon rezistoru') + `<div class="fig-body"><div id="pSvg"></div><div class="controls">${rng('pU', 'Napětí na rezistoru', 0, 24, 0.5, 12)}${rng('pR', 'Odpor', 0, Rs.length - 1, 1, Rs.indexOf(47))}
-  <div class="readouts">${ro('rI', 'Proud', 'w')}${ro('rP', 'Výkon', 'c')}${ro('rT', 'Zvol typ aspoň')}</div></div></div>`);
+  const q = mount(root, figT('Kalkulačka', 'výkon rezistoru') + `<div class="fig-body"><div id="pSvg"></div><div class="controls">${rng('pU', 'Napětí na rezistoru', 0, 24, 0.5, 12, 'U')}${rng('pR', 'Odpor', 0, Rs.length - 1, 1, Rs.indexOf(47), 'R')}
+  <div class="readouts">${ro('rI', 'Proud', 'qI')}${ro('rP', 'Výkon', 'qP')}${ro('rT', 'Zvol typ aspoň')}</div></div></div>`);
   const W = [[.125, '1/8 W', 36], [.25, '1/4 W', 63], [.5, '1/2 W', 90], [1, '1 W', 110], [2, '2 W', 150], [5, '5 W', 200], [10, '10 W', 240]];
   onInputs(q, ['pU', 'pR'], () => {
     const U = +q('#pU').value, R = Rs[+q('#pR').value], I = U / R, P = U * I; q('#pUo').textContent = num(U) + ' V'; q('#pRo').textContent = si(R, 'Ω');
@@ -1376,10 +1422,10 @@ SIMS.power = (root) => {
 function scopeSim(root, kind, opts = {}) {
   const isC = kind === 'C';
   const q = mount(root, figT('Simulace', isC ? 'nabíjení kondenzátoru (zpomaleno)' : 'proud cívkou (zpomaleno)') + `<div class="fig-body"><div id="aSvg"></div><canvas style="aspect-ratio:2/1" aria-label="Průběh napětí a proudu v čase"></canvas>
-  <div class="legend"><span><i style="background:var(--muted)"></i>napětí zdroje</span><span><i style="background:var(--copper)"></i>${isC ? 'napětí na kondenzátoru' : 'napětí na cívce'}</span><span><i style="background:var(--water)"></i>proud</span></div>
+  <div class="legend"><span><i style="background:var(--muted)"></i>napětí zdroje</span><span><i style="background:var(--qU)"></i>${isC ? 'napětí na kondenzátoru' : 'napětí na cívce'}</span><span><i style="background:var(--qI)"></i>proud</span></div>
   <div class="controls"><div class="btns"><button class="btn primary" id="aSw" type="button"></button>${opts.flyback ? '<label class="lbl" style="align-items:center;gap:.4rem;justify-content:flex-start"><input type="checkbox" id="aFb"> ochranná dioda</label>' : ''}</div>
   ${isC ? rng('aP', 'Kapacita C (R = 1 kΩ)', 100, 2000, 50, 500) : rng('aP', 'Indukčnost L (R = 10 Ω)', 2, 20, 1, 8)}
-  <div class="readouts">${ro('rT', 'Časová konstanta', '')}${ro('rV', isC ? 'U na C' : 'U na cívce', 'c')}${ro('rI', 'Proud', 'w')}${ro('rPk', 'Špička')}</div></div></div>`);
+  <div class="readouts">${ro('rT', 'Časová konstanta', '')}${ro('rV', isC ? 'U na C' : 'U na cívce', 'c')}${ro('rI', 'Proud', 'qI')}${ro('rPk', 'Špička')}</div></div></div>`);
   const U0 = 9, R = isC ? 1000 : 10, Roff = 300; let on = false, x = 0, t = 0, acc = 0, peak = 0, hist = [], dash = 0, lastB = null;
   const k = canvasKit(q('canvas'));
   const par = () => isC ? +q('#aP').value * 1e-6 : +q('#aP').value;
@@ -1407,7 +1453,7 @@ function scopeSim(root, kind, opts = {}) {
     const { ctx, w } = k; if (!w) return; const Imax = U0 / R;
     const pl = plot(k, { x0: 0, x1: 320, y0: -2 * U0, y1: 2 * U0, yt: [-18, -9, 0, 9, 18], yf: (v) => v + ' V', left: 44, bottom: 10, top: 10 });
     const tr = (ix, col, sc) => { ctx.strokeStyle = col; ctx.lineWidth = 2.2; ctx.beginPath(); hist.forEach((hv, j) => { const xx = pl.X(320 - hist.length + j), yy = pl.Y(clamp(hv[ix] * sc, -2.3 * U0, 2.3 * U0)); j ? ctx.lineTo(xx, yy) : ctx.moveTo(xx, yy); }); ctx.stroke(); };
-    tr(0, C.muted, 1); tr(1, C.copper, 1); tr(2, C.water, U0 / Imax); pl.done();
+    tr(0, C.muted, 1); tr(1, C.qU, 1); tr(2, C.qI, U0 / Imax); pl.done();
     if (Math.abs(peak) > 2 * U0) { ctx.fillStyle = C.bad; ctx.font = '700 12px "Archivo",sans-serif'; ctx.textAlign = 'right'; ctx.fillText(`špička ${num(peak, 3)} V (mimo graf)`, w - 18, k.h - 16); }
   } };
 }
@@ -1458,7 +1504,7 @@ SIMS.diode = (root) => {
   const TY = { si: { n: 'křemíková dioda', vf: .7 }, sch: { n: 'Schottkyho dioda', vf: .3 }, red: { n: 'červená LED', vf: 1.9, led: '#e63b2e' }, blue: { n: 'modrá LED', vf: 3.0, led: '#3d7dff' }, z: { n: 'Zenerova dioda 5,1 V', vf: .7, vz: 5.1 } };
   const q = mount(root, figT('Simulace', 'VA charakteristika') + `<div class="fig-body"><div id="dvSvg"></div><canvas style="aspect-ratio:16/10" aria-label="Graf proudu diodou podle napětí"></canvas><div class="controls">
   <div class="ctl"><label for="dT">Součástka</label><select id="dT">${Object.entries(TY).map(([k, v]) => `<option value="${k}">${v.n}</option>`).join('')}</select></div>
-  ${rng('dV', 'Napětí na diodě', -6, 4, 0.01, 0.5)}<div class="readouts">${ro('rI', 'Proud', 'w')}${ro('rS', 'Stav')}</div></div></div>`);
+  ${rng('dV', 'Napětí na diodě', -6, 4, 0.01, 0.5, 'U')}<div class="readouts">${ro('rI', 'Proud', 'qI')}${ro('rS', 'Stav')}</div></div></div>`);
   const k = canvasKit(q('canvas'));
   const I = (t, V) => V > 0 ? Math.min(0.2, 0.01 * Math.exp((V - t.vf) / 0.045)) - 0.01 * Math.exp(-t.vf / 0.045) : (t.vz && V < -t.vz + 0.3 ? -Math.min(0.2, 0.01 * Math.exp((-V - t.vz) / 0.045)) : -1e-7);
   let tv = -1;
@@ -1475,14 +1521,14 @@ SIMS.diode = (root) => {
   return { step() {
     if (!k.need()) return; const t = TY[q('#dT').value], V = +q('#dV').value;
     const p = plot(k, { x0: -6, x1: 4, y0: -30, y1: 30, xt: [-6, -4, -2, 0, 2, 4], xf: (v) => v + ' V', yt: [-30, -15, 0, 15, 30], yf: (v) => v + ' mA', left: 50 });
-    p.vline(t.vf, C.muted); p.line((v) => I(t, v) * 1000, C.water, 500); p.dot(V, clamp(I(t, V) * 1000, -31, 31), C.copper); p.done(); void tv;
+    p.vline(t.vf, C.muted); p.line((v) => I(t, v) * 1000, C.qI, 500); p.dot(V, clamp(I(t, V) * 1000, -31, 31), C.copper); p.done(); void tv;
   } };
 };
 
 /* ---------- 17 Tranzistor: páka a β ---------- */
 SIMS.beta = (root) => {
-  const q = mount(root, figT('Simulace', 'zesílení a nasycení') + `<div class="fig-body"><div id="bSvg"></div><div class="controls">${rng('bIb', 'Proud bází I_B', 0, 400, 5, 100)}${rng('bB', 'β', 50, 400, 10, 200)}
-  <div class="readouts">${ro('rC', 'I_C', 'w')}${ro('rE', 'I_E = I_B + I_C', 'c')}${ro('rS', 'Režim')}</div><p class="cap">Zdroj 9 V, žárovka 90 Ω. Víc než asi 98 mA jí neproteče, ani kdyby byl tranzistor otevřený naplno.</p></div></div>`);
+  const q = mount(root, figT('Simulace', 'zesílení a nasycení') + `<div class="fig-body"><div id="bSvg"></div><div class="controls">${rng('bIb', 'Proud bází I_B', 0, 400, 5, 100, 'I')}${rng('bB', 'β', 50, 400, 10, 200)}
+  <div class="readouts">${ro('rC', 'I_C', 'qI')}${ro('rE', 'I_E = I_B + I_C', 'qI')}${ro('rS', 'Režim')}</div><p class="cap">Zdroj 9 V, žárovka 90 Ω. Víc než asi 98 mA jí neproteče, ani kdyby byl tranzistor otevřený naplno.</p></div></div>`);
   onInputs(q, ['bIb', 'bB'], () => {
     const Ib = +q('#bIb').value * 1e-6, b = +q('#bB').value, Imax = 8.8 / 90, Ic = Math.min(b * Ib, Imax), f = Ic / Imax;
     q('#bIbo').textContent = si(Ib, 'A'); q('#bBo').textContent = b; q('#rC').textContent = si(Ic, 'A'); q('#rE').textContent = si(Ib + Ic, 'A');
@@ -1500,7 +1546,7 @@ SIMS.beta = (root) => {
 SIMS.pwm = (root) => {
   const q = mount(root, figT('Simulace', 'PWM na GPIO 3,3 V') + `<div class="fig-body"><div class="row" style="flex-wrap:nowrap;align-items:center"><canvas style="aspect-ratio:3/1;flex:1;min-width:0" aria-label="Průběh PWM"></canvas><svg viewBox="0 0 70 80" style="width:70px;flex:none" aria-hidden="true"><circle id="pLed" cx="35" cy="34" r="26" style="fill:#e63b2e;opacity:0"/><path d="M23 56V34a12 12 0 0 1 24 0v22z" style="fill:#e63b2e;opacity:.85"/><path class="ld" d="M30 56V78M40 56V72"/></svg></div>
   ${rng('pD', 'Střída', 0, 100, 5, 25)}<div class="btns" role="group" aria-label="Frekvence">${[0.5, 1, 2, 50, 100, 500].map((f) => `<button class="btn small" data-f="${f}" type="button">${num(f)} Hz</button>`).join('')}</div>
-  <div class="readouts">${ro('rU', 'Průměrné napětí', 'c')}${ro('rT', 'Perioda')}${ro('rO', 'Zapnuto')}</div><p class="cap">Blikání rychlejší než 3× za sekundu simulace nezobrazuje; od 50 Hz ukazuje průměrný jas, jak ho vidí oko.</p></div>`);
+  <div class="readouts">${ro('rU', 'Průměrné napětí', 'qU')}${ro('rT', 'Perioda')}${ro('rO', 'Zapnuto')}</div><p class="cap">Blikání rychlejší než 3× za sekundu simulace nezobrazuje; od 50 Hz ukazuje průměrný jas, jak ho vidí oko.</p></div>`);
   let f = 2, ph = 0; const k = canvasKit(q('canvas'));
   const setF = (v) => { f = v; root.querySelectorAll('[data-f]').forEach((b) => b.setAttribute('aria-pressed', +b.dataset.f === f)); upd(); };
   const upd = () => { const d = +q('#pD').value / 100; q('#pDo').textContent = Math.round(d * 100) + ' %'; q('#rU').textContent = num(3.3 * d, 3) + ' V'; q('#rT').textContent = si(1 / f, 's'); q('#rO').textContent = si(d / f, 's'); k.dirty = true; };
@@ -1535,7 +1581,7 @@ SIMS.ac = (root) => {
 /* ---------- 20 RC filtr ---------- */
 SIMS.rcfilter = (root) => {
   const Rs = series(E12, 100, 100000);
-  const q = mount(root, figT('Simulace', 'dolní propust') + `<div class="fig-body"><canvas style="aspect-ratio:16/10" aria-label="Graf propustnosti filtru"></canvas><div class="controls">${rng('fR', 'R', 0, Rs.length - 1, 1, Rs.indexOf(10000))}${rng('fC', 'C', 0, 1000, 1, 500)}${rng('fF', 'Frekvence signálu', 0, 1000, 1, 600)}
+  const q = mount(root, figT('Simulace', 'dolní propust') + `<div class="fig-body"><canvas style="aspect-ratio:16/10" aria-label="Graf propustnosti filtru"></canvas><div class="controls">${rng('fR', 'R', 0, Rs.length - 1, 1, Rs.indexOf(10000), 'R')}${rng('fC', 'C', 0, 1000, 1, 500)}${rng('fF', 'Frekvence signálu', 0, 1000, 1, 600)}
   <div class="readouts">${ro('rM', 'Mezní frekvence', 'c')}${ro('rG', 'Projde amplitudy', 'w')}${ro('rD', 'Útlum')}</div></div></div>`);
   const k = canvasKit(q('canvas')); const Cs = logSlider(q('#fC'), 1e-9, 1e-5), F = logSlider(q('#fF'), 1, 1e5);
   const G = (f, R, c) => 1 / Math.sqrt(1 + Math.pow(2 * Math.PI * f * R * c, 2));
@@ -1566,8 +1612,8 @@ SIMS.indcalc = (root) => {
 /* ---------- 22 Transformátor ---------- */
 SIMS.transformer = (root) => {
   const q = mount(root, figT('Simulace', 'transformátor na 230 V') + `<div class="fig-body"><div id="xSvg"></div><div class="controls"><div class="btns"><button class="btn" id="xAC" type="button" aria-pressed="true">Zdroj: střídavý 230 V / 50 Hz</button></div>
-  ${rng('xN1', 'Závity primáru N₁', 50, 2000, 10, 1000)}${rng('xN2', 'Závity sekundáru N₂', 10, 2000, 1, 52)}${rng('xR', 'Zátěž na sekundáru', 1, 1000, 1, 10)}
-  <div class="readouts">${ro('rU', 'U₂', 'c')}${ro('rI2', 'I₂', 'w')}${ro('rI1', 'I₁', 'w')}${ro('rP', 'Výkon')}</div><div id="xSt"></div></div></div>`);
+  ${rng('xN1', 'Závity primáru N₁', 50, 2000, 10, 1000)}${rng('xN2', 'Závity sekundáru N₂', 10, 2000, 1, 52)}${rng('xR', 'Zátěž na sekundáru', 1, 1000, 1, 10, 'R')}
+  <div class="readouts">${ro('rU', 'U₂', 'qU')}${ro('rI2', 'I₂', 'w')}${ro('rI1', 'I₁', 'w')}${ro('rP', 'Výkon', 'qP')}</div><div id="xSt"></div></div></div>`);
   let ac = true, off = 0;
   const upd = () => {
     const N1 = +q('#xN1').value, N2 = +q('#xN2').value, R = +q('#xR').value, U2 = ac ? 230 * N2 / N1 : 0, I2 = U2 / R, I1 = I2 * N2 / N1;
@@ -1587,7 +1633,7 @@ SIMS.transformer = (root) => {
 
 /* ---------- 23 LC rezonance ---------- */
 SIMS.lc = (root) => {
-  const q = mount(root, figT('Simulace', 'sériový RLC obvod') + `<div class="fig-body"><canvas style="aspect-ratio:16/10" aria-label="Rezonanční křivka"></canvas><div class="controls">${rng('lL', 'Indukčnost L', 0, 1000, 1, 500)}${rng('lC', 'Kapacita C', 0, 1000, 1, 500)}${rng('lR', 'Odpor vinutí r', 0, 1000, 1, 500)}
+  const q = mount(root, figT('Simulace', 'sériový RLC obvod') + `<div class="fig-body"><canvas style="aspect-ratio:16/10" aria-label="Rezonanční křivka"></canvas><div class="controls">${rng('lL', 'Indukčnost L', 0, 1000, 1, 500)}${rng('lC', 'Kapacita C', 0, 1000, 1, 500)}${rng('lR', 'Odpor vinutí r', 0, 1000, 1, 500, 'R')}
   <div class="readouts">${ro('rF', 'f₀', 'c')}${ro('rQ', 'Q', 'w')}${ro('rB', 'Šířka pásma')}</div></div></div>`);
   const k = canvasKit(q('canvas')); const Ls = logSlider(q('#lL'), 1e-3, 1e-1), Cs = logSlider(q('#lC'), 1e-7, 1e-5), Rr = logSlider(q('#lR'), 1, 100);
   onInputs(q, ['lL', 'lC', 'lR'], () => { const L = Ls.get(), c = Cs.get(), r = Rr.get(), f0 = 1 / (2 * Math.PI * Math.sqrt(L * c)), Q = Math.sqrt(L / c) / r; q('#lLo').textContent = si(L, 'H'); q('#lCo').textContent = si(c, 'F'); q('#lRo').textContent = si(r, 'Ω'); q('#rF').textContent = si(f0, 'Hz'); q('#rQ').textContent = num(Q, 3); q('#rB').textContent = si(f0 / Q, 'Hz'); k.dirty = true; });
@@ -1605,8 +1651,8 @@ SIMS.mosfet = (root) => {
   const q = mount(root, figT('Simulace', 'MOSFET spíná 12 V zátěž') + `<div class="fig-body"><div id="mSvg"></div><div class="controls">
   <div class="ctl"><label for="mT">Typ MOSFETu</label><select id="mT">${Object.entries(TY).map(([k, v]) => `<option value="${k}">${v.n}</option>`).join('')}</select></div>
   <div class="ctl"><label for="mI">Zátěž</label><select id="mI"><option value="0.5">0,5 A</option><option value="2" selected>2 A</option></select></div>
-  ${rng('mV', 'Napětí hradla U_GS', 0, 10, 0.1, 3.3)}<div class="btns"><button class="btn small" id="m33" type="button">Nastavit 3,3 V (GPIO)</button></div>
-  <div class="readouts">${ro('rR', 'R_DS', 'c')}${ro('rI', 'Proud zátěží', 'w')}${ro('rP', 'Teplo v MOSFETu')}</div><div id="mSt"></div></div></div>`);
+  ${rng('mV', 'Napětí hradla U_GS', 0, 10, 0.1, 3.3, 'U')}<div class="btns"><button class="btn small" id="m33" type="button">Nastavit 3,3 V (GPIO)</button></div>
+  <div class="readouts">${ro('rR', 'R_DS', 'qR')}${ro('rI', 'Proud zátěží', 'qI')}${ro('rP', 'Teplo v MOSFETu', 'qP')}</div><div id="mSt"></div></div></div>`);
   const upd = () => {
     const t = TY[q('#mT').value], V = +q('#mV').value, IL = +q('#mI').value, RL = 12 / IL; q('#mVo').textContent = num(V) + ' V';
     const Rds = V <= t.th ? Infinity : Math.max(t.r, t.r * Math.pow((t.full - t.th) / (V - t.th), 2)), I = isFinite(Rds) ? 12 / (RL + Rds) : 0, P = isFinite(Rds) ? I * I * Rds : 0, open = isFinite(Rds) ? clamp(1 - Math.log10(Rds / t.r) / 3, 0.05, 1) : 0;
@@ -1624,8 +1670,8 @@ SIMS.mosfet = (root) => {
 SIMS.opamp = (root) => {
   const Rs = series(E12, 1000, 100000);
   const bar = (id, lab) => `<div class="stack" style="gap:.2rem"><span class="lbl">${lab} <output id="${id}t"></output></span><div class="progress" style="height:14px"><i id="${id}"></i></div></div>`;
-  const q = mount(root, figT('Simulace', 'neinvertující zesilovač, napájení 5 V') + `<div class="fig-body"><div class="controls">${rng('oU', 'Vstupní napětí', 0, 1, 0.01, 0.2)}${rng('o1', 'R1', 0, Rs.length - 1, 1, Rs.indexOf(1000))}${rng('o2', 'R2', 0, Rs.length - 1, 1, Rs.indexOf(10000))}
-  ${bar('bIn', 'Vstup')}${bar('bOut', 'Výstup')}<div class="readouts">${ro('rA', 'Zesílení A', 'c')}${ro('rO', 'Výstup', 'w')}</div><div id="oSt"></div></div></div>`);
+  const q = mount(root, figT('Simulace', 'neinvertující zesilovač, napájení 5 V') + `<div class="fig-body"><div class="controls">${rng('oU', 'Vstupní napětí', 0, 1, 0.01, 0.2, 'U')}${rng('o1', 'R1', 0, Rs.length - 1, 1, Rs.indexOf(1000))}${rng('o2', 'R2', 0, Rs.length - 1, 1, Rs.indexOf(10000))}
+  ${bar('bIn', 'Vstup')}${bar('bOut', 'Výstup')}<div class="readouts">${ro('rA', 'Zesílení A', 'c')}${ro('rO', 'Výstup', 'qU')}</div><div id="oSt"></div></div></div>`);
   onInputs(q, ['oU', 'o1', 'o2'], () => {
     const U = +q('#oU').value, R1 = Rs[+q('#o1').value], R2 = Rs[+q('#o2').value], A = 1 + R2 / R1, Uo = Math.min(A * U, 5);
     q('#oUo').textContent = num(U) + ' V'; q('#o1o').textContent = si(R1, 'Ω'); q('#o2o').textContent = si(R2, 'Ω'); q('#rA').textContent = num(A, 3); q('#rO').textContent = num(Uo, 3) + ' V';
@@ -1936,7 +1982,7 @@ const QBANK = {
   { q: 'Rezistor v cestě ke kondenzátoru zdvojnásobíš. Co se stane s nabíjením?', a: ['bude trvat dvakrát déle', 'bude dvakrát rychlejší', 'nezmění se', 'kondenzátor se nenabije vůbec'], why: 'τ = R · C roste s R.' },
   { q: 'Za jak dlouho je kondenzátor prakticky nabitý?', a: ['asi za 5τ', 'za τ', 'okamžitě', 'nikdy'], why: 'Za τ je nabitý na 63 %, za 5τ prakticky úplně.' },
   { q: 'Na kolik procent se kondenzátor nabije za čas τ?', a: ['asi na 63 %', 'na 50 %', 'na 100 %', 'na 10 %'], why: 'Proto se ke konci nabíjení proud jen pomalu blíží nule.' },
-  { q: 'Zdroj připojíš přes rezistor k neznámé součástce. Graf ukazuje proud od chvíle připojení. Co je to za součástku?', img: QF.graph([[CUR_DOWN, 'var(--water)']], { x: 'čas t', y: 'proud I' }),
+  { q: 'Zdroj připojíš přes rezistor k neznámé součástce. Graf ukazuje proud od chvíle připojení. Co je to za součástku?', img: QF.graph([[CUR_DOWN, 'var(--qI)']], { x: 'čas t', y: 'proud I' }),
     a: ['kondenzátor: nabíjí se a proud klesá k nule', 'cívka', 'další rezistor', 'LED'], why: 'Nejdřív teče velký proud, a jak se kondenzátor plní, proud slábne.' },
   { q: 'Kondenzátorem stejnosměrný proud trvale:', a: ['neprochází', 'prochází bez omezení', 'prochází jen s rezistorem', 'prochází jen u elektrolytů'], why: 'Teče jen krátký nabíjecí proud.' },
   { q: 'Co v analogii s trubkou odpovídá nabitému kondenzátoru?', a: ['napnutá membrána, která tlačí vodu zpátky', 'otevřený ventil', 'prázdná trubka', 'protržená membrána'], why: 'Když membrána tlačí stejně silně jako píst, voda se zastaví.' },
@@ -1971,7 +2017,7 @@ const QBANK = {
 'l2-05': [
   { q: 'Cívku nejlépe popisuje:', a: ['elektrická setrvačnost', 'elektrické tření', 'zásobník náboje', 'zpětný ventil'], why: 'Proud v cívce se nechce rozběhnout ani zastavit.' },
   { q: 'Po připojení ke zdroji proud cívkou:', a: ['roste postupně', 'skočí okamžitě na maximum', 'krátce teče a pak klesne na nulu', 'neteče vůbec'], why: 'Klesání proudu k nule je chování kondenzátoru.' },
-  { q: 'Zdroj připojíš přes rezistor k neznámé součástce. Graf ukazuje proud od chvíle připojení. Co je to za součástku?', img: QF.graph([[CUR_UP, 'var(--water)']], { x: 'čas t', y: 'proud I' }),
+  { q: 'Zdroj připojíš přes rezistor k neznámé součástce. Graf ukazuje proud od chvíle připojení. Co je to za součástku?', img: QF.graph([[CUR_UP, 'var(--qI)']], { x: 'čas t', y: 'proud I' }),
     a: ['cívka: proud se rozbíhá postupně', 'kondenzátor', 'dioda', 'nic, takový průběh nemůže nastat'], why: 'Proud cívkou nemůže skočit, roste postupně k hodnotě U / R.' },
   { q: 'Co způsobí náhlé přerušení proudu cívkou?', a: ['napěťovou špičku', 'okamžitý pokles napětí na nulu', 'zkrat zdroje', 'nic zvláštního'], why: 'Cívka se snaží udržet proud a vyrobí k tomu vysoké napětí.' },
   { q: 'Kondenzátor blokuje stejnosměrný proud. Cívka brání:', a: ['rychlým změnám a střídavému proudu', 'stejnosměrnému proudu', 'napětí', 'ničemu'], why: 'Proto se jim říká duální součástky.' },
@@ -1987,7 +2033,7 @@ const QBANK = {
   { q: 'Kterým směrem teče proud diodou?', a: ['z anody do katody', 'z katody do anody', 'oběma směry', 'jen do země'], why: 'Ve značce ukazuje směr trojúhelník.' },
   { q: 'Ve kterém obvodu teče proud?', img: QF.opts(QF.loop(diodeRight(78, 18, false), S.res(125, 62, true, '')), QF.loop(diodeRight(78, 18, true), S.res(125, 62, true, ''))),
     a: ['A', 'B', 'v obou', 'v žádném'], why: 'Proud teče od + baterie (delší čárka). V A míří trojúhelník diody po směru proudu, dioda vede. V B je otočená a proud zastaví.' },
-  { q: 'Graf ukazuje proud diodou podle napětí. Od kolika voltů začne proud znatelně téct?', img: QF.graph([[(x) => Math.exp((x - .7) / .0334), 'var(--copper)']], { y: 'proud I', ticks: [[0, '0'], [.25, '0,25'], [.5, '0,5'], [.75, '0,75'], [1, '1 V']] }),
+  { q: 'Graf ukazuje proud diodou podle napětí. Od kolika voltů začne proud znatelně téct?', img: QF.graph([[(x) => Math.exp((x - .7) / .0334), 'var(--qI)']], { y: 'proud I', ticks: [[0, '0'], [.25, '0,25'], [.5, '0,5'], [.75, '0,75'], [1, '1 V']] }),
     a: ['asi od 0,7 V', 'hned od 0 V', 'až od 1 V', 'proud neteče při žádném napětí'], why: 'Pod prahovým napětím je proud zanedbatelný, nad ním prudce roste.' },
   { q: 'Zenerova dioda se obvykle zapojuje:', a: ['v závěrném směru jako zdroj stálého napětí', 'v propustném směru jako LED', 'místo pojistky do série', 'paralelně k LED'], why: 'Využívá se řízený průraz v závěrném směru.' },
   { q: 'Proč modrá LED potřebuje vyšší napětí než červená?', a: ['modré světlo má vyšší energii, materiál má vyšší práh', 'má jiné pouzdro', 'modrá barva pohlcuje světlo', 'je větší'], why: 'Energie fotonu odpovídá energii potřebné k přechodu elektronu.' },
@@ -2045,7 +2091,7 @@ const QBANK = {
   { q: 'Který vzorec udává reaktanci cívky?', a: ['X_L = 2π · f · L', 'X_L = 1 / (2π · f · L)', 'X_L = L / f', 'X_L = f / L'], why: 'S rostoucí frekvencí i indukčností reaktance roste.' },
   { q: 'Graf ukazuje reaktanci dvou součástek podle frekvence. Která křivka patří kondenzátoru?', img: QF.graph([[(x) => .06 / (x + .04), 'var(--water)', '1', .2, .4], [(x) => .05 + .88 * x, 'var(--copper)', '2', .78, .88]], { x: 'frekvence f', y: 'reaktance X' }),
     a: ['1, s frekvencí klesá', '2, s frekvencí roste', 'obě', 'žádná, kondenzátor reaktanci nemá'], why: 'Kondenzátor propouští rychlé změny snáz, cívka hůř.' },
-  { q: 'Na grafu je napětí U a proud I na jedné součástce. O jakou součástku jde?', img: QF.graph([[(x) => .5 + .38 * Math.sin(4 * Math.PI * x), 'var(--copper)', 'U', .125, .97], [(x) => .5 + .28 * Math.cos(4 * Math.PI * x), 'var(--water)', 'I', .5, .85]], { x: 'čas t', mid: true }),
+  { q: 'Na grafu je napětí U a proud I na jedné součástce. O jakou součástku jde?', img: QF.graph([[(x) => .5 + .38 * Math.sin(4 * Math.PI * x), 'var(--qU)', 'U', .125, .97], [(x) => .5 + .28 * Math.cos(4 * Math.PI * x), 'var(--qI)', 'I', .5, .85]], { x: 'čas t', mid: true }),
     a: ['kondenzátor: proud předbíhá napětí', 'cívka: napětí předbíhá proud', 'rezistor: jsou ve fázi', 'dioda'], why: 'Proud (I) má vrchol o čtvrt periody dřív než napětí (U). Kondenzátor se musí nejdřív nabít proudem.' },
   { q: 'Jakou frekvenci má elektrická síť v Evropě?', a: ['50 Hz', '60 Hz', '230 Hz', '100 Hz'], why: '60 Hz je v USA.' },
   { q: 'Jak je to s fází u kondenzátoru ve střídavém obvodu?', a: ['proud předbíhá napětí', 'napětí předbíhá proud', 'proud a napětí jsou ve fázi', 'proud je nulový'], why: 'Kondenzátor se musí nejdřív nabít proudem.' },
@@ -2169,7 +2215,7 @@ const iso = (d) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDat
 const parseIso = (s) => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
 const addDays = (s, n) => { const d = parseIso(s); d.setDate(d.getDate() + n); return iso(d); };
 const today = () => iso(new Date());
-const DEF = () => ({ v: 1, updated: 0, plan: { start: today(), days: [1, 2, 3, 4, 5], from: 1 }, done: {}, srs: {}, todos: {}, score: {}, test: { off: [], n: 10 } });
+const DEF = () => ({ v: 1, updated: 0, plan: { start: today(), days: [1, 2, 3, 4, 5], from: 1 }, done: {}, srs: {}, todos: {}, score: {}, test: { off: [], n: 10 }, qc: true });
 const LS_KEY = 'e15min:state';
 function normalize(r) {
   const d = DEF(); const o = JSON.parse(JSON.stringify(r || {})); const srs = o.srs || {};
@@ -2251,6 +2297,66 @@ function reviewFor(lessonId) {
 }
 const dueCount = () => { const t = today(); let n = 0; for (const l of LESSONS) if (state.done[l.id]) for (const qq of l.qs) { const r = state.srs[qq.k]; if (r && r.d <= t) n++; } return n; };
 
+
+/* ================= Barvy veličin ================= */
+// Napětí U (V) modře, proud I (A) zeleně, odpor R (Ω) červeně, výkon P (W) oranžově. Barva patří k jednotce.
+// Barví se automaticky: čísla s jednotkou, slova veličin (i v analogii s vodou) a značky ve vzorcích.
+const Q_UNIT = { V: 'U', mV: 'U', kV: 'U', A: 'I', mA: 'I', 'µA': 'I', mAh: 'I', 'Ω': 'R', 'kΩ': 'R', 'MΩ': 'R', W: 'P', mW: 'P', kW: 'P' };
+const Q_NUM = '(?:\\d+\\/\\d+|\\d+(?:[ \\u00a0]\\d{3})*(?:,\\d+)?)', Q_UNITS = '(mAh|mA|µA|mV|kV|MΩ|kΩ|mW|kW|Ω|V|A|W)';
+const Q_RE = {
+  unit: new RegExp(`(^|[^\\p{L}\\d,])((?:${Q_NUM}[ \\u00a0]?[–-][ \\u00a0]?)?${Q_NUM}[ \\u00a0]?${Q_UNITS})(?![\\p{L}\\d])`, 'gu'),
+  brk: new RegExp(`([\\[(,][ \\u00a0]?)${Q_UNITS}(?=[\\])])`, 'gu'),
+  res: /(^|[^\p{L}\d])(\d+[kMR]\d+)(?![\p{L}\d])/gu,
+  sym: /(^|[^\p{L}\d_])([UIRPX](?:_[\p{L}\d]+|[₀-₉²]+|\d)?)(?![\p{L}\d_])/gu,
+  words: [
+    ['U', '[Nn]apětí|[Nn]apěť\\p{L}+|[Tt]lak(?:u|em|y|ů)?|[Tt]lakov\\p{L}+|[Vv]olt(?:y|ů|ech)?|[Mm]ilivolt\\p{L}*', 'U'],
+    ['I', '[Pp]roud(?:u|em|y|ů|ům|ech)?|[Pp]roudov\\p{L}+|[Pp]růtok(?:u|em|y)?|[Oo]dběr(?:u|em|y)?|[Aa]mpér(?:y|ů|ech)?|[Mm]iliampér(?:y|ů|ech)?', 'I'],
+    ['R', '[Oo]dpor(?:u|em|y|ů|ům|ech)?|[Oo]dporov\\p{L}+|[Tt]ření|[Zz]úžení|[Oo]hm(?:y|ů|ech)?|[Kk]iloohm(?:y|ů|ech)?|[Rr]eaktanc\\p{L}+', 'R'],
+    ['P', '[Vv]ýkon(?:u|em|y|ů|ům|ech)?|[Vv]ýkonov\\p{L}+|[Tt]epl(?:o|a|em|u)|[Ww]att(?:y|ů|ech)?', 'P'],
+  ].map(([q, w, sym]) => [q, new RegExp(`(^|[^\\p{L}])((?:${w})(?:[ \\u00a0]${sym}(?:_[\\p{L}\\d]+)?)?)(?![\\p{L}\\d])`, 'gu')]),
+};
+const Q_OPS = '=/·×+−≈(', Q_OPS_AFTER = '=/·×+−≈)';
+function qSplit(t) {
+  const hits = [];
+  const add = (re, qf) => { re.lastIndex = 0; let m; while ((m = re.exec(t))) { const pre = m[1].length, s0 = m.index + pre, q = qf(m, s0); if (q) hits.push([s0, s0 + m[2].length, q]); } };
+  add(Q_RE.unit, (m) => Q_UNIT[m[3]]);
+  add(Q_RE.brk, (m) => Q_UNIT[m[2]]);
+  add(Q_RE.res, () => 'R');
+  for (const [q, re] of Q_RE.words) add(re, () => q);
+  add(Q_RE.sym, (m, s0) => {
+    const tok = m[2], letter = tok[0]; if (letter === 'X' && tok.length === 1) return null;
+    const before = t.slice(0, s0).trimEnd().slice(-1), after = t.slice(s0 + tok.length).trimStart()[0] || '';
+    const q = letter === 'X' ? 'R' : letter;
+    if (tok.length > 1) return q; // značka s indexem (I_C, U_F, R1) je vždy veličina
+    return (before && Q_OPS.includes(before)) || (after && Q_OPS_AFTER.includes(after)) ? q : null;
+  });
+  if (!hits.length) return null;
+  hits.sort((a, b) => a[0] - b[0] || b[1] - a[1]);
+  const out = []; let pos = 0;
+  for (const [a, b, q] of hits) { if (a < pos) continue; if (a > pos) out.push([t.slice(pos, a)]); out.push([t.slice(a, b), q]); pos = b; }
+  if (pos < t.length) out.push([t.slice(pos)]);
+  return out;
+}
+const Q_SKIP = 'pre, code, svg, button, summary, script, style, input, select, textarea, h1, h2, h3, .ro, #simRoot, .from, .mono, .eyebrow, .lvl, .qlegend, .qU, .qI, .qR, .qP';
+function qcolor(root) {
+  if (!root) return;
+  const tw = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: (n) => !/\S/.test(n.nodeValue) || n.parentElement.closest(Q_SKIP) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+  const nodes = []; while (tw.nextNode()) nodes.push(tw.currentNode);
+  for (const n of nodes) {
+    const parts = qSplit(n.nodeValue); if (!parts) continue;
+    const f = document.createDocumentFragment();
+    for (const [txt, q] of parts) { if (!q) { f.appendChild(document.createTextNode(txt)); continue; } const sp = document.createElement('span'); sp.className = 'q' + q; sp.textContent = txt; f.appendChild(sp); }
+    n.replaceWith(f);
+  }
+}
+// Pojem, jehož název začíná veličinou, dostane její barvu (kartička v lekci, slovníček).
+const qOf = (title) => { for (const [q, re] of Q_RE.words) { re.lastIndex = 0; const m = re.exec(title); if (m && m.index === 0) return q; } return ''; };
+function applyQc() {
+  const on = state.qc !== false;
+  if (on) document.documentElement.removeAttribute('data-qc'); else document.documentElement.setAttribute('data-qc', 'off');
+  document.querySelectorAll('.qc').forEach((b) => { b.setAttribute('aria-pressed', on); b.title = on ? 'Barvy veličin: zapnuté' : 'Barvy veličin: vypnuté'; });
+}
+
 /* ================= UI pomůcky ================= */
 const $ = (s, r = document) => r.querySelector(s);
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -2297,6 +2403,7 @@ function renderToday() {
   <section class="card stack"><h3>Úkoly na dnes</h3>${todoBlock(t)}</section>
   <section class="card lvlprog"><h3>Postup</h3>${lv}</section>
   <p class="cap">Plán: ${['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'].filter((_, i) => state.plan.days.includes(i)).join(', ')} · od úrovně ${state.plan.from}. Změníš ho v záložce Kalendář.</p>`;
+  qcolor(view.querySelector('.today-lesson'));
   bindTodos(view, renderToday);
 }
 
@@ -2347,8 +2454,8 @@ function renderCal() {
 /* ================= Obrazovka: Pojmy ================= */
 function renderGloss() {
   setTab('pojmy'); const all = []; for (const l of LESSONS) for (const [t, d] of l.terms) all.push({ t, d, l }); all.sort((a, b) => a.t.localeCompare(b.t, 'cs'));
-  view.innerHTML = `<div><span class="eyebrow">${all.length} pojmů ze všech lekcí</span><h1>Pojmy</h1></div><input type="text" id="gq" placeholder="Hledat pojem…" autocomplete="off" aria-label="Hledat pojem"><dl class="gl" id="gl"></dl>`;
-  const draw = () => { const qv = $('#gq').value.trim().toLowerCase(); $('#gl').innerHTML = all.filter((x) => !qv || (x.t + ' ' + x.d).toLowerCase().includes(qv)).map((x) => `<dt>${esc(x.t)}</dt><dd>${esc(x.d)} <small>· <a href="#${x.l.id}">lekce ${x.l.code}</a>${state.done[x.l.id] ? '' : ' (zatím neprobráno)'}</small></dd>`).join('') || '<p class="muted">Nic nenalezeno.</p>'; };
+  view.innerHTML = `<div><span class="eyebrow">${all.length} pojmů ze všech lekcí</span><h1>Pojmy</h1></div>${QLEGEND}<input type="text" id="gq" placeholder="Hledat pojem…" autocomplete="off" aria-label="Hledat pojem"><dl class="gl" id="gl"></dl>`;
+  const draw = () => { const qv = $('#gq').value.trim().toLowerCase(); $('#gl').innerHTML = all.filter((x) => !qv || (x.t + ' ' + x.d).toLowerCase().includes(qv)).map((x) => `<dt class="${qOf(x.t) ? 'q' + qOf(x.t) : ''}">${esc(x.t)}</dt><dd>${esc(x.d)} <small>· <a href="#${x.l.id}">lekce ${x.l.code}</a>${state.done[x.l.id] ? '' : ' (zatím neprobráno)'}</small></dd>`).join('') || '<p class="muted">Nic nenalezeno.</p>'; qcolor($('#gl')); };
   $('#gq').addEventListener('input', draw); draw();
 }
 
@@ -2410,11 +2517,12 @@ function qBlock(items, name, onDone) {
     const order = shuffle(it.qq.a.map((_, j) => j));
     const fs = document.createElement('fieldset'); fs.className = 'q';
     fs.innerHTML = `<legend>${it.from ? `<span class="from">z lekce ${it.l.code} · ${esc(it.l.title)}</span>` : ''}${esc(it.qq.q)}</legend>${it.qq.img ? `<div class="qimg">${it.qq.img}</div>` : ''}<div class="ans">${order.map((j) => `<label><input type="radio" name="${name}-${k}" value="${j}"><span>${esc(it.qq.a[j])}</span></label>`).join('')}</div><p class="why" hidden></p>`;
+    qcolor(fs);
     fs.addEventListener('change', (e) => {
       const j = +e.target.value, good = j === 0; answered++; if (good) ok++; marks[k] = good;
       fs.querySelectorAll('input').forEach((x) => x.disabled = true);
       fs.querySelectorAll('label').forEach((lb) => { const v = +lb.querySelector('input').value; if (v === 0) lb.classList.add('ok'); else if (v === j) lb.classList.add('ko'); });
-      const w = fs.querySelector('.why'); w.hidden = false; w.innerHTML = `<b style="color:var(--${good ? 'good' : 'bad'})">${good ? 'Správně.' : 'Ne tak docela.'}</b> ${esc(it.qq.why)}`;
+      const w = fs.querySelector('.why'); w.hidden = false; w.innerHTML = `<b style="color:var(--${good ? 'good' : 'bad'})">${good ? 'Správně.' : 'Ne tak docela.'}</b> ${esc(it.qq.why)}`; qcolor(w);
       record(it.qq.k, good); save();
       sc.textContent = `${ok} z ${items.length} správně`; if (answered === items.length && onDone) onDone(ok, items.length, marks);
     });
@@ -2429,7 +2537,7 @@ function renderLesson(id) {
   const review = reviewFor(id), checkQs = pickQs([l], 4);
   const steps = [['Opakování', 'rev'], ['Klíčové pojmy', 'terms'], ['Výklad', 'body']].concat(l.sim ? [['Simulace', 'sim']] : []).concat([['Kontrolní otázky', 'check'], ['Hotovo', 'done']]);
   let cur = 0, checkScore = null; const t0 = Date.now();
-  view.innerHTML = `<div class="lesson-top"><div class="row"><a class="iconbtn" href="#dnes" aria-label="Zavřít lekci"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></a><span class="ttl">${l.code} · ${esc(l.title)}</span><span class="timer" id="tmr">0:00</span></div><div class="steps" id="stp">${steps.map((s, i) => `<button type="button" data-i="${i}" aria-label="Krok ${i + 1}: ${s[0]}"><i></i></button>`).join('')}</div></div><div id="stepBox"></div>
+  view.innerHTML = `<div class="lesson-top"><div class="row"><a class="iconbtn" href="#dnes" aria-label="Zavřít lekci"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></a><span class="ttl">${l.code} · ${esc(l.title)}</span><button class="qc" type="button" aria-pressed="true" aria-label="Barvy veličin (napětí, proud, odpor)"><span class="qU">U</span><span class="qI">I</span><span class="qR">R</span></button><span class="timer" id="tmr">0:00</span></div><div class="steps" id="stp">${steps.map((s, i) => `<button type="button" data-i="${i}" aria-label="Krok ${i + 1}: ${s[0]}"><i></i></button>`).join('')}</div></div><div id="stepBox"></div>
   <nav class="navbar"><div class="navbar-in"><button class="btn ghost" id="bBack" type="button">Zpět</button><button class="btn primary" id="bNext" type="button">Další</button></div></nav>`;
   const box = $('#stepBox');
   const head = (i) => `<div class="step-label"><span class="k">${i + 1}</span><div><span class="eyebrow">Krok ${i + 1} z ${steps.length}</span><h2>${steps[i][0]}</h2></div></div>`;
@@ -2439,7 +2547,7 @@ function renderLesson(id) {
       if (!review.length) sb.innerHTML = `<p class="prose">Tohle je ${Object.keys(state.done).length ? 'lekce, ke které zatím nemáš co opakovat' : 'tvoje první lekce'}. Od příště tu budou tři otázky z předchozích lekcí. Vybavování z paměti je nejúčinnější způsob, jak si učivo udržet.</p>`;
       else { sb.innerHTML = `<p class="prose">Než začneš, zkus si vybavit, co už víš. Otázky vybírá aplikace podle toho, co ti dřív šlo nejhůř nebo co jsi dlouho neopakoval(a).</p>`; sb.appendChild(qBlock(review.map((r) => ({ ...r, from: true })), 'rev')); }
     } else if (kind === 'terms') {
-      sb.innerHTML = `<div class="meta">${lvlPill(l.lvl)}<span>${esc(l.sub)}</span></div><p class="idea">${esc(l.idea)}</p><div class="terms">${l.terms.map(([a, b]) => `<div class="term"><b>${esc(a)}</b><span>${esc(b)}</span></div>`).join('')}</div>`;
+      sb.innerHTML = `<div class="meta">${lvlPill(l.lvl)}<span>${esc(l.sub)}</span></div><p class="idea">${esc(l.idea)}</p><div class="terms">${l.terms.map(([a, b]) => `<div class="term ${qOf(a) ? 'q' + qOf(a) : ''}"><b>${esc(a)}</b><span>${esc(b)}</span></div>`).join('')}</div>`;
     } else if (kind === 'body') {
       sb.innerHTML = `<div class="prose">${l.body}</div>${FIG[l.id] ? FIG[l.id]() : ''}`;
     } else if (kind === 'sim') {
@@ -2454,6 +2562,7 @@ function renderLesson(id) {
       sb.innerHTML = `<div class="done-hero"><div class="bigcheck">${ICON_CHECK}</div><h2>Lekce ${l.code} je hotová</h2><p>${sc ? `Kontrolní otázky: ${sc[0]} z ${sc[1]} správně. ` : ''}Trvalo ti to asi ${mins} min.</p><p class="idea">${esc(l.idea)}</p><p class="muted">V kalendáři je den odškrtnutý. Série: ${streak()} ${streak() === 1 ? 'den' : streak() < 5 && streak() > 0 ? 'dny' : 'dní'}.</p></div>`
         + `<div class="btns"><a class="btn primary" href="#dnes">Zpět na dnešek</a>${nl && nl.id !== id ? `<a class="btn" href="#${nl.id}">Další lekce: ${esc(nl.title)}</a>` : ''}<a class="btn ghost" href="#kalendar">Kalendář</a></div>`;
     }
+    qcolor(kind === 'sim' ? sb.querySelector('.note') : sb);
     document.querySelectorAll('#stp button').forEach((b, j) => { b.className = j === i ? 'on' : j < i ? 'past' : ''; b.setAttribute('aria-current', j === i ? 'step' : 'false'); });
     $('#bBack').disabled = i === 0; $('#bNext').hidden = kind === 'done'; $('#bBack').hidden = kind === 'done';
     $('#bNext').textContent = steps[i + 1] && steps[i + 1][1] === 'done' ? 'Dokončit lekci' : 'Další';
@@ -2462,11 +2571,12 @@ function renderLesson(id) {
   $('#stp').addEventListener('click', (e) => { const b = e.target.closest('[data-i]'); if (!b) return; const j = +b.dataset.i; if (steps[j][1] === 'done' && cur < j - 1) return; show(j); });
   const tick = () => { if (!inLesson || !$('#tmr')) return; const s = Math.floor((Date.now() - t0) / 1000); $('#tmr').textContent = `${Math.floor(s / 60)}:${pad2(s % 60)}${s >= 900 ? ' · 15 min ✓' : ''}`; };
   clearInterval(window.__tmr); window.__tmr = setInterval(tick, 1000);
-  show(0);
+  applyQc(); show(0);
 }
 
 /* ================= Směrování ================= */
 function route() {
+  applyQc();
   const h = location.hash.replace('#', '') || 'dnes';
   if (LBY[h]) { renderLesson(h); return; }
   inLesson = false; document.body.classList.remove('lesson'); teardownSim(); clearInterval(window.__tmr); window.scrollTo(0, 0);
@@ -2477,6 +2587,7 @@ document.querySelectorAll('.tab').forEach((b) => b.addEventListener('click', () 
 document.addEventListener('click', (e) => {
   const close = e.target.closest('.more-close');
   if (close) { const d = close.closest('details'); d.open = false; const sm = d.querySelector('summary'); if (sm.getBoundingClientRect().top < 0) sm.scrollIntoView({ block: 'center' }); return; }
+  if (e.target.closest('.qc, .qc-text')) { state.qc = state.qc === false; save(); applyQc(); toast(state.qc ? 'Barvy veličin zapnuté' : 'Barvy veličin vypnuté'); return; }
   const cm = e.target.closest('.code-cm');
   if (cm) { const box = cm.closest('.codebox'), hide = !box.classList.contains('no-cm'); box.classList.toggle('no-cm', hide); cm.setAttribute('aria-pressed', hide); cm.textContent = hide ? 'Ukázat komentáře' : 'Skrýt komentáře'; }
 });
@@ -2485,7 +2596,7 @@ window.addEventListener('hashchange', route);
 /* ================= Téma, animace, start ================= */
 readColors();
 try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', readColors); } catch (e) { /* starší prohlížeč */ }
-new MutationObserver(readColors).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+new MutationObserver(readColors).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'data-qc'] });
 const MOTION = !matchMedia('(prefers-reduced-motion: reduce)').matches;
 let lastT = performance.now();
 function frame(t) { const dt = Math.min(0.05, (t - lastT) / 1000); lastT = t; if (simInst && simInst.step) { try { simInst.step(dt, MOTION); } catch (e) { console.error(e); simInst = null; } } requestAnimationFrame(frame); }
