@@ -35,6 +35,8 @@
 :root[data-qc="off"]{--qU:var(--copper);--qI:var(--water);--qR:var(--ink);--qP:var(--copper)}
 
 *{box-sizing:border-box}
+/* atribut hidden musí vyhrát i nad display z tříd (.tabs, .btn, .stack…) */
+[hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:var(--s0);line-height:1.6;
   background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
