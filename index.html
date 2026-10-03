@@ -10,7 +10,7 @@
   --copper:#a9571f; --copper-soft:rgba(169,87,31,.13); --water:#1c74ab; --water-soft:rgba(28,116,171,.15);
   --good:#2b7a4b; --good-soft:rgba(43,122,75,.13); --bad:#b8352a; --bad-soft:rgba(184,53,42,.11); --warn:#94630f;
   --l1:#2b7a4b; --l2:#1c74ab; --l3:#a9571f;
-  --pcb:#1f5b3e; --silk:#f2f2e6; --lead:#8d949a; --edge:rgba(0,0,0,.25);
+  --pcb:#1f5b3e; --silk:#f2f2e6; --lead:#8d949a; --edge:rgba(0,0,0,.25); --code-lib:#7b4bb0;
   --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
   --f-body:"Source Serif 4",Georgia,"Times New Roman",serif;
   --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
@@ -21,14 +21,14 @@
   --copper:#e39a62; --copper-soft:rgba(227,154,98,.15); --water:#62b9ec; --water-soft:rgba(98,185,236,.16);
   --good:#62c98f; --good-soft:rgba(98,201,143,.14); --bad:#ef6f60; --bad-soft:rgba(239,111,96,.13); --warn:#e2b25a;
   --l1:#62c98f; --l2:#62b9ec; --l3:#e39a62;
-  --pcb:#2f7f56; --silk:#f2f2e6; --lead:#9aa2a8; --edge:rgba(255,255,255,.2);
+  --pcb:#2f7f56; --silk:#f2f2e6; --lead:#9aa2a8; --edge:rgba(255,255,255,.2); --code-lib:#c3a2f0;
   color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0e1615; --surface:#15201e; --sunk:#1b2826; --ink:#dde7e2; --muted:#93a6a0; --line:#2c3c39; --grid:rgba(140,200,180,.05);
   --copper:#e39a62; --copper-soft:rgba(227,154,98,.15); --water:#62b9ec; --water-soft:rgba(98,185,236,.16);
   --good:#62c98f; --good-soft:rgba(98,201,143,.14); --bad:#ef6f60; --bad-soft:rgba(239,111,96,.13); --warn:#e2b25a;
   --l1:#62c98f; --l2:#62b9ec; --l3:#e39a62;
-  --pcb:#2f7f56; --silk:#f2f2e6; --lead:#9aa2a8; --edge:rgba(255,255,255,.2);
+  --pcb:#2f7f56; --silk:#f2f2e6; --lead:#9aa2a8; --edge:rgba(255,255,255,.2); --code-lib:#c3a2f0;
   color-scheme:dark}
 
 *{box-sizing:border-box}
@@ -228,6 +228,42 @@ td.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
 .tpick label{display:flex;align-items:center;gap:.6rem;padding:.45rem .6rem;border:1px solid var(--line);border-radius:6px;background:var(--bg);cursor:pointer}
 .tpick input{width:20px;height:20px;accent-color:var(--copper);flex:none;margin:0}
 .tpick .n{font-family:var(--f-mono);font-weight:600;color:var(--muted);font-size:.85rem;min-width:2rem}
+
+/* dovysvětlení: rozbalovací blok pod odstavcem */
+.more{margin:-.3rem 0 0}
+.more>summary{list-style:none;display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;font:650 .9rem/1.3 var(--f-display);font-stretch:92%;color:var(--water);padding:.3rem .65rem .3rem .35rem;border-radius:99px;border:1px solid transparent;max-width:100%}
+.more>summary::-webkit-details-marker{display:none}
+.more>summary:hover{background:var(--water-soft)}
+.more>summary .qm{flex:none;width:20px;height:20px;border-radius:50%;background:var(--water);color:var(--surface);display:grid;place-items:center;font:800 .78rem var(--f-display)}
+.more>summary .chev{flex:none;width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.4;transition:transform .2s}
+.more[open]>summary{border-color:var(--water);background:var(--water-soft)}
+.more[open]>summary .chev{transform:rotate(180deg)}
+.more-body{margin-top:.5rem;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--water);border-radius:0 8px 8px 0;padding:.75rem .9rem .6rem;display:grid;gap:.6rem}
+.more-body>.eyebrow{color:var(--water)}
+.more-body ul,.more-body ol{margin:0;padding-left:1.25rem;display:grid;gap:.3rem}
+.more-body svg{display:block;width:100%;max-width:340px;height:auto;justify-self:center}
+.more-body .hint{border-top:1px dashed var(--line);padding-top:.5rem;font-size:.93rem}
+.more-close{justify-self:end;background:none;border:0;color:var(--muted);font:650 .82rem var(--f-display);cursor:pointer;padding:.2rem 0}
+
+/* kód MicroPythonu: barvy a přepínač komentářů */
+.codebox{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--sunk);min-width:0}
+.codebox pre.code{border:0;border-radius:0}
+.code-bar{display:flex;justify-content:space-between;align-items:center;gap:.5rem;padding:.25rem .3rem .25rem .8rem;border-bottom:1px solid var(--line);background:var(--surface)}
+.code-bar span{font-family:var(--f-display);font-stretch:85%;font-weight:700;font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.code-cm{background:none;border:1px solid var(--line);border-radius:99px;color:var(--ink);font:650 .8rem var(--f-display);font-stretch:90%;padding:.25rem .7rem;min-height:32px;cursor:pointer}
+.code-cm:hover{border-color:var(--ink)}
+pre.code .ln{display:block;min-height:1.5em}
+.no-cm .cm,.no-cm pre.code .cm-line{display:none}
+.cm{color:var(--muted);font-style:italic}
+.t-var{color:var(--copper);font-weight:600}
+.t-fn{color:var(--water)}
+.t-lib{color:var(--code-lib)}
+.t-num{color:var(--good)}
+.t-str{color:var(--warn)}
+.t-kw{color:var(--ink);font-weight:700}
+.legend-code{display:grid;gap:.4rem;margin:0;padding:0;list-style:none}
+.legend-code li{display:grid;grid-template-columns:6.5rem 1fr;gap:.6rem;align-items:baseline}
+.legend-code code{font-family:var(--f-mono);font-size:.86rem;background:var(--sunk);border-radius:4px;padding:.05rem .35rem;justify-self:start}
 
 /* SVG pomocné */
 .ld{stroke:var(--lead);stroke-width:3;fill:none;stroke-linecap:round}
@@ -534,7 +570,67 @@ const LEVELS = [
   { n: 3, key: 'l3', name: 'Pokročilý', sub: 'Hlubší porozumění', desc: 'Střídavý proud, filtry, rezonance, transformátor, polovodiče zevnitř, MOSFET, operační zesilovač a plošné spoje.' },
 ];
 
-const code = (s) => `<pre class="code">${s}</pre>`;
+// Dovysvětlení: otázka, kterou si student nejspíš položí, a pod ní rozbalovací vysvětlení.
+const more = (q, html) => `<details class="more"><summary><span class="qm" aria-hidden="true">?</span><span>${q}</span><svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></summary><div class="more-body"><span class="eyebrow">Dovysvětlení</span>${html}<button type="button" class="more-close">Sbalit ▲</button></div></details>`;
+
+// Barevné zvýraznění MicroPythonu. Proměnné = jména, kterým program něco přiřadí (x = …, for x in …).
+const PY_KW = new Set(['from', 'import', 'while', 'for', 'in', 'if', 'elif', 'else', 'def', 'return', 'and', 'or', 'not', 'True', 'False', 'None', 'break', 'continue', 'pass']);
+const PY_LIB = new Set(['machine', 'time', 'Pin', 'PWM', 'ADC', 'Timer']);
+function pyHi(src) {
+  const h = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const vars = new Set([...src.matchAll(/^\s*([A-Za-z_]\w*)\s*=(?!=)/gm), ...src.matchAll(/\bfor\s+([A-Za-z_]\w*)\s+in\b/g)].map((m) => m[1]));
+  return src.split('\n').map((line) => {
+    let out = '', i = 0;
+    while (i < line.length) {
+      const rest = line.slice(i); let m;
+      if (rest[0] === '#') { out += `<span class="cm">${h(rest)}</span>`; break; }
+      if ((m = rest.match(/^("[^"]*"|'[^']*')/))) out += `<span class="t-str">${h(m[0])}</span>`;
+      else if ((m = rest.match(/^\d[\d_.]*/))) out += `<span class="t-num">${m[0]}</span>`;
+      else if ((m = rest.match(/^[A-Za-z_]\w*/))) {
+        const w = m[0], cls = PY_KW.has(w) ? 't-kw' : PY_LIB.has(w) || /\b(Pin|PWM|ADC)\.$/.test(line.slice(0, i)) ? 't-lib' : /^\s*\(/.test(rest.slice(w.length)) ? 't-fn' : vars.has(w) ? 't-var' : '';
+        out += cls ? `<span class="${cls}">${w}</span>` : w;
+      } else { m = [rest[0]]; out += h(rest[0]); }
+      i += m[0].length;
+    }
+    return `<span class="ln${/^\s*#/.test(line) ? ' cm-line' : ''}">${out}</span>`;
+  }).join('');
+}
+const CODE_LEGEND = more('Co znamenají barvy a znak #?', `<ul class="legend-code">
+  <li><code><span class="t-var">led</span></code><span><b>Proměnná:</b> jméno, které si program zvolil a uložil do něj hodnotu. Mohla by se jmenovat i jinak, třeba <span class="mono">svetlo</span>.</span></li>
+  <li><code><span class="t-fn">toggle</span>()</code><span><b>Příkaz (funkce):</b> něco, co se má udělat. Poznáš ho podle závorek.</span></li>
+  <li><code><span class="t-lib">Pin</span></code><span><b>Z knihovny:</b> hotový nástroj, který si program na začátku načte příkazem <span class="mono">import</span>.</span></li>
+  <li><code><span class="t-num">15</span> <span class="t-str">"LED"</span></code><span><b>Číslo a text:</b> hodnoty, které se do příkazů dosazují. Text je vždy v uvozovkách.</span></li>
+  <li><code><span class="t-kw">while</span></code><span><b>Slovo Pythonu:</b> řídí, co se opakuje nebo kdy se co stane.</span></li>
+  <li><code><span class="cm"># poznámka</span></code><span><b>Komentář:</b> poznámka pro člověka. Všechno od znaku # do konce řádku Pico přeskočí.</span></li></ul>
+  <p class="hint">Program funguje stejně i bez komentářů. Vyzkoušej si tlačítko „Skrýt komentáře" nad kódem.</p>`);
+/* Obrázky k dovysvětlením */
+const XF = {
+  // LED z Pica na nepájivém poli: tři spoje = tři sloupce
+  bbLed: () => {
+    const X = (c) => 44 + (c - 1) * 24, Y = { a: 40, b: 54, c: 68, d: 82, e: 96, m: 134 };
+    let s = `<rect x="4" y="24" width="292" height="126" rx="8" style="fill:var(--sunk);stroke:var(--line)"/>`;
+    for (const c of [3, 6, 7]) s += `<rect x="${X(c) - 10}" y="${Y.a - 10}" width="20" height="${Y.e - Y.a + 20}" rx="6" style="fill:var(--water-soft);stroke:var(--water);stroke-width:1"/>`;
+    s += `<rect x="30" y="108" width="244" height="6" rx="2" style="fill:var(--line)"/><path d="M30 142H274" style="stroke:var(--water);stroke-width:1.5"/>` + S.t(286, 138, '−', 'tx', 'middle');
+    for (const r of 'abcde') s += S.t(18, Y[r] + 4, r, 'txm', 'middle');
+    for (const r in Y) for (let c = 1; c <= 10; c++) s += `<circle cx="${X(c)}" cy="${Y[r]}" r="4" style="fill:var(--bg);stroke:var(--muted);stroke-width:1.2"/>`;
+    const dot = (x, y) => `<circle cx="${x}" cy="${y}" r="3.5" style="fill:var(--lead)"/>`;
+    s += `<path d="M${X(3)} 6V${Y.a}" style="stroke:var(--water);stroke-width:3.5;stroke-linecap:round"/>` + dot(X(3), Y.a) + S.t(X(3) + 9, 14, 'vodič z GP15', 'txw');
+    s += `<line x1="${X(3)}" y1="${Y.c}" x2="${X(6)}" y2="${Y.c}" style="stroke:var(--lead);stroke-width:3"/><rect x="${X(3) + 16}" y="${Y.c - 6}" width="40" height="12" rx="5" style="fill:#d8c291;stroke:var(--edge)"/>` + dot(X(3), Y.c) + dot(X(6), Y.c);
+    s += dot(X(6), Y.d) + dot(X(7), Y.d) + `<circle cx="${(X(6) + X(7)) / 2}" cy="${Y.d}" r="9" style="fill:#e63b2e;stroke:var(--edge)"/>`;
+    s += `<path d="M${X(7)} ${Y.e}V${Y.m}" style="stroke:var(--ink);stroke-width:3.5;stroke-linecap:round"/>` + dot(X(7), Y.e) + dot(X(7), Y.m);
+    [[3, '1'], [6, '2'], [7, '3']].forEach(([c, n]) => { s += `<circle cx="${X(c)}" cy="164" r="8.5" style="fill:var(--water)"/><text x="${X(c)}" y="168" text-anchor="middle" style="fill:var(--surface);font:700 11px var(--f-mono)">${n}</text>`; });
+    return S.svg(300, 176, s, 'Nepájivé pole: vodič z GP15 ve sloupci 1, rezistor mezi sloupci 1 a 2, LED mezi sloupci 2 a 3, ze sloupce 3 vodič na lištu minus');
+  },
+  // cesta napájení na desce Pica
+  power: () => {
+    const box = (y, t, col) => `<rect x="60" y="${y}" width="160" height="34" rx="6" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.5"/>` + (col ? `<rect x="60" y="${y}" width="8" height="34" rx="3" style="fill:${col}"/>` : '') + S.t(146, y + 22, t, 'tx', 'middle');
+    const arr = (y1, y2, lab) => `<path class="sy" d="M140 ${y1}V${y2 - 2}"/>` + S.arrowHead(140, y1, 140, y2, 1) + (lab ? S.t(152, (y1 + y2) / 2 + 4, lab, 'txm') : '');
+    return S.svg(300, 300, box(6, 'USB kabel 5 V') + arr(40, 62, '') + box(62, 'VBUS · 5 V', '#d0312d') + arr(96, 124, 'dioda') + box(124, 'VSYS · asi 4,7 V', '#d0312d')
+      + `<path class="sy" d="M282 141H224"/>` + S.arrowHead(282, 141, 222, 141, 1) + S.t(254, 132, 'baterie', 'txm', 'middle') + S.t(254, 160, '1,8–5,5 V', 'txm', 'middle')
+      + arr(158, 186, 'regulátor') + box(186, '3V3(OUT) · 3,3 V', '#e0913a') + arr(220, 248, '') + box(248, 'čip Pica, senzory'), 'Cesta napájení: USB, VBUS, dioda, VSYS, regulátor, 3V3(OUT), čip a senzory; baterie se připojuje na VSYS');
+  },
+};
+const code = (s) => `<div class="codebox"><div class="code-bar"><span>MicroPython</span><button type="button" class="code-cm" aria-pressed="false">Skrýt komentáře</button></div><pre class="code">${pyHi(s)}</pre></div>${CODE_LEGEND}`;
 
 const LESSONS = [
 /* ---------- ÚROVEŇ 1 ---------- */
@@ -545,8 +641,15 @@ const LESSONS = [
   <div class="tscroll"><table><thead><tr><th>Ve vodovodu</th><th>V elektronice</th><th>Jednotka</th></tr></thead><tbody><tr><td>tlak</td><td>napětí U</td><td>volt (V)</td></tr><tr><td>průtok</td><td>proud I</td><td>ampér (A)</td></tr><tr><td>tření, zúžení</td><td>odpor R</td><td>ohm (Ω)</td></tr><tr><td>čerpadlo</td><td>zdroj, baterie</td><td>—</td></tr></tbody></table></div>
   <p>Čím vyšší napětí, tím větší proud. Čím větší odpor, tím menší proud. Obojí shrnuje Ohmův zákon:</p><p class="formula">I = U / R</p>
   <p>Příklad: baterie 9 V a rezistor 100 Ω. I = 9 / 100 = 0,09 A = 90 mA.</p>
+  ${more('Jak z 0,09 A vzniklo 90 mA?', `<p>Předpona <b>m</b> (mili) znamená tisícinu. Miliampér je tisícina ampéru, takže 1&nbsp;A = 1&nbsp;000&nbsp;mA.</p>
+  <div class="tscroll"><table><tbody><tr><td class="num">1 A</td><td class="num">= 1&nbsp;000 mA</td></tr><tr><td class="num">0,09 A</td><td class="num">= 90 mA</td></tr><tr><td class="num">0,004 A</td><td class="num">= 4 mA</td></tr></tbody></table></div>
+  <p>Převod je jen posun desetinné čárky o tři místa: z ampérů na miliampéry doprava, zpátky doleva. Stejně funguje <b>k</b> (kilo, tisíc): 1&nbsp;kΩ = 1&nbsp;000&nbsp;Ω.</p>
+  <p class="hint"><b>Zkratka:</b> volty dělené kiloohmy dají rovnou miliampéry. 9&nbsp;V / 1&nbsp;kΩ = 9&nbsp;mA.</p>`)}
   <p>Materiály, které vedou proud snadno (měď, hliník), jsou <b>vodiče</b>. Ty, které ho téměř nevedou (plast, sklo, guma), jsou <b>izolanty</b>. Proto mají kabely měděné jádro a plastový obal.</p>
-  <div class="note"><h4>Častá chyba</h4><p>Proud se v rezistoru nespotřebuje. Kolik vody do trubky vteče, tolik z ní vyteče, a proto je proud v jednoduchém okruhu všude stejný. Rezistor bere energii (tlak klesá) a mění ji v teplo.</p></div>`,
+  <div class="note"><h4>Častá chyba</h4><p>Proud se v rezistoru nespotřebuje. Kolik vody do trubky vteče, tolik z ní vyteče, a proto je proud v jednoduchém okruhu všude stejný. Rezistor bere energii (tlak klesá) a mění ji v teplo.</p></div>
+  ${more('Když se proud nespotřebuje, co tedy rezistor bere?', `<p>Představ si v potrubí malou vrtulku. Kolik vody do ní vteče, tolik z ní vyteče. Voda se nikam neztratí. Za vrtulkou má ale menší tlak: vrtulka jí vzala <b>energii</b> a roztočila se.</p>
+  <p>Rezistor je taková vrtulka, jen energii mění v teplo. Projdou jím všechny elektrony, proto je proud před ním i za ním stejný. Za rezistorem mají ale menší „tlak": napětí kleslo. Tomu poklesu se říká <b>úbytek napětí</b>.</p>
+  <p>Spotřebuje se tedy energie, ne proud. Proto se rezistor hřeje.</p>`)}`,
   sim: 'ohm', task: 'Nastav 9 V a 100 Ω. Pak odpor zdvojnásob. Co se stane s proudem? Teče voda v zúženém místě pomaleji než jinde?' },
 
 { id: 'l1-02', lvl: 1, title: 'Obvod, zem a zkrat', sub: 'Proud teče jen dokola',
@@ -554,6 +657,9 @@ const LESSONS = [
   terms: [['Elektrický obvod', 'Uzavřená cesta od zdroje přes součástky zpět ke zdroji.'], ['GND (zem)', 'Společný bod s napětím 0 V. K němu se vztahují všechna ostatní napětí.'], ['Zkrat', 'Přímé spojení + a − bez součástky, která by omezila proud. Teče obrovský proud.'], ['Schéma', 'Výkres obvodu. Čáry jsou vodiče, součástky mají dohodnuté značky.']],
   body: `<p>Voda v našem modelu koluje dokola: z čerpadla trubkami přes součástky a zpátky. Když okruh někde přerušíš (rozepneš spínač), proud se zastaví <em>všude</em>, nejen za spínačem.</p>
   <p>Bod, ke kterému vztahujeme všechna napětí, se jmenuje <b class="c">GND</b> (ground, zem) a má 0 V. Když se řekne „pin má 3,3 V", myslí se 3,3 V vůči GND. Proto musí mít všechny části projektu, třeba Pico a zdroj pro motor, <b>společnou zem</b>: jejich GND se propojí drátem.</p>
+  ${more('Proč musí mít Pico a zdroj motoru společnou zem?', `<p>Napětí je vždycky rozdíl mezi dvěma body, podobně jako výška. Když řekneš „stůl je vysoký 1 metr", myslíš od podlahy.</p>
+  <p>Pico pošle signál 3,3&nbsp;V, tedy o 3,3&nbsp;V víc, než má <em>jeho</em> GND. Ovladač motoru měří vůči <em>svému</em> GND. Dokud nejsou obě GND spojená, je to jako měřit výšku stolu ze dvou různých pater: čísla spolu nesouvisí a ovladač signál spolehlivě nepozná.</p>
+  <p>Propojením GND získají oba obvody společnou „podlahu". Kladné póly zdrojů se nespojují, každý zdroj dál napájí svou část.</p>`)}
   <p><b class="c">Zkrat</b> vznikne, když spojíš + a − zdroje přímo, bez součástky, která by proud omezila. Podle Ohmova zákona je při téměř nulovém odporu proud obrovský. Baterie se zahřeje, tenký drát se může roztavit a Pico se může nevratně poškodit.</p>
   <div class="note try"><h4>Bezpečnostní pravidlo</h4><p>Zapojení měň vždy s odpojeným napájením. Před zapnutím zkontroluj, že nikde nejsou přímo spojené 5 V (nebo 3,3 V) a GND.</p></div>`,
   sim: 'circuit', task: 'Sepni spínač a podívej se na proud. Pak zkus zkrat. Kolikrát je proud větší?' },
@@ -566,6 +672,14 @@ const LESSONS = [
   <li>Středová <b>drážka</b> dělí pole na dvě poloviny: horní a dolní pětice spojené nejsou.</li>
   <li>Po okrajích jsou <b>napájecí lišty</b> + a −, spojené po celé délce. U některých delších polí je lišta v polovině přerušená; ověř si to.</li></ul>
   <p>Pico s připájenými kolíky (Pico WH) se zasouvá přímo do pole přes středovou drážku, stejně jako integrovaný obvod. Každý pin Pica tak má vlastní sloupec a volné díry v něm použiješ pro vodiče. Obvyklý začátek: z pinu 3V3(OUT) vede drát na lištu +, z pinu GND na lištu −.</p>
+  ${more('Jak přenesu schéma na nepájivé pole?', `<p>Schéma ukazuje, co je s čím spojené. Na poli platí jediné pravidlo: <b>co je ve schématu spojené, musí být ve stejném sloupci</b> (nebo na stejné liště).</p>
+  <ol><li>Najdi ve schématu spoje. U LED z Pica jsou tři: GP15 s rezistorem, rezistor s LED a LED s GND.</li>
+  <li>Každému spoji přiděl jeden volný sloupec. Spoj s GND může vést rovnou na lištu −.</li>
+  <li>Každou součástku zasuň tak, aby její dvě nožičky byly ve dvou sloupcích, které odpovídají jejím spojům.</li>
+  <li>Vodičem propoj pin GP15 se sloupcem prvního spoje.</li></ol>
+  ${XF.bbLed()}
+  <p class="cap">Zvýrazněné sloupce jsou tři spoje ze schématu: 1 = GP15 a rezistor, 2 = rezistor a anoda LED, 3 = katoda LED a vodič na lištu −.</p>
+  <p class="hint"><b>Kontrola:</b> polož prst na vodič od GP15 a „jdi" po sloupcích. Musíš projít rezistorem i LED a dojít ke GND, nikde zkratkou.</p>`)}
   <div class="note limit"><h4>Nejčastější chyba</h4><p>Obě nožičky součástky ve stejném sloupci. Pak jsou spojené nakrátko a proud součástku obejde.</p></div>`,
   sim: 'breadboard', task: 'Klikej na díry a sleduj, které se rozsvítí. Pak klikni na horní lištu.' },
 
@@ -575,6 +689,11 @@ const LESSONS = [
   body: `<p>Rezistor je <b class="c">elektrické tření</b>. Omezuje proud podobně jako kohoutek. Kdyby kohoutek uměl jen „zavřeno" a „naplno", sklenici vody bys nenaplnil. Rezistor dovolí nastavit přesně tolik proudu, kolik součástka snese.</p>
   <p>Hodnota se na malé rezistory tiskne barevnými pruhy. U čtyřpruhového rezistoru:</p>
   <ol><li>první pruh = první číslice,</li><li>druhý pruh = druhá číslice,</li><li>třetí pruh = násobitel (počet nul),</li><li>čtvrtý pruh = tolerance, obvykle zlatá (±5 %), bývá trochu odsazená.</li></ol>
+  ${more('Ze které strany se pruhy čtou?', `<p>Hledej pruh, který je od ostatních trochu odsazený. To je tolerance a patří na konec. Čti od opačného konce.</p>
+  <ul><li>Zlatá ani stříbrná nikdy nejsou první pruh. Když je vidíš na kraji, je to konec.</li>
+  <li>Když si nejsi jistý, zkus číst oběma směry. Správný směr skoro vždy dá běžnou hodnotu (220, 330, 4k7…), obrácený obvykle nesmysl.</li></ul>
+  <p>Příklad: oranžová–oranžová–hnědá–zlatá je 330&nbsp;Ω. Obráceně by začínala zlatou, a tou začínat nelze.</p>
+  <p class="hint">Když pořád nevíš: multimetr přepnutý na ohmy řekne hodnotu za pár sekund.</p>`)}
   <p>Příklad: červená (2), fialová (7), oranžová (×1 000), zlatá → 27 × 1 000 = 27 000 Ω = 27 kΩ ±5 %.</p>
   <p>Přesné metalizované rezistory mají pět pruhů: tři číslice, násobitel a toleranci (hnědá = ±1 %). Při pochybnostech hodnotu změř multimetrem.</p>
   <p>Ve schématech se píše 4k7 místo 4,7 kΩ nebo 2R2 místo 2,2 Ω. Písmeno nahrazuje desetinnou čárku, kterou by šlo na výkresu přehlédnout.</p>`,
@@ -586,6 +705,13 @@ const LESSONS = [
   body: `<p>LED sama proud neomezuje. Dokud je napětí pod asi 2 V, nesvítí. Jakmile ho překročí, proud prudce roste a LED se během chvilky zničí. Proto s ní vždy zapojujeme rezistor.</p>
   <p>Výpočet: od napětí zdroje odečteme úbytek na LED a zbytek „padne" na rezistoru.</p><p class="formula">R = (U zdroje − U_F) / I</p>
   <p>Na Picu počítáme s proudem kolem 4 mA, protože s ním počítá výchozí nastavení jeho pinů. Pro GPIO (3,3 V) a červenou LED (2,0 V): R = (3,3 − 2,0) / 0,004 ≈ 325 Ω. Zvolíme nejbližší vyšší běžnou hodnotu: <b>330 Ω</b>. Pro napájení 5 V a 10 mA vychází 300 Ω, tedy také 330 Ω.</p>
+  ${more('Proč se odečítá U_F? Výpočet krok za krokem', `<p>Představ si potrubí se schodem. LED je schod: ať teče jakýkoli proud, vezme si vždy zhruba stejné napětí, u červené asi 2&nbsp;V. Zbytek napětí zdroje „padne" na rezistoru.</p>
+  <ol><li>Kolik zbyde na rezistor? 3,3&nbsp;V − 2,0&nbsp;V = <b>1,3&nbsp;V</b>.</li>
+  <li>Jaký proud chceš? 4&nbsp;mA = <b>0,004&nbsp;A</b> (do vzorce v ampérech).</li>
+  <li>Ohmův zákon jen pro rezistor: R = U / I = 1,3 / 0,004 ≈ <b>325&nbsp;Ω</b>.</li>
+  <li>Vyber nejbližší vyšší hodnotu, kterou lze koupit: <b>330&nbsp;Ω</b>.</li></ol>
+  <p>Rezistor a LED jsou za sebou, takže jimi teče stejný proud. Proto stačí počítat jen s rezistorem.</p>
+  <p class="hint"><b>Kontrola zkratkou z lekce 1.1:</b> 1,3&nbsp;V / 0,33&nbsp;kΩ ≈ 3,9&nbsp;mA. Sedí.</p>`)}
   <p>Zapojení: GP15 → rezistor 330 Ω → anoda LED, katoda → GND. Program v MicroPythonu s knihovnou machine:</p>
   ${code(`from machine import Pin
 import time
@@ -593,7 +719,15 @@ import time
 led = Pin(15, Pin.OUT)  # GP15
 while True:             # dokola:
     led.toggle()        # přepni LED
-    time.sleep(0.5)     # čekej 0,5 s`)}`,
+    time.sleep(0.5)     # čekej 0,5 s`)}
+  ${more('Jak program funguje řádek po řádku?', `<ul><li><span class="mono">from machine import Pin</span>: z knihovny <span class="mono">machine</span> si vezmi nástroj <span class="mono">Pin</span>, který ovládá piny.</li>
+  <li><span class="mono">import time</span>: načti knihovnu pro práci s časem.</li>
+  <li><span class="mono">led = Pin(15, Pin.OUT)</span>: nastav GP15 jako výstup a pojmenuj ho <span class="mono">led</span>. Jméno si vybíráš ty.</li>
+  <li><span class="mono">while True:</span> opakuj pořád dokola všechno, co je pod tím odsazené.</li>
+  <li><span class="mono">led.toggle()</span>: přepni LED. Když svítila, zhasne, a naopak.</li>
+  <li><span class="mono">time.sleep(0.5)</span>: počkej půl sekundy.</li></ul>
+  <p><b>Odsazení</b> (mezery na začátku řádku) není jen pro hezký vzhled. Pythonu říká, které řádky patří do smyčky.</p>
+  <p class="hint"><b>Co kdyby chybělo <span class="mono">time.sleep</span>?</b> LED by se přepínala mnohotisíckrát za sekundu a oko by vidělo jen slabě svítící LED.</p>`)}`,
   sim: 'led', task: 'Zvol zdroj 3,3 V (GPIO) a hledej nejmenší rezistor, se kterým proud LED nepřekročí 4 mA. Pak LED otoč.' },
 
 { id: 'l1-06', lvl: 1, title: 'Piny GPIO na Picu W', sub: '40 pinů a jejich pravidla',
@@ -605,6 +739,12 @@ while True:             # dokola:
   <li>Z jednoho pinu ber jen pár miliampérů. Výchozí nastavení počítá se 4 mA, nejvíc se dá nastavit 12 mA. Na LED to stačí, na motor, relé nebo LED pásek ne. Na ty je tranzistor (lekce 9).</li>
   <li>Piny <b>VBUS</b>, <b>VSYS</b> a <b>3V3(OUT)</b> jsou napájecí a nedají se ovládat. Z 3V3(OUT) napájej senzory a pull-up rezistory.</li>
   <li>Tři piny, GP26 až GP28, umí změřit i napětí mezi 0 a 3,3 V (analogový vstup, lekce 3.8).</li></ul>
+  ${more('Jaký je rozdíl mezi VBUS, VSYS a 3V3(OUT)?', `<p>Napájení teče po desce Pica postupně, jako voda po spádu:</p>
+  ${XF.power()}
+  <ul><li><b>VBUS</b>: 5&nbsp;V přímo z USB kabelu. Je tam, jen když je Pico připojené k USB.</li>
+  <li><b>VSYS</b>: hlavní vstup napájení desky, za ochrannou diodou. Sem se připojuje baterie (1,8–5,5&nbsp;V).</li>
+  <li><b>3V3(OUT)</b>: z VSYS vyrobí regulátor stálých 3,3&nbsp;V. Z nich běží čip a odtud napájíš senzory a pull-up rezistory.</li></ul>
+  <p class="hint"><b>Pravidlo:</b> VBUS ani VSYS nikdy nespojuj s GPIO. Pro součástky na nepájivém poli ber skoro vždy 3V3(OUT) a GND.</p>`)}
   <p>Pozor na dvojí číslování. <b>Fyzické</b> číslo je pozice na okraji desky (1 až 40). <b>Číslo GP</b> je číslo pinu v čipu a to se píše do kódu. <span class="mono">Pin(15)</span> znamená GP15, a ten je fyzicky na pinu 20.</p>
   ${code(`from machine import Pin
 
@@ -624,6 +764,10 @@ deska.toggle()          # přepne ji`)}
   body: `<p>Tlačítko jen spojuje dva kontakty. Zapojíš ho mezi GPIO a GND. Když ho pustíš, pin není připojený k ničemu. Takový vstup <b class="c">plave</b>: chytá rušení ze vzduchu i z tvé ruky a náhodně čte 0 a 1.</p>
   <p>Řešením je rezistor, který pin v klidu jemně „drží" v jednom stavu:</p>
   <ul><li><b>Pull-up</b> ke 3,3 V: v klidu 1, stisk spojí pin s GND → 0.</li><li><b>Pull-down</b> ke GND: v klidu 0, tlačítko ke 3,3 V → 1.</li></ul>
+  ${more('Proč stisk tlačítka neudělá zkrat a proč pin čte 0?', `<p>Při stisku vede od 3,3&nbsp;V do GND cesta: rezistor 10&nbsp;kΩ a za ním tlačítko. Rezistor ji brzdí, takže teče jen 3,3&nbsp;V / 10&nbsp;kΩ = 0,33&nbsp;mA. To je zanedbatelné, žádný zkrat.</p>
+  <p>A proč 0? Pin je připojený mezi rezistor a tlačítko. Sepnuté tlačítko má skoro nulový odpor, takže pin je s GND spojený „natvrdo". Celých 3,3&nbsp;V padne na rezistoru a na pinu zbude 0&nbsp;V.</p>
+  <p>Když tlačítko pustíš, rezistorem neteče skoro nic. Nic na něm nepadne a pin má plných 3,3&nbsp;V, tedy 1.</p>
+  <p class="hint">Proto je s pull-upem logika obrácená: stisknuto = 0, puštěno = 1.</p>`)}
   <p>Rezistor musí být dost velký (typicky 10 kΩ), aby při stisku netekl zbytečný proud: 3,3 V / 10 kΩ = 0,33 mA. Pico má pull-up i pull-down rezistory přímo v čipu (kolem 50 kΩ). Zapneš je při vytvoření pinu parametrem <span class="mono">Pin.PULL_UP</span> nebo <span class="mono">Pin.PULL_DOWN</span>:</p>
   ${code(`from machine import Pin
 import time
@@ -643,7 +787,10 @@ while True:
         predtim = ted
         # přečkej zákmity:
         time.sleep_ms(50)`)}
-  <p>Řádek <span class="mono">time.sleep_ms(50)</span> potlačí zákmity: 50 ms po každé změně se program na tlačítko nedívá, takže odskoky kontaktů nepočítá jako další stisky.</p>`,
+  <p>Řádek <span class="mono">time.sleep_ms(50)</span> potlačí zákmity: 50 ms po každé změně se program na tlačítko nedívá, takže odskoky kontaktů nepočítá jako další stisky.</p>
+  ${more('Proč program hlídá proměnnou predtim?', `<p>Smyčka <span class="mono">while True</span> přečte tlačítko mnohokrát za sekundu. Kdyby program přepnul LED pokaždé, když vidí 0, přepínal by ji celou dobu, co tlačítko držíš. LED by blikala a jestli nakonec zůstane svítit, by byla náhoda.</p>
+  <p>Nás ale zajímá jen <b>okamžik stisku</b>. Program si proto pamatuje, co přečetl minule (<span class="mono">predtim</span>), a porovná to s tím, co čte teď (<span class="mono">ted</span>):</p>
+  <ul><li>minule 1, teď 0: tlačítko se právě stisklo → přepni LED,</li><li>minule 0, teď 0: pořád ho držíš → nedělej nic,</li><li>minule 0, teď 1: tlačítko se právě pustilo → nedělej nic.</li></ul>`)}`,
   sim: 'pullup', task: 'Přepni na „bez rezistoru" a sleduj graf. Pak zapni pull-up a stiskni tlačítko.' },
 
 { id: 'l1-08', lvl: 1, title: 'Dělič napětí', sub: 'Jak z 5 V udělat 3,3 V',
@@ -651,6 +798,10 @@ while True:
   terms: [['Sériové zapojení', 'Součástky za sebou. Teče jimi stejný proud, odpory se sčítají.'], ['Dělič napětí', 'Dva rezistory v sérii. Z jejich středu odebíráš nižší napětí.'], ['Úbytek napětí', 'Část napětí, která „padne" na jedné součástce.'], ['Převodník úrovní', 'Obvod pro obousměrné rychlé signály mezi 5 V a 3,3 V.']],
   body: `<p>Když zapojíš dva rezistory za sebou, teče oběma stejný proud. Napětí se mezi ně rozdělí v poměru jejich odporů. Na větším rezistoru „padne" větší část.</p>
   <p class="formula">U_výst = U_vst · R2 / (R1 + R2)</p>
+  ${more('Odkud se vzorec bere?', `<p>Oběma rezistory teče stejný proud, takže se napětí rozdělí v poměru odporů. Stačí se zeptat: <b>jakou část celkového odporu tvoří R2?</b></p>
+  <p>U HC-SR04: R1 = 1&nbsp;kΩ, R2 = 2&nbsp;kΩ, dohromady 3&nbsp;kΩ. R2 tvoří 2 ze 3 dílů, tedy dvě třetiny. Dostane proto dvě třetiny napětí: 5&nbsp;V · 2/3 ≈ 3,3&nbsp;V.</p>
+  <p>Přesně to říká vzorec: R2 / (R1 + R2) je ten díl a násobí se jím vstupní napětí.</p>
+  <p class="hint"><b>Postup přes proud dá totéž:</b> I = 5&nbsp;V / 3&nbsp;kΩ ≈ 1,67&nbsp;mA a na R2 je U = I · R2 = 1,67&nbsp;mA · 2&nbsp;kΩ ≈ 3,3&nbsp;V.</p>`)}
   <p>Typické použití s Picem: ultrazvukový dálkoměr HC-SR04 vrací na pinu ECHO 5 V. S děličem R1 = 1 kΩ (nahoře) a R2 = 2 kΩ (dole) dostaneš 5 · 2 / 3 ≈ 3,3 V a GPIO je v bezpečí.</p>
   <p>Potenciometr je vlastně nastavitelný dělič: jezdec rozdělí odporovou dráhu na R1 a R2.</p>
   <div class="note limit"><h4>Na co se dělič nehodí</h4><p>Dělič je dobrý pro signály, ne pro napájení. Jakmile z jeho středu začneš odebírat proud (motor, LED pásek), napětí poklesne. Pro napájení se používá stabilizátor nebo měnič.</p></div>`,
@@ -662,7 +813,14 @@ while True:
   body: `<p>GPIO dá jen pár miliampérů. Motor, relé nebo LED pásek potřebují stovky. Pomůže <b class="c">tranzistor</b>: ventil, který malým proudem otevíráš pro velký proud.</p>
   <p>Zapojení: zátěž mezi +5 V a kolektor, emitor na GND, báze přes rezistor 1 kΩ na GPIO. Když je GPIO HIGH, teče do báze proud</p>
   <p class="formula">I_B = (3,3 − 0,7) / 1 000 ≈ 2,6 mA</p>
+  ${more('Proč je zátěž nahoře a tranzistor dole u GND?', `<p>NPN tranzistor se otevírá napětím mezi bází a emitorem: báze musí být asi o 0,7&nbsp;V výš než emitor.</p>
+  <p>Když je emitor na GND (0&nbsp;V), stačí na to bez problému 3,3&nbsp;V z GPIO. Kdyby byl tranzistor nahoře, mezi +5&nbsp;V a zátěží, emitor by nebyl na pevné nule, ale „plaval" by se zátěží. Báze s 3,3&nbsp;V by ho vytáhla nejvýš asi na 2,6&nbsp;V. Zátěž by tak dostala jen část napětí a tranzistor by se hřál.</p>
+  <p class="hint">Proto „spínání na straně GND": tranzistor připojuje spodní konec zátěže k zemi, jako vypínač pod žárovkou.</p>`)}
   <p>(0,7 V „spolkne" přechod báze–emitor). S β ≈ 100 může kolektorem téct až 260 mA. Aby byl tranzistor plně sepnutý, dávej do báze proud s rezervou, aspoň dvakrát víc, než by stačilo podle β. Jinak zůstane napůl otevřený a hřeje se.</p>
+  ${more('Co znamená plně sepnutý a proč ta rezerva?', `<p>Tranzistor pustí kolektorem nejvýš β-krát víc, než teče bází. Motorek chce 250&nbsp;mA a tranzistor má β = 100. Do báze tedy musí téct aspoň 250 / 100 = 2,5&nbsp;mA.</p>
+  <p>β se ale kus od kusu liší a mění se i s teplotou. Kdyby měl tvůj kus β jen 80, pustí při 2,5&nbsp;mA jen 200&nbsp;mA. Tranzistor zůstane napůl otevřený, část napětí padne na něm a mění se v teplo. Proto se do báze dává rezerva, ideálně dvojnásobek.</p>
+  <p><b>Plně sepnutý</b> tranzistor (v nasycení) je jako dokořán otevřený ventil: napětí na něm je jen asi 0,2&nbsp;V a skoro se nehřeje.</p>
+  <p class="hint">U Pica naráží rezerva na limit pinu (výchozí 4&nbsp;mA). Na větší motory je proto lepší MOSFET (úroveň 3) nebo hotový ovladač motoru.</p>`)}
   <p>Běžné malé tranzistory (BC337, 2N2222) spínají do asi 500 mA. Na větší proudy se používá MOSFET (úroveň 3). Motor a relé potřebují navíc ochrannou diodu (úroveň 2, lekce Relé).</p>
   <div class="note"><h4>Pořadí vývodů</h4><p>Pořadí C–B–E se u různých tranzistorů liší (BC547: C, B, E; 2N2222: E, B, C). Vždy si ho ověř v katalogovém listu (datasheetu).</p></div>`,
   sim: 'tswitch', task: 'Zvol zátěž motorek. Najdi bázový rezistor, se kterým je tranzistor plně sepnutý a GPIO přitom nepřetížíš.' },
@@ -671,6 +829,10 @@ while True:
   idea: 'Zdroj musí dodat dost proudu. Výdrž baterie ≈ kapacita (mAh) / odběr (mA).',
   terms: [['Napájení Pica', 'Pico W se napájí 5 V přes micro-USB (pin VBUS). Baterie se připojuje na pin VSYS (1,8 až 5,5 V).'], ['Kapacita (mAh)', 'Kolik proudu baterie dodá za hodinu. 1 000 mAh = 1 A po dobu jedné hodiny.'], ['Výkon P = U · I', 'Ve wattech (W). 5 V · 2 A = 10 W.'], ['Podpětí', 'Zdroj nestíhá, napětí klesá. Pico se může náhodně restartovat, třeba když se rozjede motor na stejném zdroji.']],
   body: `<p>Každý zdroj má dvě důležitá čísla: <b class="c">napětí</b> (musí sedět) a <b class="c">maximální proud</b> (musí stačit). Pico W samo odebírá jen desítky miliampérů, se zapnutou Wi-Fi o něco víc. Stačí mu tedy skoro každá USB nabíječka nebo port počítače.</p>
+  ${more('Proč větší proud zdroje nevadí, ale větší napětí ano?', `<p>Napětí zdroj „tlačí" vždycky celé. Proud si ale určuje zařízení samo, podle Ohmova zákona: I = U / R, kde R je dané zařízením.</p>
+  <p>Nabíječka 5&nbsp;V / 2&nbsp;A tedy do Pica „nenatlačí" 2&nbsp;A. Jen říká, že <em>umí</em> dodat až 2&nbsp;A. Pico si při 5&nbsp;V vezme svých asi 50&nbsp;mA a zbytek zůstane nevyužitý, jako u kohoutku, ze kterého natočíš jen sklenici.</p>
+  <p>S napětím je to jinak: 12&nbsp;V místo 5&nbsp;V by do Pica zatlačilo víc, než snese, a zničilo by ho.</p>
+  <p class="hint"><b>Pravidlo:</b> napětí musí sedět, proud zdroje může být větší, nikdy menší.</p>`)}
   <p>Problém nastane, když ze stejného zdroje napájíš motor, servo nebo LED pásek. Ty berou stovky mA a při rozběhu ještě víc. Napětí poklesne (<b>podpětí</b>) a Pico se může restartovat nebo zaseknout. Motory a LED pásky proto napájej z vlastního zdroje a země obou zdrojů propoj. Pin 3V3(OUT) unese nejvýš asi 300 mA, a to jen pro senzory a drobnosti.</p>
   <p>Na baterie se Pico připojuje přes pin <b>VSYS</b>, který přijme 1,8 až 5,5 V: třeba tři tužkové články (4,5 V) nebo jeden Li-ion článek (3,7 V). Jinak stačí powerbanka přes USB. Hrubý odhad výdrže:</p>
   <p class="formula">t [h] ≈ kapacita [mAh] / odběr [mA]</p>
@@ -2312,6 +2474,12 @@ function route() {
   updStreak();
 }
 document.querySelectorAll('.tab').forEach((b) => b.addEventListener('click', () => { location.hash = b.dataset.tab; }));
+document.addEventListener('click', (e) => {
+  const close = e.target.closest('.more-close');
+  if (close) { const d = close.closest('details'); d.open = false; const sm = d.querySelector('summary'); if (sm.getBoundingClientRect().top < 0) sm.scrollIntoView({ block: 'center' }); return; }
+  const cm = e.target.closest('.code-cm');
+  if (cm) { const box = cm.closest('.codebox'), hide = !box.classList.contains('no-cm'); box.classList.toggle('no-cm', hide); cm.setAttribute('aria-pressed', hide); cm.textContent = hide ? 'Ukázat komentáře' : 'Skrýt komentáře'; }
+});
 window.addEventListener('hashchange', route);
 
 /* ================= Téma, animace, start ================= */
